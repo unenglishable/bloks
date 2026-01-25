@@ -6,6 +6,7 @@ public final class ClientState {
     private boolean hudVisible = true;
     private long currentDay = 0L; // 0 indicates uninitialized
     private String dayLabel = "Day"; // configurable later
+    private int tickSinceOverlayUpdate = 0;
 
     public static ClientState get() {
         return INSTANCE;
@@ -35,5 +36,17 @@ public final class ClientState {
 
     public void setDayLabel(String dayLabel) {
         this.dayLabel = dayLabel;
+    }
+
+    public int getTickSinceOverlayUpdate() {
+        return tickSinceOverlayUpdate;
+    }
+
+    public void incrementOverlayTick() {
+        this.tickSinceOverlayUpdate++;
+    }
+
+    public void resetOverlayTick() {
+        this.tickSinceOverlayUpdate = 0;
     }
 }
