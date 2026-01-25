@@ -13,6 +13,9 @@
     ],
     "client": [
       "dev.bloks.beautiful_day_counter.client.BeautifulDayCounterClient"
+    ],
+    "modmenu": [
+      "dev.bloks.beautiful_day_counter.client.config.ModMenuEntrypoint"
     ]
   },
   "depends": {
@@ -20,9 +23,11 @@
     "fabric": ">=${fabric_api}",
     "minecraft": ">=${minecraft}"
   },
+  "suggests": {
+    "modmenu": "*"
+  },
   "contact": {
     "homepage": "https://example.com",
     "sources": "https://example.com"
   }
 }
-

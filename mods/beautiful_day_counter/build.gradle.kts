@@ -12,6 +12,9 @@ dependencies {
   mappings(loom.officialMojangMappings())
   modImplementation(libs.fabric.loader)
   modImplementation(libs.fabric.api)
+  // Optional integration with Mod Menu for config UI
+  modCompileOnly(libs.modmenu)
+  modRuntimeOnly(libs.modmenu)
 }
 
 tasks.processResources {

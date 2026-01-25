@@ -2,7 +2,8 @@ package dev.bloks.beautiful_day_counter.client;
 
 import dev.bloks.beautiful_day_counter.client.state.ClientState;
 import dev.bloks.beautiful_day_counter.net.Packets;
-import dev.bloks.beautiful_day_counter.client.ui.Toasts;
+import dev.bloks.beautiful_day_counter.client.ui.DayToast;
+import dev.bloks.beautiful_day_counter.client.config.Config;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -17,6 +18,12 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         LOGGER.info("Client init: Beautiful Day Counter");
+        // Load config and apply to live state
+        Config cfg = Config.load();
+        ClientState.get().setDayLabel(cfg.label);
+        if (ClientState.get().isHudVisible() != cfg.hudVisible) {
+            ClientState.get().toggleHudVisible();
+        }
         // Keybinding: toggle HUD on/off (default: H)
         TOGGLE_KEY = KeyBindingHelper.registerKeyBinding(
                 new net.minecraft.client.KeyMapping(
@@ -31,7 +38,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             client.execute(() -> {
                 ClientState.get().setCurrentDay(day);
                 LOGGER.debug("Day updated from packet: {}", day);
-                Toasts.showDayToast(day, ClientState.get().getDayLabel());
+                DayToast.show(day, ClientState.get().getDayLabel());
             });
         });
         // TODO: Register HUD overlay to render subtle day counter when enabled
@@ -44,6 +51,9 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             // Handle toggle key
             if (TOGGLE_KEY != null && TOGGLE_KEY.consumeClick()) {
                 state.toggleHudVisible();
+                // Persist toggle to config
+                cfg.hudVisible = state.isHudVisible();
+                cfg.save();
                 if (client.player != null) {
                     client.player.displayClientMessage(
                             net.minecraft.network.chat.Component.literal(
@@ -60,7 +70,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             if (computedDay > state.getCurrentDay()) {
                 state.setCurrentDay(computedDay);
                 LOGGER.debug("Day advanced (client fallback): {}", computedDay);
-                Toasts.showDayToast(computedDay, state.getDayLabel());
+                DayToast.show(computedDay, state.getDayLabel());
             }
             // Minimal HUD overlay via action bar (throttled)
             if (state.isHudVisible() && client.player != null) {
