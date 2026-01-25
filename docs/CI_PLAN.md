@@ -1,26 +1,28 @@
 # CI Plan
 
-Scope: Build and test Fabric Loom multi-mods, remap jars, and publish artifacts per commit/PR.
+Scope: Build/test Fabric Loom multi-mods, remap jars, and publish per-module releases.
 
-Jobs
-- Build (Ubuntu, Java 17/21 matrix):
-  - Checkout repo
-  - Setup Temurin JDK (matrix)
-  - Use gradle/gradle-build-action with Gradle 8.10.2
-  - Run `build` then `remapJar` for all modules
-  - Upload `mods/*/build/libs/*.jar` as artifacts (exclude sources)
+Build job (ci.yml)
+- Ubuntu; Java matrix [17, 21] to ensure compatibility.
+- Steps: checkout → setup-java → gradle build → remapJar → upload jars.
 
-Triggers
-- `push` to main and feature branches
-- `pull_request` to main
-- Manual `workflow_dispatch`
+Release (release.yml)
+- Trigger: tag push `<modid>-v<semver>` (legacy path or manual tags).
+- Steps: parse tag → build only module → create GitHub Release → upload jars.
 
-Caching
-- gradle-build-action handles Gradle and dependency caching automatically.
+Publish with semantic-release (publish-mod.yml)
+- Trigger: manual `workflow_dispatch` with `modid`.
+- Steps:
+  - Run semantic-release in `mods/<modid>` to compute next version from Angular commits,
+    update `gradle.properties`, generate changelog, tag `<modid>-vX.Y.Z`, and create a draft release.
+  - Build + remap with Java 21 and upload jars to that release.
+  - Optional: publish to Modrinth/CurseForge via `mc-publish` when tokens and project IDs are set.
 
-Security
-- Validate wrapper if present via wrapper-validation action (optional, gated on file existing).
+Versioning policy
+- Conventional (Angular) commits drive semantic versioning.
+- Per-module versions live in `mods/<modid>/gradle.properties`.
+- Java toolchain set to 21 in modules; CI also tests Java 17.
 
-Future Enhancements
-- Add code style/lint jobs if we introduce static checks.
-- Add release workflow to attach jars to GitHub Releases on tags (e.g., `beautiful_day_counter-vX.Y.Z`).
+Security & caching
+- Gradle caches via gradle-build-action.
+- Wrapper validation if wrapper files exist.
