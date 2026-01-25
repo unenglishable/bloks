@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "beautiful_day_counter",
+  "name": "Beautiful Day Counter",
+  "version": "${version}",
+  "description": "Shows a subtle day counter and a welcoming toast at each new day.",
+  "authors": ["bloks"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.bloks.beautiful_day_counter.BeautifulDayCounter"
+    ],
+    "client": [
+      "dev.bloks.beautiful_day_counter.client.BeautifulDayCounterClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${fabric_loader}",
+    "fabric": ">=${fabric_api}",
+    "minecraft": ">=${minecraft}"
+  },
+  "contact": {
+    "homepage": "https://example.com",
+    "sources": "https://example.com"
+  }
+}
+
