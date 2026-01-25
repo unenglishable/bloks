@@ -2,6 +2,7 @@ package dev.bloks.beautiful_day_counter.client;
 
 import dev.bloks.beautiful_day_counter.client.state.ClientState;
 import dev.bloks.beautiful_day_counter.net.Packets;
+import dev.bloks.beautiful_day_counter.client.ui.Toasts;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -30,7 +31,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             client.execute(() -> {
                 ClientState.get().setCurrentDay(day);
                 LOGGER.debug("Day updated from packet: {}", day);
-                // TODO: trigger toast once UI is implemented
+                Toasts.showDayToast(day, ClientState.get().getDayLabel());
             });
         });
         // TODO: Register HUD overlay to render subtle day counter when enabled
@@ -59,7 +60,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             if (computedDay > state.getCurrentDay()) {
                 state.setCurrentDay(computedDay);
                 LOGGER.debug("Day advanced (client fallback): {}", computedDay);
-                // TODO: trigger toast and refresh HUD once UI is implemented
+                Toasts.showDayToast(computedDay, state.getDayLabel());
             }
             // Minimal HUD overlay via action bar (throttled)
             if (state.isHudVisible() && client.player != null) {
