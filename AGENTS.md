@@ -74,3 +74,14 @@
   100-character line limits for subject and body.
   COMMIT_MSG
   ```
+
+## Documentation Maintenance
+- Keep docs current whenever structure, workflows, or versions change.
+- Update crosslinks: ensure README and module docs link to any new/renamed files.
+- Edit module docs:
+  - `mods/<modid>/PLAN.md` — phases, next steps, testing.
+  - `mods/<modid>/DESIGN.md` — product prompts and decisions.
+- Update CI/publishing docs when workflows change:
+  - `docs/CI_PLAN.md`, `docs/PUBLISHING.md`, `docs/PLATFORM_SETUP.md`.
+- Reflect version bumps mentioned in docs with `gradle/libs.versions.toml` changes.
+- Use `docs:` commits for documentation-only changes and keep them separate from code.
