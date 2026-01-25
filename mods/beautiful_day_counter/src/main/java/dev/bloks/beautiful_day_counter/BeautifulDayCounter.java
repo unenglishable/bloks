@@ -2,7 +2,12 @@ package dev.bloks.beautiful_day_counter;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import io.netty.buffer.Unpooled;
+import dev.bloks.beautiful_day_counter.net.Packets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,10 +33,14 @@ public class BeautifulDayCounter implements ModInitializer {
         if (day != lastDay) {
             if (lastDay != -1L) {
                 LOGGER.info("Welcome to Day {}!", day);
-                // TODO: Send a networking packet to clients to display toast and update HUD
+                // Send a networking packet to all players to update HUD / trigger toast
+                PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+                buf.writeVarLong(day);
+                for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                    ServerPlayNetworking.send(player, Packets.DAY_CHANGE, buf.copy());
+                }
             }
             lastDay = day;
         }
     }
 }
-
