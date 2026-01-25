@@ -21,11 +21,11 @@ jobs:
           echo "modid=${MODID}" >> $GITHUB_OUTPUT
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
-      - name: Set up Java 17
+      - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
 
       - name: Build module
         uses: gradle/gradle-build-action@v3
@@ -47,4 +47,3 @@ jobs:
             mods/${{ steps.parse.outputs.modid }}/build/libs/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
