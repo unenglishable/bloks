@@ -4,7 +4,7 @@ public final class ClientState {
     private static final ClientState INSTANCE = new ClientState();
 
     private boolean hudVisible = true;
-    private long currentDay = 1L;
+    private long currentDay = 0L; // 0 indicates uninitialized
     private String dayLabel = "Day"; // configurable later
 
     public static ClientState get() {
@@ -37,4 +37,3 @@ public final class ClientState {
         this.dayLabel = dayLabel;
     }
 }
-
