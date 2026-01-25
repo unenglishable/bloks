@@ -1,0 +1,23 @@
+{
+  "tagFormat": "beautiful_day_counter-v${version}",
+  "plugins": [
+    ["@semantic-release/commit-analyzer", { "preset": "angular" }],
+    ["@semantic-release/release-notes-generator", { "preset": "angular" }],
+    ["@semantic-release/changelog", { "changelogFile": "CHANGELOG.md" }],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "sed -i.bak -E 's/^version=.*/version=${nextRelease.version}/' gradle.properties && rm -f gradle.properties.bak"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["gradle.properties", "CHANGELOG.md"],
+        "message": "chore(release): beautiful_day_counter v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    ["@semantic-release/github", { "successComment": false }]
+  ]
+}
+
