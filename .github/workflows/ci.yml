@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["main", "master"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [17, 21]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Gradle wrapper (if present)
+        if: ${{ hashFiles('gradle/wrapper/gradle-wrapper.jar') != '' }}
+        uses: gradle/actions/wrapper-validation@v3
+
+      - name: Set up Java ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+
+      - name: Build (Gradle 8.10.2)
+        uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: 8.10.2
+          arguments: build
+
+      - name: Remap jars
+        uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: 8.10.2
+          arguments: remapJar
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mod-jars-java-${{ matrix.java }}
+          path: |
+            mods/*/build/libs/*.jar
+          if-no-files-found: warn
+

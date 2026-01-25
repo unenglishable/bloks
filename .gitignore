@@ -1,0 +1,19 @@
+# Gradle
+.gradle/
+**/build/
+
+# IDEs
+.idea/
+.project
+.classpath
+.settings/
+.vscode/
+
+# Minecraft dev
+run/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
