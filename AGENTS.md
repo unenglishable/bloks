@@ -55,9 +55,12 @@
 - No secrets in repo; use Gradle properties or `.env.example`. Use Git LFS for large assets if needed.
 
 ## Agent Commit Workflow
-- After each change, propose a single command that stages and commits.
+- After each change, run a single command that stages and commits; rely on the harness to
+  prompt for approval.
 - Use Angular Conventional Commits. Keep subject ≤100 chars; body lines ≤100 chars.
 - Provide a human-readable message via heredoc instead of multiple `-m` flags.
+- Stage an explicit list of files only (e.g., `git add path/to/file1 path/to/file2`).
+- Never use `git add -A` or `git add .`, and never use `git commit -a`/`git commit -A`.
 - Example (adjust scope and files as needed):
   
   ```
