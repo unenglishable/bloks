@@ -37,7 +37,9 @@ public class BeautifulDayCounter implements ModInitializer {
                 PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
                 buf.writeVarLong(day);
                 for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                    ServerPlayNetworking.send(player, Packets.DAY_CHANGE, buf.copy());
+                    if (ServerPlayNetworking.canSend(player, Packets.DAY_CHANGE)) {
+                        ServerPlayNetworking.send(player, Packets.DAY_CHANGE, buf.copy());
+                    }
                 }
             }
             lastDay = day;
