@@ -3,7 +3,7 @@ plugins {
 }
 
 java {
-  toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+  toolchain.languageVersion.set(JavaLanguageVersion.of(21))
   withSourcesJar()
 }
 
@@ -26,4 +26,3 @@ tasks.processResources {
 base {
   archivesName.set("beautiful_day_counter")
 }
-
