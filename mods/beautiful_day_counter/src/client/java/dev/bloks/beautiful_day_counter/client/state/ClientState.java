@@ -1,83 +1,81 @@
 package dev.bloks.beautiful_day_counter.client.state;
 
 public final class ClientState {
-    private static final ClientState INSTANCE = new ClientState();
+  private static final ClientState INSTANCE = new ClientState();
 
-    private boolean hudVisible = true;
-    private long currentDay = 0L; // 0 indicates uninitialized
-    private String dayLabel = "Day"; // configurable later
-    private int tickSinceOverlayUpdate = 0;
-    private String hudCorner = "bottom_right"; // top_left, top_right, bottom_left, bottom_right
-    private boolean toastEnabled = true;
-    private boolean toastActive = false;
-    // Moon feature removed
+  private boolean hudVisible = true;
+  private long currentDay = 0L; // 0 indicates uninitialized
+  private String dayLabel = "Day"; // configurable later
+  private int tickSinceOverlayUpdate = 0;
+  private String hudCorner = "bottom_right"; // top_left, top_right, bottom_left, bottom_right
+  private boolean toastEnabled = true;
+  private boolean toastActive = false;
 
-    public static ClientState get() {
-        return INSTANCE;
-    }
+  // Moon feature removed
 
-    private ClientState() {}
+  public static ClientState get() {
+    return INSTANCE;
+  }
 
-    public boolean isHudVisible() {
-        return hudVisible;
-    }
+  private ClientState() {}
 
-    public void toggleHudVisible() {
-        this.hudVisible = !this.hudVisible;
-    }
+  public boolean isHudVisible() {
+    return hudVisible;
+  }
 
-    public long getCurrentDay() {
-        return currentDay;
-    }
+  public void toggleHudVisible() {
+    this.hudVisible = !this.hudVisible;
+  }
 
-    public void setCurrentDay(long currentDay) {
-        this.currentDay = currentDay;
-    }
+  public long getCurrentDay() {
+    return currentDay;
+  }
 
-    public String getDayLabel() {
-        return dayLabel;
-    }
+  public void setCurrentDay(long currentDay) {
+    this.currentDay = currentDay;
+  }
 
-    public void setDayLabel(String dayLabel) {
-        this.dayLabel = dayLabel;
-    }
+  public String getDayLabel() {
+    return dayLabel;
+  }
 
-    public int getTickSinceOverlayUpdate() {
-        return tickSinceOverlayUpdate;
-    }
+  public void setDayLabel(String dayLabel) {
+    this.dayLabel = dayLabel;
+  }
 
-    public void incrementOverlayTick() {
-        this.tickSinceOverlayUpdate++;
-    }
+  public int getTickSinceOverlayUpdate() {
+    return tickSinceOverlayUpdate;
+  }
 
-    public void resetOverlayTick() {
-        this.tickSinceOverlayUpdate = 0;
-    }
+  public void incrementOverlayTick() {
+    this.tickSinceOverlayUpdate++;
+  }
 
-    public String getHudCorner() {
-        return hudCorner;
-    }
+  public void resetOverlayTick() {
+    this.tickSinceOverlayUpdate = 0;
+  }
 
-    public void setHudCorner(String hudCorner) {
-        this.hudCorner = hudCorner;
-    }
+  public String getHudCorner() {
+    return hudCorner;
+  }
 
-    public boolean isToastEnabled() {
-        return toastEnabled;
-    }
+  public void setHudCorner(String hudCorner) {
+    this.hudCorner = hudCorner;
+  }
 
-    public void setToastEnabled(boolean toastEnabled) {
-        this.toastEnabled = toastEnabled;
-    }
+  public boolean isToastEnabled() {
+    return toastEnabled;
+  }
 
-    public boolean isToastActive() {
-        return toastActive;
-    }
+  public void setToastEnabled(boolean toastEnabled) {
+    this.toastEnabled = toastEnabled;
+  }
 
-    public void setToastActive(boolean toastActive) {
-        this.toastActive = toastActive;
-    }
+  public boolean isToastActive() {
+    return toastActive;
+  }
 
-    
-
+  public void setToastActive(boolean toastActive) {
+    this.toastActive = toastActive;
+  }
 }
