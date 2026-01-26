@@ -3,6 +3,7 @@ package dev.bloks.beautiful_day_counter.client.ui;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.toast.Toast;
+import net.minecraft.client.toast.ToastManager;
 import net.minecraft.text.Text;
 
 /**
@@ -20,5 +21,10 @@ public final class DayToast implements Toast {
     public void draw(DrawContext context, TextRenderer textRenderer, long time) {
         // Simple text inside the toast
         context.drawText(textRenderer, title, 8, 8, 0xFFFFFF, true);
+    }
+
+    @Override
+    public void update(ToastManager manager, long time) {
+        // No-op; we rely on the toast manager’s defaults. Removal can be added later.
     }
 }
