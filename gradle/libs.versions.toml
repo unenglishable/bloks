@@ -1,6 +1,7 @@
 [versions]
 minecraft = "1.21.11"
-fabric_loader = "0.16.7"
+yarn = "1.21.11+build.4"
+fabric_loader = "0.18.4"
 fabric_api = "0.141.1+1.21.11"
 loom = "1.15.3"
 modmenu = "17.0.0-beta.2"

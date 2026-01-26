@@ -2,7 +2,6 @@ package dev.bloks.beautiful_day_counter.client;
 
 import dev.bloks.beautiful_day_counter.client.state.ClientState;
 import dev.bloks.beautiful_day_counter.net.Packets;
-import dev.bloks.beautiful_day_counter.client.ui.DayToast;
 import dev.bloks.beautiful_day_counter.client.config.Config;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -14,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class BeautifulDayCounterClient implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("beautiful_day_counter:client");
-    private static net.minecraft.client.KeyMapping TOGGLE_KEY;
+    private static net.minecraft.client.option.KeyBinding TOGGLE_KEY;
 
     @Override
     public void onInitializeClient() {
@@ -28,7 +27,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
         }
         // Keybinding: toggle HUD on/off (default: H)
         TOGGLE_KEY = KeyBindingHelper.registerKeyBinding(
-                new net.minecraft.client.KeyMapping(
+                new net.minecraft.client.option.KeyBinding(
                         "key.beautiful_day_counter.toggle",
                         org.lwjgl.glfw.GLFW.GLFW_KEY_H,
                         "category.beautiful_day_counter"
@@ -40,24 +39,29 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             client.execute(() -> {
                 ClientState.get().setCurrentDay(day);
                 LOGGER.debug("Day updated from packet: {}", day);
-                DayToast.show(day, ClientState.get().getDayLabel());
+                if (client.player != null) {
+                    client.player.sendMessage(
+                            net.minecraft.text.Text.literal(ClientState.get().getDayLabel() + " " + day),
+                            true
+                    );
+                }
             });
         });
 
         // HUD overlay: render a subtle day counter each frame when visible
-        HudRenderCallback.EVENT.register((guiGraphics, tickDelta) -> {
-            var mc = net.minecraft.client.Minecraft.getInstance();
+        HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
+            var mc = net.minecraft.client.MinecraftClient.getInstance();
             var state = ClientState.get();
             if (mc == null || mc.player == null) return;
-            if (mc.options.hideGui) return; // respect F1 Hide GUI
+            if (mc.options.hudHidden) return; // respect F1 Hide GUI
             if (!state.isHudVisible()) return;
             long day = state.getCurrentDay();
             if (day <= 0) return;
             String text = state.getDayLabel() + " " + day;
-            int screenW = mc.getWindow().getGuiScaledWidth();
-            int screenH = mc.getWindow().getGuiScaledHeight();
-            int textW = mc.font.width(text);
-            int textH = mc.font.lineHeight;
+            int screenW = mc.getWindow().getScaledWidth();
+            int screenH = mc.getWindow().getScaledHeight();
+            int textW = mc.textRenderer.getWidth(text);
+            int textH = mc.textRenderer.fontHeight;
             int margin = 4;
             int x;
             int y;
@@ -68,7 +72,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 case "bottom_left" -> { x = margin; y = screenH - margin - textH; }
                 default -> { x = screenW - margin - textW; y = screenH - margin - textH; }
             }
-            guiGraphics.drawString(mc.font, net.minecraft.network.chat.Component.literal(text), x, y, 0xFFFFFF, true);
+            drawContext.drawTextWithShadow(mc.textRenderer, net.minecraft.text.Text.literal(text), x, y, 0xFFFFFF);
         });
 
         // Client-only fallback: detect day change based on client world time if no packet arrives
@@ -77,16 +81,14 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             long computedDay = (client.world.getTimeOfDay() / 24000L) + 1L;
             var state = ClientState.get();
             // Handle toggle key
-            if (TOGGLE_KEY != null && TOGGLE_KEY.consumeClick()) {
+            if (TOGGLE_KEY != null && TOGGLE_KEY.wasPressed()) {
                 state.toggleHudVisible();
                 // Persist toggle to config
                 cfg.hudVisible = state.isHudVisible();
                 cfg.save();
                 if (client.player != null) {
-                    client.player.displayClientMessage(
-                            net.minecraft.network.chat.Component.literal(
-                                    state.isHudVisible() ? "Day counter: ON" : "Day counter: OFF"
-                            ),
+                    client.player.sendMessage(
+                            net.minecraft.text.Text.literal(state.isHudVisible() ? "Day counter: ON" : "Day counter: OFF"),
                             true
                     );
                 }
@@ -98,7 +100,12 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             if (computedDay > state.getCurrentDay()) {
                 state.setCurrentDay(computedDay);
                 LOGGER.debug("Day advanced (client fallback): {}", computedDay);
-                DayToast.show(computedDay, state.getDayLabel());
+                if (client.player != null) {
+                    client.player.sendMessage(
+                            net.minecraft.text.Text.literal(state.getDayLabel() + " " + computedDay),
+                            true
+                    );
+                }
             }
             // No action-bar spam; HUD overlay renders each frame via HudRenderCallback
         });

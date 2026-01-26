@@ -9,7 +9,7 @@ java {
 
 dependencies {
   minecraft(libs.minecraft)
-  mappings(loom.officialMojangMappings())
+  mappings("net.fabricmc:yarn:${libs.versions.yarn.get()}:v2")
   modImplementation(libs.fabric.loader)
   modImplementation(libs.fabric.api)
   // Optional integration with Mod Menu for config UI
