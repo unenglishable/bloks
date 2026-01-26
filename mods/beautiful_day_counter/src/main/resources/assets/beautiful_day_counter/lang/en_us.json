@@ -1,0 +1,13 @@
+{
+  "key.beautiful_day_counter.toggle": "Toggle Day Counter",
+  "category.beautiful_day_counter": "Beautiful Day Counter",
+  "ui.beautiful_day_counter.config.title": "Beautiful Day Counter Config",
+  "ui.beautiful_day_counter.save": "Save",
+  "ui.beautiful_day_counter.cancel": "Cancel",
+  "ui.beautiful_day_counter.hud.visible": "HUD: Visible",
+  "ui.beautiful_day_counter.hud.hidden": "HUD: Hidden",
+  "ui.beautiful_day_counter.corner.top_left": "Corner: Top Left",
+  "ui.beautiful_day_counter.corner.top_right": "Corner: Top Right",
+  "ui.beautiful_day_counter.corner.bottom_left": "Corner: Bottom Left",
+  "ui.beautiful_day_counter.corner.bottom_right": "Corner: Bottom Right"
+}
