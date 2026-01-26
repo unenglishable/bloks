@@ -21,7 +21,8 @@ This file is for contributors. Player-facing docs live in `README.md`.
 - Client init: `client/BeautifulDayCounterClient.java`
 - HUD: HUD callback in client init
 - Toast: `client/ui/DayToast.java`
-- Networking: `main/BeautifulDayCounter.java` + `main/.../net/Packets.java`
+- Networking: `main/BeautifulDayCounter.java` + `main/.../net/DayChangePayload.java` (typed payload
+  registered via PayloadTypeRegistry; client uses typed receiver)
 - Config: `client/config/*.java`, `fabric.mod.json` (modmenu entrypoint)
 
 ## Testing Checklist
