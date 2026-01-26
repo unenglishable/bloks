@@ -22,6 +22,8 @@ dependencies {
   // Optional integration with Mod Menu for config UI
   modCompileOnly(libs.modmenu)
   modRuntimeOnly(libs.modmenu)
+  // SpotBugs annotations for targeted suppressions
+  compileOnly(libs.spotbugsAnnotations)
   testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.2")
