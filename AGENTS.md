@@ -81,6 +81,8 @@
 - Edit module docs:
   - `mods/<modid>/PLAN.md` — phases, next steps, testing.
   - `mods/<modid>/DESIGN.md` — product prompts and decisions.
+  - `mods/<modid>/README.md` — user-facing docs (what it does, how to use, config, fun facts).
+  - `mods/<modid>/DEV.md` — developer docs (architecture, local dev, technical details).
 - Update CI/publishing docs when workflows change:
   - `docs/CI_PLAN.md`, `docs/PUBLISHING.md`, `docs/PLATFORM_SETUP.md`.
 - Reflect version bumps mentioned in docs with `gradle/libs.versions.toml` changes.
@@ -88,3 +90,7 @@
 - Implementation guide: see `docs/IMPLEMENTATION_GUIDE.md` for technology-agnostic steps to add
   new mods and restart work in new AI sessions. When altering `PLAN.md`, prefer deprecating lines
   (prefix `Deprecated:` with a date) rather than deleting.
+
+Documentation boundaries
+- Top-level `README.md` is general-purpose: repo layout, CI/release, generic dev/testing commands.
+- Per-mod specifics (usage, config, dev notes) live under that mod’s directory.
