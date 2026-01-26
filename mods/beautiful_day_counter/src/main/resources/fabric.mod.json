@@ -4,7 +4,7 @@
   "name": "Beautiful Day Counter",
   "version": "${version}",
   "description": "Shows a subtle day counter and a welcoming toast at each new day.",
-  "authors": ["bloks"],
+  "authors": ["itszelace"],
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
@@ -28,6 +28,6 @@
   },
   "contact": {
     "homepage": "https://example.com",
-    "sources": "https://example.com"
+    "sources": "https://github.com/unenglishable/bloks/tree/main/mods/beautiful_day_counter"
   }
 }
