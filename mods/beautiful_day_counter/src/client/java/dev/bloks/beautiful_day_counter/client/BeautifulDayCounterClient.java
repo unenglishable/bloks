@@ -58,9 +58,15 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
         (drawContext, tickDelta) -> {
           var mc = net.minecraft.client.MinecraftClient.getInstance();
           var state = ClientState.get();
-          if (mc == null || mc.player == null) return;
-          if (mc.options.hudHidden) return; // respect F1 Hide GUI
-          if (!state.isHudVisible()) return;
+          if (mc == null || mc.player == null) {
+            return;
+          }
+          if (mc.options.hudHidden) {
+            return; // respect F1 Hide GUI
+          }
+          if (!state.isHudVisible()) {
+            return;
+          }
           long day = state.getCurrentDay();
           if (day <= 0 && mc.world != null) {
             // Fallback compute for first-frame visibility
@@ -101,7 +107,9 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
     // Client-only fallback: detect day change based on client world time if no packet arrives
     ClientTickEvents.END_CLIENT_TICK.register(
         client -> {
-          if (client.world == null) return;
+          if (client.world == null) {
+            return;
+          }
           long computedDay = (client.world.getTimeOfDay() / 24000L) + 1L;
           var state = ClientState.get();
           // Handle toggle key
