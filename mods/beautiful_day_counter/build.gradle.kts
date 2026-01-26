@@ -4,6 +4,11 @@ plugins {
   alias(libs.plugins.fabric.loom)
 }
 
+loom {
+  // Ensure src/client/java is compiled and on the classpath for runClient
+  splitEnvironmentSourceSets()
+}
+
 java {
   toolchain.languageVersion.set(JavaLanguageVersion.of(21))
   withSourcesJar()
