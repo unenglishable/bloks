@@ -11,8 +11,10 @@ public final class Toasts {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc == null) return;
         Text title = Text.literal(label + " " + day);
-        // Use a generic system toast type; purely informational
-        SystemToast toast = new SystemToast(SystemToast.Type.TUTORIAL_HINT, title, null);
+        // Use a generic system toast type; avoid relying on a specific enum name
+        SystemToast.Type[] types = SystemToast.Type.values();
+        SystemToast.Type type = types.length > 0 ? types[0] : SystemToast.Type.values()[0];
+        SystemToast toast = new SystemToast(type, title, null);
         mc.getToastManager().add(toast);
     }
 }

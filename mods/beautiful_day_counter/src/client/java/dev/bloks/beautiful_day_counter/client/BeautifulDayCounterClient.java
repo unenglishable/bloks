@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 public class BeautifulDayCounterClient implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("beautiful_day_counter:client");
-    private static net.minecraft.client.option.KeyBinding TOGGLE_KEY;
+    private static net.minecraft.client.option.KeyBinding TOGGLE_KEY; // temporarily unused until category API pinned
 
     @Override
     public void onInitializeClient() {
@@ -27,13 +27,9 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             ClientState.get().toggleHudVisible();
         }
         // Keybinding: toggle HUD on/off (default: H)
-        TOGGLE_KEY = KeyBindingHelper.registerKeyBinding(
-                new net.minecraft.client.option.KeyBinding(
-                        "key.beautiful_day_counter.toggle",
-                        org.lwjgl.glfw.GLFW.GLFW_KEY_H,
-                        "category.beautiful_day_counter"
-                )
-        );
+        // Keybinding constructor signature changed in 1.21.11 (Category enum). We will reintroduce
+        // registration after pinning the exact API. For now, rely on config/UI toggle only.
+        TOGGLE_KEY = null;
         // Register payload receiver to update state
         ClientPlayNetworking.registerGlobalReceiver(DayChangePayload.ID, (payload, context) -> {
             long day = payload.day();
@@ -77,19 +73,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             if (client.world == null) return;
             long computedDay = (client.world.getTimeOfDay() / 24000L) + 1L;
             var state = ClientState.get();
-            // Handle toggle key
-            if (TOGGLE_KEY != null && TOGGLE_KEY.wasPressed()) {
-                state.toggleHudVisible();
-                // Persist toggle to config
-                cfg.hudVisible = state.isHudVisible();
-                cfg.save();
-                if (client.player != null) {
-                    client.player.sendMessage(
-                            net.minecraft.text.Text.literal(state.isHudVisible() ? "Day counter: ON" : "Day counter: OFF"),
-                            true
-                    );
-                }
-            }
+            // Toggle key temporarily disabled until KeyBinding category API is pinned
             if (state.getCurrentDay() == 0L) {
                 state.setCurrentDay(computedDay); // initialize on join to avoid catch-up toast
                 return;
