@@ -2,8 +2,8 @@ package dev.bloks.beautiful_day_counter.client.ui;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.toast.Toast;
-import net.minecraft.client.toast.ToastManager;
 import net.minecraft.text.Text;
 
 /**
@@ -21,14 +21,10 @@ public final class DayToast implements Toast {
     }
 
     @Override
-    public Visibility render(DrawContext context, ToastManager manager, long time) {
+    public Visibility draw(DrawContext context, TextRenderer textRenderer, long time) {
         if (startTime < 0) startTime = time;
-        var mc = MinecraftClient.getInstance();
-        if (mc != null && mc.textRenderer != null) {
-            // Simple text centered vertically in the toast area
-            context.drawText(mc.textRenderer, title, 8, 8, 0xFFFFFF, true);
-        }
+        // Simple text inside the toast
+        context.drawText(textRenderer, title, 8, 8, 0xFFFFFF, true);
         return (time - startTime) < displayMs ? Visibility.SHOW : Visibility.HIDE;
     }
 }
-
