@@ -190,7 +190,6 @@ public class ConfigScreen extends Screen {
         if (toggleHudBtn != null) rows++;
         if (cornerBtn != null) rows++;
         if (toastBtn != null) rows++;
-        if (moonTexBtn != null) rows++;
         if (saveBtn != null) rows++;
         // + Cancel shares row with Save (same y)
         contentHeight = rows * ROW_SPACING;

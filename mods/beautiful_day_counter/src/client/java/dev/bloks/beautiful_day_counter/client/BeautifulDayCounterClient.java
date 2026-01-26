@@ -25,7 +25,6 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
         ClientState.get().setDayLabel(cfg.label);
         ClientState.get().setHudCorner(cfg.hudCorner);
         ClientState.get().setToastEnabled(cfg.showToast);
-        ClientState.get().setUseSystemMoonTexture(cfg.useSystemMoonTexture);
         if (ClientState.get().isHudVisible() != cfg.hudVisible) {
             ClientState.get().toggleHudVisible();
         }
