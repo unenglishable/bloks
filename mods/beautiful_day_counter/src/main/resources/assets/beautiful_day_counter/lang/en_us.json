@@ -6,8 +6,12 @@
   "ui.beautiful_day_counter.cancel": "Cancel",
   "ui.beautiful_day_counter.hud.visible": "HUD: Visible",
   "ui.beautiful_day_counter.hud.hidden": "HUD: Hidden",
-  "ui.beautiful_day_counter.corner.top_left": "Corner: Top Left",
-  "ui.beautiful_day_counter.corner.top_right": "Corner: Top Right",
-  "ui.beautiful_day_counter.corner.bottom_left": "Corner: Bottom Left",
-  "ui.beautiful_day_counter.corner.bottom_right": "Corner: Bottom Right"
+  "ui.beautiful_day_counter.corner.top_left": "HUD Corner: Top Left",
+  "ui.beautiful_day_counter.corner.top_right": "HUD Corner: Top Right",
+  "ui.beautiful_day_counter.corner.bottom_left": "HUD Corner: Bottom Left",
+  "ui.beautiful_day_counter.corner.bottom_right": "HUD Corner: Bottom Right",
+  "ui.beautiful_day_counter.toast.enabled": "Toast: Enabled",
+  "ui.beautiful_day_counter.toast.disabled": "Toast: Disabled",
+  "ui.beautiful_day_counter.label.caption": "Counter Label",
+  "ui.beautiful_day_counter.label.suggestion": "e.g., Day or Sol"
 }

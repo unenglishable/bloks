@@ -17,8 +17,11 @@ Phases
   - Client shows "Day N" toast with native Toast API and clock icon. [Completed]
   - Basic config for label text (e.g., "Day", "Sol"). [Completed]
 - P4 Polish + config:
-  - Persist client config (visibility, label, HUD corner). [Completed]
-  - Next: localization (lang), moon phase + current weather icons, positioning offsets.
+  - Persist client config (visibility, label, HUD corner, toast enable). [Completed]
+  - Localization (lang): convert UI strings to translatables. [In Progress]
+  - Moon phase icon. [Planned]
+  - Deprecated (2026-01-26): positioning offsets — decided corner selection is sufficient.
+  - Deprecated (2026-01-26): weather icon/report — not needed now.
 
 Testing
 - Unit-test day computation from tick times. [Planned]
@@ -30,4 +33,4 @@ Packaging
 
 Status
 - Networking + client fallback done. HUD overlay implemented. Config + Mod Menu integrated.
-- Next concrete steps: localization, moon phase icon, current weather icon, optional offsets.
+- Next concrete steps: localization (finish), moon phase icon.

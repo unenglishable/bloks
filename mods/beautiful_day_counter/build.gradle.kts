@@ -22,6 +22,7 @@ dependencies {
   // Optional integration with Mod Menu for config UI
   modCompileOnly(libs.modmenu)
   modRuntimeOnly(libs.modmenu)
+  testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
 }
 
 val vc = extensions.getByType<VersionCatalogsExtension>().named("libs")
@@ -42,4 +43,8 @@ tasks.processResources {
 // Configure archives base name for nicer artifact name
 base {
   archivesName.set("beautiful_day_counter")
+}
+
+tasks.test {
+  useJUnitPlatform()
 }

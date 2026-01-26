@@ -27,11 +27,12 @@ public class ConfigScreen extends Screen {
         int y = this.height / 3;
 
         // Label input
-        labelField = new TextFieldWidget(this.textRenderer, centerX - 100, y, 200, 20, Text.literal("Counter label"));
+        labelField = new TextFieldWidget(this.textRenderer, centerX - 100, y, 200, 20,
+                Text.translatable("ui.beautiful_day_counter.label.caption"));
         labelField.setMaxLength(32);
         labelField.setText(config.label);
         // Hint text when empty, similar to Create World "World Name" field
-        labelField.setSuggestion("e.g., Day or Sol");
+        labelField.setSuggestion(Text.translatable("ui.beautiful_day_counter.label.suggestion").getString());
         addDrawableChild(labelField);
 
         y += 30;
@@ -60,7 +61,7 @@ public class ConfigScreen extends Screen {
 
         y += 30;
         // Save
-        addDrawableChild(ButtonWidget.builder(Text.literal("Save"), b -> {
+        addDrawableChild(ButtonWidget.builder(Text.translatable("ui.beautiful_day_counter.save"), b -> {
             config.label = labelField.getText();
             config.save();
             // Apply to live state
@@ -75,17 +76,21 @@ public class ConfigScreen extends Screen {
         }).dimensions(centerX - 100, y, 95, 20).build());
 
         // Cancel
-        addDrawableChild(ButtonWidget.builder(Text.literal("Cancel"), b ->
+        addDrawableChild(ButtonWidget.builder(Text.translatable("ui.beautiful_day_counter.cancel"), b ->
                 MinecraftClient.getInstance().setScreen(parent)
         ).dimensions(centerX + 5, y, 95, 20).build());
     }
 
     private String hudLabel() {
-        return "HUD: " + (config.hudVisible ? "Visible" : "Hidden");
+        return (config.hudVisible
+                ? Text.translatable("ui.beautiful_day_counter.hud.visible")
+                : Text.translatable("ui.beautiful_day_counter.hud.hidden")).getString();
     }
 
     private String toastLabel() {
-        return "Toast: " + (config.showToast ? "Enabled" : "Disabled");
+        return (config.showToast
+                ? Text.translatable("ui.beautiful_day_counter.toast.enabled")
+                : Text.translatable("ui.beautiful_day_counter.toast.disabled")).getString();
     }
 
     private String cornerLabel() {
@@ -112,7 +117,8 @@ public class ConfigScreen extends Screen {
         if (labelField != null) {
             int lx = labelField.getX();
             int ly = labelField.getY() - 12;
-            context.drawTextWithShadow(this.textRenderer, Text.literal("Counter Label"), lx, ly, 0xFFFFFFFF);
-        }
+            context.drawTextWithShadow(this.textRenderer,
+                    Text.translatable("ui.beautiful_day_counter.label.caption"), lx, ly, 0xFFFFFFFF);
+    }
     }
 }
