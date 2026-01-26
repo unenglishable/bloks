@@ -33,6 +33,15 @@ jobs:
           gradle-version: 8.10.2
           arguments: build
 
+      - name: Static analysis (Spotless, Checkstyle, SpotBugs)
+        uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: 8.10.2
+          arguments: |
+            spotlessCheck
+            checkstyleMain checkstyleTest
+            spotbugsMain spotbugsTest
+
       - name: Remap jars
         uses: gradle/gradle-build-action@v3
         with:
@@ -46,4 +55,3 @@ jobs:
           path: |
             mods/*/build/libs/*.jar
           if-no-files-found: warn
-
