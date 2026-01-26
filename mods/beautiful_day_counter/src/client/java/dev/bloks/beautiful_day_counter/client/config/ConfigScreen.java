@@ -177,9 +177,9 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void resize(MinecraftClient client, int width, int height) {
+    public void resize(int width, int height) {
         int prevScroll = this.scroll;
-        super.resize(client, width, height);
+        super.resize(width, height);
         this.scroll = prevScroll;
         relayout();
     }
