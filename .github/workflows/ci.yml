@@ -23,7 +23,7 @@ jobs:
 
       - name: Validate Gradle wrapper (if present)
         if: ${{ hashFiles('gradle/wrapper/gradle-wrapper.jar') != '' }}
-        uses: gradle/actions/wrapper-validation@v3
+        uses: gradle/actions/wrapper-validation@v5
 
       - name: Set up Java ${{ matrix.java }}
         uses: actions/setup-java@v4
@@ -32,7 +32,7 @@ jobs:
           java-version: ${{ matrix.java }}
 
       - name: Assemble (Gradle 9.3.0)
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/gradle-build-action@v5
         with:
           gradle-version: 9.3.0
           arguments: assemble
@@ -43,7 +43,7 @@ jobs:
           gradle-home-cache-includes: caches wrapper
 
       - name: Tests
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/gradle-build-action@v5
         with:
           gradle-version: 9.3.0
           arguments: test
@@ -54,7 +54,7 @@ jobs:
           gradle-home-cache-includes: caches wrapper
 
       - name: Static analysis (Spotless, Checkstyle, SpotBugs)
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/gradle-build-action@v5
         with:
           gradle-version: 9.3.0
           arguments: |
@@ -80,7 +80,7 @@ jobs:
       - run: npx -y prettier@3.2.5 --check "**/*.md"
 
       - name: Remap jars
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/gradle-build-action@v5
         with:
           gradle-version: 9.3.0
           arguments: remapJar
