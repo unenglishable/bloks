@@ -55,7 +55,7 @@ jobs:
       - name: Build and remap
         uses: gradle/gradle-build-action@v3
         with:
-          gradle-version: 8.14.4
+          gradle-version: 8.16.0
           arguments: |
             :mods:${{ env.MODID }}:build
             :mods:${{ env.MODID }}:remapJar

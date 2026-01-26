@@ -30,7 +30,7 @@ jobs:
       - name: Build module
         uses: gradle/gradle-build-action@v3
         with:
-          gradle-version: 8.14.4
+          gradle-version: 8.16.0
           arguments: |
             :mods:${{ steps.parse.outputs.modid }}:build
             :mods:${{ steps.parse.outputs.modid }}:remapJar
