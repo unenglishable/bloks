@@ -13,6 +13,7 @@ public class ConfigScreen extends Screen {
     private ButtonWidget toggleHudBtn;
     private ButtonWidget cornerBtn;
     private ButtonWidget toastBtn;
+    private ButtonWidget moonTexBtn;
     private final Config config;
 
     public ConfigScreen(Screen parent, Config config) {
@@ -60,6 +61,14 @@ public class ConfigScreen extends Screen {
         addDrawableChild(toastBtn);
 
         y += 30;
+        // Moon texture source toggle
+        moonTexBtn = ButtonWidget.builder(Text.literal(moonTextureLabel()), b -> {
+            config.useSystemMoonTexture = !config.useSystemMoonTexture;
+            b.setMessage(Text.literal(moonTextureLabel()));
+        }).dimensions(centerX - 100, y, 200, 20).build();
+        addDrawableChild(moonTexBtn);
+
+        y += 30;
         // Save
         addDrawableChild(ButtonWidget.builder(Text.translatable("ui.beautiful_day_counter.save"), b -> {
             config.label = labelField.getText();
@@ -72,6 +81,7 @@ public class ConfigScreen extends Screen {
             }
             state.setHudCorner(config.hudCorner);
             state.setToastEnabled(config.showToast);
+            state.setUseSystemMoonTexture(config.useSystemMoonTexture);
             MinecraftClient.getInstance().setScreen(parent);
         }).dimensions(centerX - 100, y, 95, 20).build());
 
@@ -91,6 +101,12 @@ public class ConfigScreen extends Screen {
         return (config.showToast
                 ? Text.translatable("ui.beautiful_day_counter.toast.enabled")
                 : Text.translatable("ui.beautiful_day_counter.toast.disabled")).getString();
+    }
+
+    private String moonTextureLabel() {
+        return (config.useSystemMoonTexture
+                ? Text.translatable("ui.beautiful_day_counter.moon.texture.system")
+                : Text.translatable("ui.beautiful_day_counter.moon.texture.fallback")).getString();
     }
 
     private String cornerLabel() {

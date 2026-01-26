@@ -27,6 +27,9 @@ public final class Config {
     @SerializedName("hudCorner")
     public String hudCorner = "bottom_right"; // top_left, top_right, bottom_left, bottom_right
 
+    @SerializedName("useSystemMoonTexture")
+    public boolean useSystemMoonTexture = true;
+
     public static Path configPath() {
         return FabricLoader.getInstance().getConfigDir().resolve(FILE_NAME);
     }

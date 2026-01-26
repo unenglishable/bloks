@@ -25,6 +25,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
         ClientState.get().setDayLabel(cfg.label);
         ClientState.get().setHudCorner(cfg.hudCorner);
         ClientState.get().setToastEnabled(cfg.showToast);
+        ClientState.get().setUseSystemMoonTexture(cfg.useSystemMoonTexture);
         if (ClientState.get().isHudVisible() != cfg.hudVisible) {
             ClientState.get().toggleHudVisible();
         }
@@ -46,7 +47,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 LOGGER.debug("Day updated from payload: {}", day);
                 // Show native toast via ToastManager if enabled
                 if (ClientState.get().isToastEnabled()) {
-                    Toasts.showDayToast(day, ClientState.get().getDayLabel());
+                    Toasts.showDayToast(day, ClientState.get().getDayLabel(), ClientState.get().isUseSystemMoonTexture());
                 }
             });
         });
@@ -94,7 +95,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 cfg.save();
                 // Brief confirmation toast
                 if (ClientState.get().isToastEnabled()) {
-                    Toasts.showDayToast(state.getCurrentDay(), state.isHudVisible() ? state.getDayLabel() : "");
+                    Toasts.showDayToast(state.getCurrentDay(), state.isHudVisible() ? state.getDayLabel() : "", ClientState.get().isUseSystemMoonTexture());
                 }
             }
             if (state.getCurrentDay() == 0L) {
@@ -105,7 +106,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 state.setCurrentDay(computedDay);
                 LOGGER.debug("Day advanced (client fallback): {}", computedDay);
                 if (ClientState.get().isToastEnabled()) {
-                    Toasts.showDayToast(computedDay, state.getDayLabel());
+                    Toasts.showDayToast(computedDay, state.getDayLabel(), ClientState.get().isUseSystemMoonTexture());
                 }
             }
             // No action-bar spam; HUD overlay renders each frame via HudRenderCallback
