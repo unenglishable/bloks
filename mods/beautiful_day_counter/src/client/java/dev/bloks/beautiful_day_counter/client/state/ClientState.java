@@ -1,6 +1,7 @@
 package dev.bloks.beautiful_day_counter.client.state;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public final class ClientState {
   private static final ClientState INSTANCE = new ClientState();
 

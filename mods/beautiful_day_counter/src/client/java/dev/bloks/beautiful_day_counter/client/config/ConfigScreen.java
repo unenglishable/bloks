@@ -1,7 +1,7 @@
 package dev.bloks.beautiful_day_counter.client.config;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import dev.bloks.beautiful_day_counter.client.state.ClientState;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
