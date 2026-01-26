@@ -110,6 +110,8 @@ Tooling via asdf
 - Implementation guide: see `docs/IMPLEMENTATION_GUIDE.md` for technology-agnostic steps to add new
   mods and restart work in new AI sessions. When altering `PLAN.md`, prefer deprecating lines
   (prefix `Deprecated:` with a date) rather than deleting.
+- Any time you touch Markdown, run `npx -y prettier@3.2.5 --write "**/*.md"` (or its check mode) and
+  commit the resulting changes as part of the same task. Prettier fixes are always acceptable.
 
 Documentation boundaries
 

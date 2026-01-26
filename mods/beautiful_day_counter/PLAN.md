@@ -26,6 +26,7 @@ Phases
   - Deprecated (2026-01-26): weather icon/report — not needed now.
 
 Testing
+
 - Unit-test day computation from tick times. [Completed]
 - Manual: verify toast appears once per new day; HUD respects F1 and corner config. [Ongoing]
 
