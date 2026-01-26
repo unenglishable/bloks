@@ -25,23 +25,35 @@ public final class DayToast implements Toast {
 
     @Override
     public void draw(DrawContext context, TextRenderer textRenderer, long time) {
-        // Warm background dimensions (approximate default toast size)
-        int bw = Math.max(120, textRenderer.getWidth(title) + 12 + 16 + 4);
-        int bh = textRenderer.fontHeight + 6;
+        // Layout constants
+        int pad = 8;
+        int iconSize = 16;
+        int iconPad = 6;
+
+        int textW = textRenderer.getWidth(title);
+        int bw = Math.max(140, pad + iconSize + iconPad + textW + pad);
+        int bh = Math.max(24, textRenderer.fontHeight + pad);
         int bx = 0;
         int by = 0;
-        // Background with soft golden color and subtle border
-        context.fill(bx, by, bx + bw, by + bh, 0xC0FFCC66);
-        context.fill(bx, by, bx + bw, by + 1, 0x80E6B450);
-        context.fill(bx, by + bh - 1, bx + bw, by + bh, 0x80E6B450);
-        context.fill(bx, by, bx + 1, by + bh, 0x80E6B450);
-        context.fill(bx + bw - 1, by, bx + bw, by + bh, 0x80E6B450);
 
-        // Icon (clock) + text
-        int iconX = bx + 6;
-        int iconY = by + 2;
+        // Background with soft golden color and 75% opacity (alpha ~ 0xBF/0xC0)
+        context.fill(bx, by, bx + bw, by + bh, 0xBFFFCC66);
+        // Subtle border
+        int border = 0x80E6B450;
+        context.fill(bx, by, bx + bw, by + 1, border);
+        context.fill(bx, by + bh - 1, bx + bw, by + bh, border);
+        context.fill(bx, by, bx + 1, by + bh, border);
+        context.fill(bx + bw - 1, by, bx + bw, by + bh, border);
+
+        // Icon (clock), vertically centered
+        int iconX = bx + pad;
+        int iconY = by + (bh - iconSize) / 2;
         context.drawItem(new ItemStack(Items.CLOCK), iconX, iconY);
-        context.drawTextWithShadow(textRenderer, title, iconX + 16 + 4, by + 4, 0xFF2A2A2A);
+
+        // Bright, readable text with shadow, vertically centered
+        int textX = iconX + iconSize + iconPad;
+        int textY = by + (bh - textRenderer.fontHeight) / 2;
+        context.drawTextWithShadow(textRenderer, title, textX, textY, 0xFFFFFFFF);
     }
 
     @Override
