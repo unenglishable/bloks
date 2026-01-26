@@ -24,7 +24,7 @@ public class ConfigScreen extends Screen {
     private static final int MARGIN = 12;
 
     public ConfigScreen(Screen parent, Config config) {
-        super(Text.literal("Beautiful Day Counter Config"));
+        super(Text.translatable("ui.beautiful_day_counter.config.title"));
         this.parent = parent;
         this.config = config;
     }
@@ -46,25 +46,25 @@ public class ConfigScreen extends Screen {
 
         y += 30;
         // Toggle HUD button
-        toggleHudBtn = ButtonWidget.builder(Text.literal(hudLabel()), b -> {
+        toggleHudBtn = ButtonWidget.builder(hudLabel(), b -> {
             config.hudVisible = !config.hudVisible;
-            b.setMessage(Text.literal(hudLabel()));
+            b.setMessage(hudLabel());
         }).dimensions(centerX - 100, y, 200, 20).build();
         addDrawableChild(toggleHudBtn);
 
         y += 30;
         // Corner selector
-        cornerBtn = ButtonWidget.builder(Text.literal(cornerLabel()), b -> {
+        cornerBtn = ButtonWidget.builder(cornerLabel(), b -> {
             config.hudCorner = nextCorner(config.hudCorner);
-            b.setMessage(Text.literal(cornerLabel()));
+            b.setMessage(cornerLabel());
         }).dimensions(centerX - 100, y, 200, 20).build();
         addDrawableChild(cornerBtn);
 
         y += 30;
         // Toast toggle (placed after HUD settings to keep them grouped)
-        toastBtn = ButtonWidget.builder(Text.literal(toastLabel()), b -> {
+        toastBtn = ButtonWidget.builder(toastLabel(), b -> {
             config.showToast = !config.showToast;
-            b.setMessage(Text.literal(toastLabel()));
+            b.setMessage(toastLabel());
         }).dimensions(centerX - 100, y, 200, 20).build();
         addDrawableChild(toastBtn);
 
@@ -97,26 +97,26 @@ public class ConfigScreen extends Screen {
         relayout();
     }
 
-    private String hudLabel() {
-        return (config.hudVisible
+    private Text hudLabel() {
+        return config.hudVisible
                 ? Text.translatable("ui.beautiful_day_counter.hud.visible")
-                : Text.translatable("ui.beautiful_day_counter.hud.hidden")).getString();
+                : Text.translatable("ui.beautiful_day_counter.hud.hidden");
     }
 
-    private String toastLabel() {
-        return (config.showToast
+    private Text toastLabel() {
+        return config.showToast
                 ? Text.translatable("ui.beautiful_day_counter.toast.enabled")
-                : Text.translatable("ui.beautiful_day_counter.toast.disabled")).getString();
+                : Text.translatable("ui.beautiful_day_counter.toast.disabled");
     }
 
     // Moon feature removed
 
-    private String cornerLabel() {
-        return "HUD Corner: " + switch (config.hudCorner.toLowerCase()) {
-            case "top_left" -> "Top Left";
-            case "top_right" -> "Top Right";
-            case "bottom_left" -> "Bottom Left";
-            default -> "Bottom Right";
+    private Text cornerLabel() {
+        return switch (config.hudCorner.toLowerCase()) {
+            case "top_left" -> Text.translatable("ui.beautiful_day_counter.corner.top_left");
+            case "top_right" -> Text.translatable("ui.beautiful_day_counter.corner.top_right");
+            case "bottom_left" -> Text.translatable("ui.beautiful_day_counter.corner.bottom_left");
+            default -> Text.translatable("ui.beautiful_day_counter.corner.bottom_right");
         };
     }
 
