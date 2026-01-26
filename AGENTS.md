@@ -100,3 +100,13 @@ Tooling via asdf
 Documentation boundaries
 - Top-level `README.md` is general-purpose: repo layout, CI/release, generic dev/testing commands.
 - Per-mod specifics (usage, config, dev notes) live under that mod’s directory.
+
+## External Data & Version Pinning
+- Do not claim knowledge of “latest” dependency/plugin versions if network access is unavailable.
+- When a version is needed, ask the user to provide authoritative metadata (e.g., `maven-metadata.xml`)
+  via `curl` and paste/upload, then pin the exact version in `gradle/libs.versions.toml`.
+- Prefer mapping plugin IDs to modules in `settings.gradle.kts` (`pluginManagement` + `resolutionStrategy`)
+  so versions resolve from the correct repository (e.g., Fabric Maven for Loom).
+- Add the required repositories explicitly (e.g., Fabric, TerraformersMC) and keep them scoped in
+  `pluginManagement` (for plugins) and project `repositories` (for libraries).
+- Treat `.tool-versions` as the source of truth for Java/Gradle/Node; align CI/workflows with it.
