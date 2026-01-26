@@ -27,7 +27,7 @@ public class ConfigScreen extends Screen {
         int y = this.height / 3;
 
         // Label input
-        labelField = new TextFieldWidget(this.textRenderer, centerX - 100, y, 200, 20, Text.literal("Day label"));
+        labelField = new TextFieldWidget(this.textRenderer, centerX - 100, y, 200, 20, Text.literal("Counter label (e.g., Day/Sol)"));
         labelField.setMaxLength(32);
         labelField.setText(config.label);
         addDrawableChild(labelField);
@@ -41,20 +41,20 @@ public class ConfigScreen extends Screen {
         addDrawableChild(toggleHudBtn);
 
         y += 30;
-        // Toast toggle
-        toastBtn = ButtonWidget.builder(Text.literal(toastLabel()), b -> {
-            config.showToast = !config.showToast;
-            b.setMessage(Text.literal(toastLabel()));
-        }).dimensions(centerX - 100, y, 200, 20).build();
-        addDrawableChild(toastBtn);
-
-        y += 30;
         // Corner selector
         cornerBtn = ButtonWidget.builder(Text.literal(cornerLabel()), b -> {
             config.hudCorner = nextCorner(config.hudCorner);
             b.setMessage(Text.literal(cornerLabel()));
         }).dimensions(centerX - 100, y, 200, 20).build();
         addDrawableChild(cornerBtn);
+
+        y += 30;
+        // Toast toggle (placed after HUD settings to keep them grouped)
+        toastBtn = ButtonWidget.builder(Text.literal(toastLabel()), b -> {
+            config.showToast = !config.showToast;
+            b.setMessage(Text.literal(toastLabel()));
+        }).dimensions(centerX - 100, y, 200, 20).build();
+        addDrawableChild(toastBtn);
 
         y += 30;
         // Save
@@ -86,7 +86,7 @@ public class ConfigScreen extends Screen {
     }
 
     private String cornerLabel() {
-        return "Corner: " + switch (config.hudCorner.toLowerCase()) {
+        return "HUD Corner: " + switch (config.hudCorner.toLowerCase()) {
             case "top_left" -> "Top Left";
             case "top_right" -> "Top Right";
             case "bottom_left" -> "Bottom Left";
@@ -101,5 +101,14 @@ public class ConfigScreen extends Screen {
             case "bottom_right" -> "bottom_left";
             default -> "top_left";
         };
+    }
+
+    @Override
+    public void render(net.minecraft.client.gui.DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
+        if (labelField != null) {
+            context.drawText(this.textRenderer, Text.literal("Counter Label (e.g., Day/Sol)"),
+                    labelField.getX(), labelField.getY() - 10, 0xA0A0A0, false);
+        }
     }
 }
