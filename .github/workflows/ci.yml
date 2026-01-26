@@ -36,9 +36,6 @@ jobs:
         with:
           gradle-version: 9.3.0
           cache-read-only: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork }}
-          cache-key: gradle-home-v1-${{ runner.os }}-java${{ matrix.java }}-${{ hashFiles('settings.gradle.kts', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle.properties', '.tool-versions', 'mods/**/build.gradle.kts') }}
-          cache-restore-keys: |
-            gradle-home-v1-${{ runner.os }}-java${{ matrix.java }}-
           gradle-home-cache-includes: caches wrapper
 
       - name: Assemble
