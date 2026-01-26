@@ -1,4 +1,4 @@
-import org.gradle.api.plugins.VersionCatalogsExtension
+import org.gradle.api.artifacts.VersionCatalogsExtension
 
 plugins {
   alias(libs.plugins.fabric.loom)
