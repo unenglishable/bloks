@@ -30,7 +30,8 @@ subprojects {
 
   configure<CheckstyleExtension> {
     toolVersion = "10.16.0"
-    configDirectory.set(file("config/checkstyle"))
+    // Use the repo-root config for all modules instead of per-module paths
+    configDirectory.set(rootProject.file("config/checkstyle"))
     isShowViolations = true
   }
 
