@@ -30,6 +30,9 @@ public final class Config {
     @SerializedName("useSystemMoonTexture")
     public boolean useSystemMoonTexture = true;
 
+    @SerializedName("debugSystemMoon")
+    public boolean debugSystemMoon = false;
+
     public static Path configPath() {
         return FabricLoader.getInstance().getConfigDir().resolve(FILE_NAME);
     }

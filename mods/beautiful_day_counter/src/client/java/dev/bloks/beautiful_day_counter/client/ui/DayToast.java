@@ -61,13 +61,19 @@ public final class DayToast implements Toast {
         int textY = by + (bh - textRenderer.fontHeight) / 2;
         context.drawTextWithShadow(textRenderer, title, textX, textY, 0xFFFFFFFF);
 
-        // Right icon: moon phase glyph placeholder (until system texture signature is finalized)
+        // Right icon: try system moon texture via reflection when enabled; fallback to glyph
         int rightIconX = bx + bw - pad - iconSize;
         int rightIconY = iconY;
-        String[] glyphs = new String[]{"●", "◔", "◑", "◕", "○", "◕", "◑", "◔"};
-        String g = glyphs[phase % glyphs.length];
-        context.fill(rightIconX, rightIconY, rightIconX + iconSize, rightIconY + iconSize, 0x20FFFFFF);
-        context.drawTextWithShadow(textRenderer, Text.literal(g), rightIconX + 3, rightIconY + 2, 0xFFFFFFFF);
+        boolean drawn = false;
+        if (useSystemMoonTexture) {
+            drawn = MoonTextureDebug.drawSystemMoonPhase(context, rightIconX, rightIconY, phase, iconSize);
+        }
+        if (!drawn) {
+            String[] glyphs = new String[]{"●", "◔", "◑", "◕", "○", "◕", "◑", "◔"};
+            String g = glyphs[phase % glyphs.length];
+            context.fill(rightIconX, rightIconY, rightIconX + iconSize, rightIconY + iconSize, 0x20FFFFFF);
+            context.drawTextWithShadow(textRenderer, Text.literal(g), rightIconX + 3, rightIconY + 2, 0xFFFFFFFF);
+        }
     }
 
     @Override

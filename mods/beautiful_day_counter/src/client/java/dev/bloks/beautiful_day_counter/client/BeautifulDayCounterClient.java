@@ -47,7 +47,9 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 LOGGER.debug("Day updated from payload: {}", day);
                 // Show native toast via ToastManager if enabled
                 if (ClientState.get().isToastEnabled()) {
-                    Toasts.showDayToast(day, ClientState.get().getDayLabel(), ClientState.get().isUseSystemMoonTexture());
+                    boolean useSystem = ClientState.get().isUseSystemMoonTexture();
+                    if (ClientState.get().isDebugSystemMoon()) useSystem = true;
+                    Toasts.showDayToast(day, ClientState.get().getDayLabel(), useSystem);
                 }
             });
         });
@@ -95,7 +97,9 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 cfg.save();
                 // Brief confirmation toast
                 if (ClientState.get().isToastEnabled()) {
-                    Toasts.showDayToast(state.getCurrentDay(), state.isHudVisible() ? state.getDayLabel() : "", ClientState.get().isUseSystemMoonTexture());
+                    boolean useSystem = ClientState.get().isUseSystemMoonTexture();
+                    if (ClientState.get().isDebugSystemMoon()) useSystem = true;
+                    Toasts.showDayToast(state.getCurrentDay(), state.isHudVisible() ? state.getDayLabel() : "", useSystem);
                 }
             }
             if (state.getCurrentDay() == 0L) {
@@ -106,7 +110,9 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 state.setCurrentDay(computedDay);
                 LOGGER.debug("Day advanced (client fallback): {}", computedDay);
                 if (ClientState.get().isToastEnabled()) {
-                    Toasts.showDayToast(computedDay, state.getDayLabel(), ClientState.get().isUseSystemMoonTexture());
+                    boolean useSystem = ClientState.get().isUseSystemMoonTexture();
+                    if (ClientState.get().isDebugSystemMoon()) useSystem = true;
+                    Toasts.showDayToast(computedDay, state.getDayLabel(), useSystem);
                 }
             }
             // No action-bar spam; HUD overlay renders each frame via HudRenderCallback
