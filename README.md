@@ -28,6 +28,29 @@ We (you + this AI agent) are building Minecraft Java mods with Fabric (Loom) in 
   - Semantic Release: run Publish Mod (Semantic Release) with `modid` (see [publish-mod.yml](.github/workflows/publish-mod.yml)) to bump version from commits, tag, build (Java 21), upload jars, and optionally publish to Modrinth/CurseForge.
 - Token setup: see [docs/PLATFORM_SETUP.md](docs/PLATFORM_SETUP.md). Publishing details in [docs/PUBLISHING.md](docs/PUBLISHING.md).
 
+## Test In-Game
+- Local dev client: `./gradlew :mods:<modid>:runClient` (fastest for iteration).
+- Build a jar: `./gradlew :mods:<modid>:remapJar` → find jar in `mods/<modid>/build/libs/` and copy
+  it to your Fabric `mods/` folder (client or server).
+- From CI: open a CI run artifact `mod-jars-java-<ver>` and download the jar.
+
+## Lint & Code Quality
+- Format check: `./gradlew spotlessCheck` (auto-fix: `spotlessApply`).
+- Lint: `./gradlew checkstyleMain checkstyleTest`.
+- Static analysis: `./gradlew spotbugsMain spotbugsTest` (HTML reports in `build/reports/spotbugs`).
+CI runs all of the above on every push/PR.
+
+## Best Practices Before Publishing
+- Sanity tests:
+  - New world and existing world; sleep → new day toast shows once.
+  - Toggle (H), F1 Hide GUI, dimension switch (Overworld/Nether/End).
+  - Join a server without the mod (client-only fallback) and with the mod (packet assist).
+- Logs: watch the game log for errors/exceptions; keep log noise minimal.
+- Conflicts: check keybinding conflicts; verify Mod Menu config opens and saves.
+- Performance: ensure HUD/toast do not cause frame drops; test with other common mods.
+- Packaging: verify `fabric.mod.json` fields, jar filename, and that only needed classes/resources
+  are included (no dev-only assets).
+
 ## Getting Started (new machine)
 1) Install JDK 21 (Temurin). Optional: JDK 17 for matrix testing.
 2) Clone repo. Ensure `java -version` shows 21.
