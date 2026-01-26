@@ -3,6 +3,7 @@ package dev.bloks.beautiful_day_counter.client;
 import dev.bloks.beautiful_day_counter.client.state.ClientState;
 import dev.bloks.beautiful_day_counter.client.ui.Toasts;
 import dev.bloks.beautiful_day_counter.net.DayChangePayload;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import dev.bloks.beautiful_day_counter.client.config.Config;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -30,9 +31,11 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
         // Keybinding constructor signature changed in 1.21.11 (Category enum). We will reintroduce
         // registration after pinning the exact API. For now, rely on config/UI toggle only.
         TOGGLE_KEY = null;
-        // Register legacy ByteBuf-based receiver (no payload type registry needed)
-        ClientPlayNetworking.registerGlobalReceiver(DayChangePayload.CHANNEL, (client, handler, buf, responseSender) -> {
-            long day = buf.readVarLong();
+        // Register typed payload for S2C
+        PayloadTypeRegistry.playS2C().register(DayChangePayload.ID, DayChangePayload.CODEC);
+        ClientPlayNetworking.registerGlobalReceiver(DayChangePayload.ID, (payload, context) -> {
+            long day = payload.day();
+            var client = net.minecraft.client.MinecraftClient.getInstance();
             client.execute(() -> {
                 ClientState.get().setCurrentDay(day);
                 LOGGER.debug("Day updated from payload: {}", day);

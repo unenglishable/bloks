@@ -3,12 +3,12 @@ package dev.bloks.beautiful_day_counter.net;
 import dev.bloks.beautiful_day_counter.BeautifulDayCounter;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.util.Identifier;
 
 public record DayChangePayload(long day) implements CustomPayload {
     public static final Id<DayChangePayload> ID = new Id<>(Identifier.of(BeautifulDayCounter.MOD_ID, "day_change"));
-    // Legacy channel identifier for ByteBuf-based networking (avoids payload type registry)
-    public static final Identifier CHANNEL = Identifier.of(BeautifulDayCounter.MOD_ID, "day_change");
+    public static final PacketCodec<PacketByteBuf, DayChangePayload> CODEC = PacketCodec.of(DayChangePayload::write, DayChangePayload::read);
 
     @Override
     public Id<? extends CustomPayload> getId() {
