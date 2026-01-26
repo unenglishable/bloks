@@ -27,16 +27,16 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java }}
 
-      - name: Build (Gradle 8.14.4)
+      - name: Build (Gradle 9.3.0)
         uses: gradle/gradle-build-action@v3
         with:
-          gradle-version: 8.14.4
+          gradle-version: 9.3.0
           arguments: build
 
       - name: Static analysis (Spotless, Checkstyle, SpotBugs)
         uses: gradle/gradle-build-action@v3
         with:
-          gradle-version: 8.14.4
+          gradle-version: 9.3.0
           arguments: |
             spotlessCheck
             checkstyleMain checkstyleTest

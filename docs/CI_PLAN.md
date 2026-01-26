@@ -3,7 +3,7 @@
 Scope: Build/test Fabric Loom multi-mods, remap jars, and publish per-module releases.
 
 Build job (ci.yml)
-- Ubuntu; Java 21 (Minecraft 1.21.x requires JDK 21).
+- Ubuntu; Java 21 (Minecraft 1.21.x requires JDK 21) and Gradle 9.3.0.
 - Steps: checkout → setup-java → gradle build → remapJar → upload jars.
 
 Release (release.yml)
@@ -21,7 +21,7 @@ Publish with semantic-release (publish-mod.yml)
 Versioning policy
 - Conventional (Angular) commits drive semantic versioning.
 - Per-module versions live in `mods/<modid>/gradle.properties`.
-- Java toolchain set to 21 in modules; CI uses Java 21.
+- Java toolchain set to 21 in modules; CI uses Java 21 and Gradle 9.3.0.
 
 Security & caching
 - Gradle caches via gradle-build-action.
