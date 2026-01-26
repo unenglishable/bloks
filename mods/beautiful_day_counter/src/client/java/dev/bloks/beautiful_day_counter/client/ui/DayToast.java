@@ -1,41 +1,34 @@
 package dev.bloks.beautiful_day_counter.client.ui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.toasts.Toast;
-import net.minecraft.client.gui.components.toasts.ToastComponent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.toast.Toast;
+import net.minecraft.client.toast.ToastManager;
+import net.minecraft.text.Text;
 
-public class DayToast implements Toast {
-    private static final ResourceLocation TOASTS_TEXTURE = new ResourceLocation("textures/gui/toasts.png");
-    private static final ItemStack ICON = new ItemStack(Items.CLOCK);
-    private final Component title;
+/**
+ * Minimal custom toast using Yarn 1.21.11 APIs.
+ * Draws a single line of text for a fixed duration.
+ */
+public final class DayToast implements Toast {
+    private final Text title;
     private final long displayMs;
+    private long startTime = -1L;
 
-    public DayToast(Component title, long displayMs) {
+    public DayToast(Text title, long displayMs) {
         this.title = title;
         this.displayMs = displayMs;
     }
 
-    public static void show(long day, String label) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc == null) return;
-        Component title = Component.literal(label + " " + day);
-        mc.getToasts().addToast(new DayToast(title, 3000));
-    }
-
     @Override
-    public Visibility render(GuiGraphics graphics, ToastComponent toastComponent, long time) {
-        // Background (160x32) like SystemToast
-        graphics.blit(TOASTS_TEXTURE, 0, 0, 0, 32, 160, 32);
-        // Icon
-        graphics.renderFakeItem(ICON, 6, 8);
-        // Text
-        graphics.drawString(Minecraft.getInstance().font, title, 30, 12, 0xFFFFFF, false);
-        return time >= displayMs ? Visibility.HIDE : Visibility.SHOW;
+    public Visibility render(DrawContext context, ToastManager manager, long time) {
+        if (startTime < 0) startTime = time;
+        var mc = MinecraftClient.getInstance();
+        if (mc != null && mc.textRenderer != null) {
+            // Simple text centered vertically in the toast area
+            context.drawText(mc.textRenderer, title, 8, 8, 0xFFFFFF, true);
+        }
+        return (time - startTime) < displayMs ? Visibility.SHOW : Visibility.HIDE;
     }
 }
 
