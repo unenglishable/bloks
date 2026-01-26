@@ -159,7 +159,9 @@ public class ConfigScreen extends Screen {
   }
 
   private void updateSuggestion() {
-    if (labelField == null) return;
+    if (labelField == null) {
+      return;
+    }
     boolean empty = labelField.getText() == null || labelField.getText().isEmpty();
     labelField.setSuggestion(
         empty ? Text.translatable("ui.beautiful_day_counter.label.suggestion").getString() : null);
@@ -204,8 +206,12 @@ public class ConfigScreen extends Screen {
       int maxScroll = Math.max(0, contentHeight - viewport);
       // Scroll direction: positive verticalAmount scrolls up (reduce scroll)
       scroll -= (int) (verticalAmount * 12);
-      if (scroll < 0) scroll = 0;
-      if (scroll > maxScroll) scroll = maxScroll;
+      if (scroll < 0) {
+        scroll = 0;
+      }
+      if (scroll > maxScroll) {
+        scroll = maxScroll;
+      }
       relayout();
       return true;
     }
@@ -224,10 +230,18 @@ public class ConfigScreen extends Screen {
     int centerX = this.width / 2;
     // Compute content height using row spacing
     int rows = 0;
-    if (labelField != null) rows++;
-    if (toggleHudBtn != null) rows++;
-    if (cornerBtn != null) rows++;
-    if (toastBtn != null) rows++;
+    if (labelField != null) {
+      rows++;
+    }
+    if (toggleHudBtn != null) {
+      rows++;
+    }
+    if (cornerBtn != null) {
+      rows++;
+    }
+    if (toastBtn != null) {
+      rows++;
+    }
     if (saveBtn != null) {
       rows++;
     }
