@@ -63,7 +63,9 @@ public final class DayToast implements Toast {
 
   @Override
   public void update(ToastManager manager, long time) {
-    if (startTime < 0) startTime = time;
+    if (startTime < 0) {
+      startTime = time;
+    }
     if (time - startTime >= displayMs) {
       visibility = Visibility.HIDE;
       if (!notified && onHide != null) {

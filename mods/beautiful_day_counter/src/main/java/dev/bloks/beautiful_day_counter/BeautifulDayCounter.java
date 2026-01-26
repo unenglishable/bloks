@@ -25,7 +25,9 @@ public class BeautifulDayCounter implements ModInitializer {
   private void onEndServerTick(MinecraftServer server) {
     // Use overworld time as the canonical day counter
     var world = server.getOverworld();
-    if (world == null) return;
+    if (world == null) {
+      return;
+    }
     long timeOfDay = world.getTimeOfDay();
     long day = (timeOfDay / 24000L) + 1L; // Day 1 starts at 0..23999
     if (day != lastDay) {
