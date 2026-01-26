@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 public class BeautifulDayCounterClient implements ClientModInitializer {
   public static final Logger LOGGER = LoggerFactory.getLogger("beautiful_day_counter:client");
-  private static net.minecraft.client.option.KeyBinding TOGGLE_KEY;
+  private net.minecraft.client.option.KeyBinding toggleKey;
 
   @Override
   public void onInitializeClient() {
@@ -29,7 +29,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
       ClientState.get().toggleHudVisible();
     }
     // Keybinding: toggle HUD on/off (default: H)
-    TOGGLE_KEY =
+    toggleKey =
         KeyBindingHelper.registerKeyBinding(
             new net.minecraft.client.option.KeyBinding(
                 "key.beautiful_day_counter.toggle",
@@ -113,7 +113,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
           long computedDay = (client.world.getTimeOfDay() / 24000L) + 1L;
           var state = ClientState.get();
           // Handle toggle key
-          if (TOGGLE_KEY != null && TOGGLE_KEY.wasPressed()) {
+          if (toggleKey != null && toggleKey.wasPressed()) {
             state.toggleHudVisible();
             cfg.hudVisible = state.isHudVisible();
             cfg.save();
