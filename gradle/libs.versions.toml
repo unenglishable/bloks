@@ -2,7 +2,7 @@
 minecraft = "1.21.11"
 fabric_loader = "0.16.7"
 fabric_api = "0.141.1+1.21.11"
-loom = "1.7.4"
+loom = "1.15"
 modmenu = "11.0.0"
 
 [libraries]
