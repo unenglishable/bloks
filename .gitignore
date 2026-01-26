@@ -13,7 +13,9 @@
 run/
 *.log
 
+# Node
+.npm-cache/
+
 # OS
 .DS_Store
 Thumbs.db
-
