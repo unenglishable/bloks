@@ -20,14 +20,13 @@ Phases
   - Basic config for label text (e.g., "Day", "Sol"). [Completed]
 - P4 Polish + config:
   - Persist client config (visibility, label, HUD corner, toast enable). [Completed]
-  - Localization (lang): convert UI strings to translatables. [In Progress]
+  - Localization (lang): convert UI strings to translatables. [Completed]
   - Deprecated (2026-01-27): moon phase icon — removed for simplicity and mappings stability.
   - Deprecated (2026-01-26): positioning offsets — decided corner selection is sufficient.
   - Deprecated (2026-01-26): weather icon/report — not needed now.
 
 Testing
-
-- Unit-test day computation from tick times. [Planned]
+- Unit-test day computation from tick times. [Completed]
 - Manual: verify toast appears once per new day; HUD respects F1 and corner config. [Ongoing]
 
 Packaging
@@ -38,4 +37,5 @@ Packaging
 Status
 
 - Networking + client fallback done. HUD overlay implemented. Config + Mod Menu integrated.
-- Next concrete steps: localization (finish), moon phase icon.
+- Localization shipped (lang strings + i18n wiring). Unit tests cover day math.
+- Deprecated future work: moon phase icon and weather additions unless requirements change.
