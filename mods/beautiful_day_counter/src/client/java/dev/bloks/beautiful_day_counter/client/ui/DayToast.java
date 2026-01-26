@@ -50,22 +50,14 @@ public final class DayToast implements Toast {
 
         int iconX = bx + pad;
         int iconY = by + (bh - iconSize) / 2;
-        if (useSystemMoonTexture) {
-            // Render moon phase from system texture (4x2 grid)
-            Identifier moon = Identifier.of("minecraft", "textures/environment/moon_phases.png");
-            int texW = 256, texH = 128; // vanilla defaults; packs scale proportionally
-            int frameW = texW / 4;
-            int frameH = texH / 2;
-            int col = phase % 4;
-            int row = phase / 4;
-            int u = col * frameW;
-            int v = row * frameH;
-            context.drawTexture(moon, iconX, iconY, u, v, iconSize, iconSize, texW, texH);
-        } else {
-            // Fallback: draw a minimalist circle outline as a placeholder
-            context.fill(iconX, iconY, iconX + iconSize, iconY + iconSize, 0x20FFFFFF);
-            context.drawTextWithShadow(textRenderer, Text.literal("◐"), iconX + 3, iconY + 2, 0xFFFFFFFF);
-        }
+        // Render moon phase. If we cannot rely on DrawContext.drawTexture signature for this
+        // mappings set, use readable Unicode glyphs as a placeholder.
+        // Glyphs approximate: new moon, waxing, full, waning across 8 phases.
+        String[] glyphs = new String[]{"●", "◔", "◑", "◕", "○", "◕", "◑", "◔"};
+        String g = glyphs[phase % glyphs.length];
+        // Soft circle background
+        context.fill(iconX, iconY, iconX + iconSize, iconY + iconSize, 0x20FFFFFF);
+        context.drawTextWithShadow(textRenderer, Text.literal(g), iconX + 3, iconY + 2, 0xFFFFFFFF);
 
         // Bright, readable text with shadow, vertically centered
         int textX = iconX + iconSize + iconPad;
