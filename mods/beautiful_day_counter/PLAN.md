@@ -34,6 +34,11 @@ Packaging
 
 - Build: `./gradlew :mods:beautiful_day_counter:build` and `:remapJar`.
 - Run dev: `./gradlew :mods:beautiful_day_counter:runClient|runServer`.
+- Next CI tasks:
+  - Add explicit `:mods:beautiful_day_counter:test` (or `test`) step to GitHub Actions build.
+    [Planned]
+  - Re-enable/polish `publish-mod.yml` and `release.yml` workflows once CI remains green.
+    [Planned]
 
 Status
 
