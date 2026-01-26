@@ -44,7 +44,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 ClientState.get().setCurrentDay(day);
                 LOGGER.debug("Day updated from payload: {}", day);
                 // Temporary in-HUD toast until SystemToast is finalized
-                ClientState.get().setToastTicks(60);
+                ClientState.get().setToastTicks(300); // ~5s at ~60 FPS
             });
         });
 
@@ -90,9 +90,18 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 int by = margin;
                 int bw = Math.max(tw + 12, 100);
                 int bh = th;
-                // Background (semi-transparent dark)
-                drawContext.fill(bx, by, bx + bw, by + bh, 0xC0000000);
-                drawContext.drawTextWithShadow(mc.textRenderer, net.minecraft.text.Text.literal(toastText), bx + 6, by + 4, 0xFFFFFFFF);
+                // Background (warm morning vibe)
+                drawContext.fill(bx, by, bx + bw, by + bh, 0xC0FFCC66);
+                // Border
+                drawContext.fill(bx, by, bx + bw, by + 1, 0x80E6B450);
+                drawContext.fill(bx, by + bh - 1, bx + bw, by + bh, 0x80E6B450);
+                drawContext.fill(bx, by, bx + 1, by + bh, 0x80E6B450);
+                drawContext.fill(bx + bw - 1, by, bx + bw, by + bh, 0x80E6B450);
+                // Icon (clock) + text
+                int iconX = bx + 6;
+                int iconY = by + 2;
+                drawContext.drawItem(new net.minecraft.item.ItemStack(net.minecraft.item.Items.CLOCK), iconX, iconY);
+                drawContext.drawTextWithShadow(mc.textRenderer, net.minecraft.text.Text.literal(toastText), iconX + 16 + 4, by + 4, 0xFF2A2A2A);
                 state.decrementToastTicks();
             }
         });
@@ -117,7 +126,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             if (computedDay > state.getCurrentDay()) {
                 state.setCurrentDay(computedDay);
                 LOGGER.debug("Day advanced (client fallback): {}", computedDay);
-                state.setToastTicks(60);
+                state.setToastTicks(300); // ~5s at ~60 FPS
             }
             // No action-bar spam; HUD overlay renders each frame via HudRenderCallback
         });
