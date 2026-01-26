@@ -46,14 +46,17 @@ subprojects {
 
   tasks.withType<com.github.spotbugs.snom.SpotBugsTask>().configureEach {
     // Prefer SARIF for CI (GitHub code scanning) and aggregate at root build dir
-    reports { 
-      // Disable legacy HTML output
-      html.required.set(false)
-      xml.required.set(false)
-      sarif.required.set(true)
-      sarif.outputLocation.set(
-        rootProject.file("build/reports/spotbugs/${project.name}-${name}.sarif")
-      )
+    val taskName = name
+    reports.all { report ->
+      val isSarif = report.name.equals("sarif", ignoreCase = true)
+      report.required.set(isSarif)
+      if (isSarif && report is org.gradle.api.reporting.SingleFileReport) {
+        report.outputLocation.set(
+          rootProject.layout.projectDirectory.file(
+            "build/reports/spotbugs/${project.name}-${taskName}.sarif"
+          )
+        )
+      }
     }
   }
 }
