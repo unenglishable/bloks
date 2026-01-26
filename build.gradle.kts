@@ -11,6 +11,8 @@ allprojects {
   repositories {
     mavenCentral()
     maven("https://maven.fabricmc.net/")
+    // TerraformersMC (Mod Menu)
+    maven("https://maven.terraformersmc.com/releases/")
   }
 }
 
