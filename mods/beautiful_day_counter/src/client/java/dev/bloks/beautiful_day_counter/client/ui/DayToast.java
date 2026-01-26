@@ -6,6 +6,8 @@ import net.minecraft.client.toast.Toast;
 import net.minecraft.client.toast.ToastManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
 /**
  * Minimal custom toast using Yarn 1.21.11 APIs.
@@ -34,7 +36,8 @@ public final class DayToast implements Toast {
         int iconPad = 6;
 
         int textW = textRenderer.getWidth(title);
-        int bw = Math.max(140, pad + iconSize + iconPad + textW + pad);
+        // Space: [pad][clock 16][pad][text][pad][moon 16][pad]
+        int bw = Math.max(160, pad + iconSize + iconPad + textW + iconPad + iconSize + pad);
         int bh = Math.max(24, textRenderer.fontHeight + pad);
         int bx = 0;
         int by = 0;
@@ -50,19 +53,21 @@ public final class DayToast implements Toast {
 
         int iconX = bx + pad;
         int iconY = by + (bh - iconSize) / 2;
-        // Render moon phase. If we cannot rely on DrawContext.drawTexture signature for this
-        // mappings set, use readable Unicode glyphs as a placeholder.
-        // Glyphs approximate: new moon, waxing, full, waning across 8 phases.
-        String[] glyphs = new String[]{"●", "◔", "◑", "◕", "○", "◕", "◑", "◔"};
-        String g = glyphs[phase % glyphs.length];
-        // Soft circle background
-        context.fill(iconX, iconY, iconX + iconSize, iconY + iconSize, 0x20FFFFFF);
-        context.drawTextWithShadow(textRenderer, Text.literal(g), iconX + 3, iconY + 2, 0xFFFFFFFF);
+        // Left icon: clock item
+        context.drawItem(new ItemStack(Items.CLOCK), iconX, iconY);
 
         // Bright, readable text with shadow, vertically centered
         int textX = iconX + iconSize + iconPad;
         int textY = by + (bh - textRenderer.fontHeight) / 2;
         context.drawTextWithShadow(textRenderer, title, textX, textY, 0xFFFFFFFF);
+
+        // Right icon: moon phase glyph placeholder (until system texture signature is finalized)
+        int rightIconX = bx + bw - pad - iconSize;
+        int rightIconY = iconY;
+        String[] glyphs = new String[]{"●", "◔", "◑", "◕", "○", "◕", "◑", "◔"};
+        String g = glyphs[phase % glyphs.length];
+        context.fill(rightIconX, rightIconY, rightIconX + iconSize, rightIconY + iconSize, 0x20FFFFFF);
+        context.drawTextWithShadow(textRenderer, Text.literal(g), rightIconX + 3, rightIconY + 2, 0xFFFFFFFF);
     }
 
     @Override
