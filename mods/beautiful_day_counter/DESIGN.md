@@ -9,6 +9,7 @@ Source notes from the product brief (kept for history and reference during devel
 - Mod ID: `beautiful_day_counter`.
 
 Functionality
+
 - Track the number of days elapsed since world start.
 - Display a non-invasive day counter; add a hotkey to hide/show the counter.
 - On a new day (after sleep/wake or day-night cycle), show a slide-in/out toast like the OST song
@@ -18,6 +19,7 @@ Functionality
 - Future add-ons: moon phase and weather report as small icons in the toast.
 
 Notes
+
 - Keep the toast compact; prefer icons to long text.
 - Save config per-world or global; defer until core is done.
 
