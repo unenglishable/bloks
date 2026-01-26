@@ -1,19 +1,18 @@
 package dev.bloks.beautiful_day_counter.client.ui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.toasts.SystemToast;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.toast.SystemToast;
+import net.minecraft.text.Text;
 
 public final class Toasts {
     private Toasts() {}
 
     public static void showDayToast(long day, String label) {
-        Minecraft mc = Minecraft.getInstance();
+        MinecraftClient mc = MinecraftClient.getInstance();
         if (mc == null) return;
-        Component title = Component.literal(label + " " + day);
-        // Use a generic system toast category; purely informational
-        SystemToast toast = new SystemToast(SystemToast.SystemToastId.TUTORIAL_HINT, title, null);
-        mc.getToasts().addToast(toast);
+        Text title = Text.literal(label + " " + day);
+        // Use a generic system toast type; purely informational
+        SystemToast toast = new SystemToast(SystemToast.Type.TUTORIAL_HINT, title, null);
+        mc.getToastManager().add(toast);
     }
 }
-

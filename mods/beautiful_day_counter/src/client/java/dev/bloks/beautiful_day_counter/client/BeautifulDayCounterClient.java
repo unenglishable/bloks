@@ -1,6 +1,7 @@
 package dev.bloks.beautiful_day_counter.client;
 
 import dev.bloks.beautiful_day_counter.client.state.ClientState;
+import dev.bloks.beautiful_day_counter.client.ui.Toasts;
 import dev.bloks.beautiful_day_counter.net.DayChangePayload;
 import dev.bloks.beautiful_day_counter.client.config.Config;
 import net.fabricmc.api.ClientModInitializer;
@@ -40,12 +41,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             client.execute(() -> {
                 ClientState.get().setCurrentDay(day);
                 LOGGER.debug("Day updated from payload: {}", day);
-                if (client.player != null) {
-                    client.player.sendMessage(
-                            net.minecraft.text.Text.literal(ClientState.get().getDayLabel() + " " + day),
-                            true
-                    );
-                }
+                Toasts.showDayToast(day, ClientState.get().getDayLabel());
             });
         });
 
@@ -101,12 +97,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             if (computedDay > state.getCurrentDay()) {
                 state.setCurrentDay(computedDay);
                 LOGGER.debug("Day advanced (client fallback): {}", computedDay);
-                if (client.player != null) {
-                    client.player.sendMessage(
-                            net.minecraft.text.Text.literal(state.getDayLabel() + " " + computedDay),
-                            true
-                    );
-                }
+                Toasts.showDayToast(computedDay, state.getDayLabel());
             }
             // No action-bar spam; HUD overlay renders each frame via HudRenderCallback
         });
