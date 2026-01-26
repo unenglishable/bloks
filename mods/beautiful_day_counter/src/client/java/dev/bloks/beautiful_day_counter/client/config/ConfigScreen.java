@@ -14,7 +14,14 @@ public class ConfigScreen extends Screen {
     private ButtonWidget cornerBtn;
     private ButtonWidget toastBtn;
     private ButtonWidget moonTexBtn;
+    private ButtonWidget saveBtn;
+    private ButtonWidget cancelBtn;
     private final Config config;
+    private int scroll = 0;
+    private int contentHeight = 0;
+    private static final int ROW_SPACING = 30;
+    private static final int CONTROL_HEIGHT = 20;
+    private static final int MARGIN = 12;
 
     public ConfigScreen(Screen parent, Config config) {
         super(Text.literal("Beautiful Day Counter Config"));
@@ -70,7 +77,7 @@ public class ConfigScreen extends Screen {
 
         y += 30;
         // Save
-        addDrawableChild(ButtonWidget.builder(Text.translatable("ui.beautiful_day_counter.save"), b -> {
+        saveBtn = ButtonWidget.builder(Text.translatable("ui.beautiful_day_counter.save"), b -> {
             config.label = labelField.getText();
             config.save();
             // Apply to live state
@@ -83,12 +90,17 @@ public class ConfigScreen extends Screen {
             state.setToastEnabled(config.showToast);
             state.setUseSystemMoonTexture(config.useSystemMoonTexture);
             MinecraftClient.getInstance().setScreen(parent);
-        }).dimensions(centerX - 100, y, 95, 20).build());
+        }).dimensions(centerX - 100, y, 95, CONTROL_HEIGHT).build();
+        addDrawableChild(saveBtn);
 
         // Cancel
-        addDrawableChild(ButtonWidget.builder(Text.translatable("ui.beautiful_day_counter.cancel"), b ->
+        cancelBtn = ButtonWidget.builder(Text.translatable("ui.beautiful_day_counter.cancel"), b ->
                 MinecraftClient.getInstance().setScreen(parent)
-        ).dimensions(centerX + 5, y, 95, 20).build());
+        ).dimensions(centerX + 5, y, 95, CONTROL_HEIGHT).build();
+        addDrawableChild(cancelBtn);
+
+        // Initial layout (centered if fits; else enable scroll)
+        relayout();
     }
 
     private String hudLabel() {
@@ -135,6 +147,73 @@ public class ConfigScreen extends Screen {
             int ly = labelField.getY() - 12;
             context.drawTextWithShadow(this.textRenderer,
                     Text.translatable("ui.beautiful_day_counter.label.caption"), lx, ly, 0xFFFFFFFF);
+        }
+        // Optional simple scrollbar indicator on the right
+        int viewport = this.height - 2 * MARGIN;
+        if (contentHeight > viewport) {
+            float ratio = (float) viewport / (float) contentHeight;
+            int barH = Math.max(12, (int) (viewport * ratio));
+            int maxScroll = contentHeight - viewport;
+            int barY = MARGIN + (maxScroll == 0 ? 0 : (int) ((this.scroll / (float) maxScroll) * (viewport - barH)));
+            int barX = this.width - 6;
+            context.fill(barX, MARGIN, barX + 3, MARGIN + viewport, 0x30000000);
+            context.fill(barX, barY, barX + 3, barY + barH, 0x80FFFFFF);
+        }
     }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        int viewport = this.height - 2 * MARGIN;
+        if (contentHeight > viewport) {
+            int maxScroll = Math.max(0, contentHeight - viewport);
+            // Scroll direction: positive verticalAmount scrolls up (reduce scroll)
+            scroll -= (int) (verticalAmount * 12);
+            if (scroll < 0) scroll = 0;
+            if (scroll > maxScroll) scroll = maxScroll;
+            relayout();
+            return true;
+        }
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+    }
+
+    @Override
+    public void resize(MinecraftClient client, int width, int height) {
+        int prevScroll = this.scroll;
+        super.resize(client, width, height);
+        this.scroll = prevScroll;
+        relayout();
+    }
+
+    private void relayout() {
+        int centerX = this.width / 2;
+        // Compute content height using row spacing
+        int rows = 0;
+        if (labelField != null) rows++;
+        if (toggleHudBtn != null) rows++;
+        if (cornerBtn != null) rows++;
+        if (toastBtn != null) rows++;
+        if (moonTexBtn != null) rows++;
+        if (saveBtn != null) rows++;
+        // + Cancel shares row with Save (same y)
+        contentHeight = rows * ROW_SPACING;
+        int viewport = this.height - 2 * MARGIN;
+        int startY;
+        if (contentHeight <= viewport) {
+            // Center vertically
+            startY = (this.height - contentHeight) / 2;
+            scroll = 0;
+        } else {
+            startY = MARGIN - scroll;
+        }
+        int y = startY;
+        if (labelField != null) { labelField.setX(centerX - 100); labelField.setY(y); y += ROW_SPACING; }
+        if (toggleHudBtn != null) { toggleHudBtn.setX(centerX - 100); toggleHudBtn.setY(y); y += ROW_SPACING; }
+        if (cornerBtn != null) { cornerBtn.setX(centerX - 100); cornerBtn.setY(y); y += ROW_SPACING; }
+        if (toastBtn != null) { toastBtn.setX(centerX - 100); toastBtn.setY(y); y += ROW_SPACING; }
+        if (moonTexBtn != null) { moonTexBtn.setX(centerX - 100); moonTexBtn.setY(y); y += ROW_SPACING; }
+        if (saveBtn != null && cancelBtn != null) {
+            saveBtn.setX(centerX - 100); saveBtn.setY(y);
+            cancelBtn.setX(centerX + 5); cancelBtn.setY(y);
+        }
     }
 }
