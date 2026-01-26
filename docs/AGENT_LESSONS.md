@@ -48,6 +48,15 @@ we do not repeat the same mistakes.
     keep CI workflows synced.  
   - *Prevent:* Update tooling + docs atomically with any version bump.
 
+- **Gradle wrapper bootstrap script (`scripts/bootstrap-wrapper.sh`)**  
+  - *Issues:* A long chain (`scripts/bootstrap-wrapper.sh` commits culminating in
+    `refactor(scripts/bootstrap): update ...`) shows how easy it is to brick local dev when the
+    wrapper is absent or bootstrapped with the wrong system Gradle.  
+  - *Fix:* Always run `scripts/bootstrap-wrapper.sh` via an asdf-installed Gradle that meets the
+    minimum version (`chore(scripts): guard wrapper bootstrap with system Gradle >= 8.x`) and keep
+    the script up to date before regenerating the wrapper.  
+  - *Prevent:* Never call `gradle wrapper` manually; rely on the script so the repo stays portable.
+
 ## Static Analysis & Style
 
 - **Spotless import order (`mods/beautiful_day_counter/src/...`)**  
@@ -129,6 +138,23 @@ we do not repeat the same mistakes.
 
 ## Process / Workflow
 
+- **Docs & tooling guides are required reading**  
+  - Commits `docs: add implementation guide`, `docs(readme): add repo overview`,
+    `docs(agents): add documentation maintenance...`, and `docs(tooling): add asdf setup guide`
+    were added because agents skipped local setup/context. Always study `AGENTS.md`,
+    `docs/IMPLEMENTATION_GUIDE.md`, and `docs/TOOLING.md` at session start.
+
+- **Commit commands must actually run**  
+  - `docs(agents): require running commit commands (no proposal step)` landed after agents tried to
+    ask for approval *before* staging/committing. Always run `git add ... && git commit ...` so the
+    harness can prompt properly; never propose commands.
+
+- **Doc boundaries + module maintenance**  
+  - Commits `docs(beautiful_day_counter): separate user and developer docs`, `docs(agents): add
+    documentation maintenance and linking rules`, and `docs(readme): crosslink ...` came from
+    mixing user-facing and developer notes. Keep repo-level docs generic and put mod-specific
+    details under `mods/<id>/`.
+
 - **Docs vs. code split**  
   - The repo enforces doc updates alongside behavior changes (see `docs(beautiful_day_counter): ...`
     commits and AGENTS.md). Always keep PLAN/DEV/README files in sync so future contributors know status.
@@ -136,5 +162,22 @@ we do not repeat the same mistakes.
 - **Conventional commits**  
   - Commits are scoped (e.g., `fix(build)`, `feat(client)`). Keep using that format so the history
     reads like a troubleshooting diary future agents can learn from.
+
+## CI & Release
+
+- **CI parity with .tool-versions**  
+  - Commits `ci/build: align Gradle to 8.14.4`, `ci: align Gradle/Node with .tool-versions`, and
+    later bumps show we repeatedly broke CI by upgrading tooling locally first. Whenever `.tool-versions`
+    changes, update CI workflows (`.github/workflows/`) in the same PR.
+
+- **Quality gates in CI**  
+  - `ci: run Spotless, Checkstyle, and SpotBugs` ensures formatting and analysis run server-side.
+    Local code must pass `./gradlew spotlessCheck checkstyleMain spotbugsMain` before pushing.
+
+- **Release automation expectations**  
+  - Commits `ci: add GitHub Actions build`, `ci(release): per-mod tag-driven releases`,
+    `ci: add semantic-release publish workflow`, and `docs(platforms): add setup guide...` illustrate
+    that releases assume semantic commits, module tags, and configured tokens. Keep changelogs/docs
+    accurate so semantic-release can cut versions without manual intervention.
 
 Review this file at the start of each session to refresh what already broke and how it was fixed.
