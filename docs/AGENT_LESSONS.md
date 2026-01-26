@@ -1,0 +1,140 @@
+# Beautiful Day Counter — Bring-up Lessons
+
+This note captures every issue we hit while getting the mod playable and
+getting CI/QA green. Future agents should skim this before touching the code so
+we do not repeat the same mistakes.
+
+## Build & Tooling
+
+- **SpotBugs report DSL (build.gradle.kts:47)**  
+  - *Issues:* `fix(build): configure spotbugs reports…` and `fix(build): ensure spotbugs…`
+    were needed because the Kotlin DSL does not expose `reports.html/xml/sarif` like
+    Groovy. Accessing them caused script compilation errors.  
+  - *Fix:* Iterate `reports.configureEach { … }`, enable only SARIF, and set the output
+    via `rootProject.layout.projectDirectory.file(...)`.  
+  - *Prevent:* When copying Groovy snippets, check the Kotlin API (`SpotBugsTask#getReports()`).
+
+- **SARIF aggregation + CI upload**  
+  - *Issues:* Commits `build(spotbugs): switch to SARIF…` and `ci(spotbugs): upload SARIF…`
+    were added after SpotBugs generated scattered HTML.  
+  - *Fix:* Write every report into `build/reports/spotbugs/` and upload in CI so
+    GitHub annotates findings.  
+  - *Prevent:* Plan report formats + locations before adding analyzers.
+
+- **JUnit runtime missing (`mods/beautiful_day_counter/build.gradle.kts:26`)**  
+  - *Issues:* `build(test): add JUnit Jupiter engine` and `build(test): add JUnit Platform
+    launcher` landed after tests failed to execute.  
+  - *Fix:* Add both `testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")` and the
+    launcher dependency.  
+  - *Prevent:* Always add runtime engine + launcher whenever we add JUnit tests.
+
+- **Node/npm cache failures (`.npmrc`, `scripts/bootstrap-npm-cache.sh`)**  
+  - *Issues:* `build(tooling): pin npm cache…` and `docs(tooling): document npm cache...`
+    came after `npx prettier` couldn’t write `~/.npm`.  
+  - *Fix:* Route npm cache into `./.npm-cache` and add `scripts/bootstrap-npm-cache.sh`
+    so the asdf Node install has `<install>/.npm`.  
+  - *Prevent:* Run the bootstrap script after installing any new Node version.
+
+- **Prettier drift (`docs/*.md`, `mods/beautiful_day_counter/*.md`)**  
+  - *Issues:* Formatting accumulated until `style(docs): run npx … --write "**/*.md"`.  
+  - *Fix:* Run Prettier in write mode any time docs change; keep `.prettierignore`
+    updated.  
+  - *Prevent:* Integrate `npx prettier --check` locally before pushing.
+
+- **Version alignment**  
+  - *Issues:* Multiple commits (`build(tool-versions)`, `ci/build`, `build(loom)`, `build(repos)`)
+    track bumps to Gradle, Loom, yarn mappings, Mod Menu, and plugin repositories.  
+  - *Fix:* Centralize versions in `.tool-versions` and `gradle/libs.versions.toml` and
+    keep CI workflows synced.  
+  - *Prevent:* Update tooling + docs atomically with any version bump.
+
+## Static Analysis & Style
+
+- **Spotless import order (`mods/beautiful_day_counter/src/...`)**  
+  - *Issue:* Commit `chore(beautiful_day_counter): satisfy Spotless import order/spacing`
+    cleaned up failing format checks.  
+  - *Fix:* Run `./gradlew spotlessApply` after touching Java files.  
+  - *Prevent:* Configure IDE formatting to Google Java style so Spotless has nothing to fix.
+
+- **Checkstyle braces (`mods/beautiful_day_counter/src/client/java/.../ConfigScreen.java`)**  
+  - *Issue:* Three commits (`style(checkstyle): ... add braces`) were needed because single-line
+    `if` statements violated the root Checkstyle config.  
+  - *Fix:* Always use braces, even for single statements.  
+  - *Prevent:* Turn on the IDE rule for “require braces”.
+
+- **SpotBugs warnings and annotations (`mods/beautiful_day_counter/src/client/java/...`)**  
+  - *Issues:* `build(beautiful_day_counter): add SpotBugs annotations dependency`,
+    `fix(beautiful_day_counter): resolve SpotBugs warnings`, and `refactor(bdc): some fixes...`
+    addressed singleton exposure and nullability issues.  
+  - *Fix:* Depend on `spotbugs-annotations` and add targeted `@SuppressFBWarnings`
+    plus code tweaks (e.g., `ClientState.get()` returns).  
+  - *Prevent:* Run `./gradlew :mods:beautiful_day_counter:spotbugsMain` often; read the
+    report before pushing.
+
+## Gameplay / Client Bring-up
+
+- **Toast API churn (`mods/.../client/ui/DayToast.java`)**  
+  - *Issues:* The series `fix(client): add Yarn-compatible DayToast ...` through
+    `fix(client): ensure HUD shows on first join` highlight how Yarn’s `Toast`
+    interface changed (different `draw`, `update`, `getVisibility` signatures).  
+  - *Fix:* Implement a custom toast matching the exact Yarn version, with explicit clock icon
+    rendering (`DayToast.java:1`).  
+  - *Prevent:* Always check the mapped interface in the targeted Minecraft version before
+    porting UI code from other repos.
+
+- **Networking payload API (`mods/.../BeautifulDayCounter.java` & client)**  
+  - *Issues:* Commits `fix(network): register typed payload`, `fix(network): use ByteBuf-based...`,
+    `refactor(network): remove legacy Packets.java`, and `feat(network): add S2C day-change packet`
+    chart the move to Fabric’s typed payloads. Crashes happened when the registry mismatched.  
+  - *Fix:* Define `DayChangePayload` with `PacketCodec`, register in both Server and Client reload
+    paths, and fall back to client-side calculation (`BeautifulDayCounterClient.java:23`).  
+  - *Prevent:* When Loom/Yarn updates, re-verify packet registration and ensure IDs match.
+
+- **HUD toggle + fallback (`mods/.../client/BeautifulDayCounterClient.java`)**  
+  - *Issues:* `feat(client): restore keybinding`, `fix(client): ensure HUD shows on first join`,
+    and later commits ensured the HUD respects F1, persists label, and initializes day count to
+    avoid catch-up toasts.  
+  - *Fix:* Keep a `toggleKey` instance field, sync `ClientState` with config on init, and compute
+    the first day from the client world when no packet arrived.  
+  - *Prevent:* Whenever we add a HUD, build both server-authoritative and client fallbacks.
+
+- **Toast spam / concurrency (`mods/.../client/ui/Toasts.java`)**  
+  - *Issue:* `fix(toast): prevent infinite queueing...` addressed multiple toasts stacking.  
+  - *Fix:* Track `ClientState.toastActive` and bail if one is showing.  
+  - *Prevent:* Always guard UI popups with client-side state to avoid concurrency loops.
+
+## UI / Config Lessons
+
+- **Localized strings (`mods/.../lang/en_us.json`, `ConfigScreen.java`)**  
+  - *Issues:* `feat(i18n+test)` and `fix(i18n)` commits tracked down missing `Text.translatable`
+    calls and JSON syntax errors.  
+  - *Fix:* Use `Text.translatable` everywhere, keep lang files sorted, and run Spotless on JSON.  
+  - *Prevent:* When adding UI copy, update lang files immediately.
+
+- **Config screen UX**  
+  - *Issues:* Commits `fix(ui): add TextFieldWidget suggestion`, `fix(ui): render caption...`,
+    `feat(config-ui): center vertically`, `fix(ui): match Screen.resize signature`, etc.,
+    show how easy it is to regress the config screen when mappings change.  
+  - *Fix:* Encapsulate all layout logic inside `ConfigScreen.relayout()` and rely on
+    constants for spacing. Keep `resize(int width, int height)` signature in sync with Yarn.  
+  - *Prevent:* After GUI changes, launch the dev client (`./gradlew :mods:beautiful_day_counter:runClient`)
+    and test different resolutions.
+
+- **Config persistence and live preview (`Config.java`, `ClientState.java`)**  
+  - *Issues:* `feat(config): add Toast enable/disable`, `a9109d1 fix(config): make toast toggle live`,
+    etc., ensure toggles update `ClientState`.  
+  - *Fix:* For every config field, store it in JSON *and* propagate to `ClientState` before closing
+    the screen (see `ConfigScreen.java:70`).  
+  - *Prevent:* When adding config options, extend `Config`, `ClientState`, and UI simultaneously.
+
+## Process / Workflow
+
+- **Docs vs. code split**  
+  - The repo enforces doc updates alongside behavior changes (see `docs(beautiful_day_counter): ...`
+    commits and AGENTS.md). Always keep PLAN/DEV/README files in sync so future contributors know status.
+
+- **Conventional commits**  
+  - Commits are scoped (e.g., `fix(build)`, `feat(client)`). Keep using that format so the history
+    reads like a troubleshooting diary future agents can learn from.
+
+Review this file at the start of each session to refresh what already broke and how it was fixed.
