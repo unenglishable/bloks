@@ -14,8 +14,5 @@
   "ui.beautiful_day_counter.toast.disabled": "Toast: Disabled",
   "ui.beautiful_day_counter.label.caption": "Counter Label",
   "ui.beautiful_day_counter.label.suggestion": "e.g., Day or Sol",
-  "ui.beautiful_day_counter.moon.texture.system": "Moon Icon Texture: System",
-  "ui.beautiful_day_counter.moon.texture.fallback": "Moon Icon Texture: Fallback",
-  "ui.beautiful_day_counter.moon.debug.on": "Debug System Moon: On",
-  "ui.beautiful_day_counter.moon.debug.off": "Debug System Moon: Off"
+  
 }

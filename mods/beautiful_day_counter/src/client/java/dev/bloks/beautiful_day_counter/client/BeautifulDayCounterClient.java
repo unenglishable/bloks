@@ -47,9 +47,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 LOGGER.debug("Day updated from payload: {}", day);
                 // Show native toast via ToastManager if enabled
                 if (ClientState.get().isToastEnabled()) {
-                    boolean useSystem = ClientState.get().isUseSystemMoonTexture();
-                    if (ClientState.get().isDebugSystemMoon()) useSystem = true;
-                    Toasts.showDayToast(day, ClientState.get().getDayLabel(), useSystem);
+                    Toasts.showDayToast(day, ClientState.get().getDayLabel());
                 }
             });
         });
@@ -97,9 +95,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 cfg.save();
                 // Brief confirmation toast
                 if (ClientState.get().isToastEnabled()) {
-                    boolean useSystem = ClientState.get().isUseSystemMoonTexture();
-                    if (ClientState.get().isDebugSystemMoon()) useSystem = true;
-                    Toasts.showDayToast(state.getCurrentDay(), state.isHudVisible() ? state.getDayLabel() : "", useSystem);
+                    Toasts.showDayToast(state.getCurrentDay(), state.isHudVisible() ? state.getDayLabel() : "");
                 }
             }
             if (state.getCurrentDay() == 0L) {
@@ -110,9 +106,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 state.setCurrentDay(computedDay);
                 LOGGER.debug("Day advanced (client fallback): {}", computedDay);
                 if (ClientState.get().isToastEnabled()) {
-                    boolean useSystem = ClientState.get().isUseSystemMoonTexture();
-                    if (ClientState.get().isDebugSystemMoon()) useSystem = true;
-                    Toasts.showDayToast(computedDay, state.getDayLabel(), useSystem);
+                    Toasts.showDayToast(computedDay, state.getDayLabel());
                 }
             }
             // No action-bar spam; HUD overlay renders each frame via HudRenderCallback

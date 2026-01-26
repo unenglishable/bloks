@@ -9,8 +9,7 @@ public final class ClientState {
     private int tickSinceOverlayUpdate = 0;
     private String hudCorner = "bottom_right"; // top_left, top_right, bottom_left, bottom_right
     private boolean toastEnabled = true;
-    private boolean useSystemMoonTexture = true;
-    private boolean debugSystemMoon = false;
+    // Moon feature removed
 
     public static ClientState get() {
         return INSTANCE;
@@ -70,15 +69,6 @@ public final class ClientState {
         this.toastEnabled = toastEnabled;
     }
 
-    public boolean isUseSystemMoonTexture() {
-        return useSystemMoonTexture;
-    }
-
-    public void setUseSystemMoonTexture(boolean useSystemMoonTexture) {
-        this.useSystemMoonTexture = useSystemMoonTexture;
-    }
-
-    public boolean isDebugSystemMoon() { return debugSystemMoon; }
-    public void setDebugSystemMoon(boolean v) { this.debugSystemMoon = v; }
+    
 
 }

@@ -13,8 +13,7 @@ public class ConfigScreen extends Screen {
     private ButtonWidget toggleHudBtn;
     private ButtonWidget cornerBtn;
     private ButtonWidget toastBtn;
-    private ButtonWidget moonTexBtn;
-    private ButtonWidget moonDebugBtn;
+    // Moon feature removed
     private ButtonWidget saveBtn;
     private ButtonWidget cancelBtn;
     private final Config config;
@@ -70,22 +69,7 @@ public class ConfigScreen extends Screen {
         addDrawableChild(toastBtn);
 
         y += 30;
-        // Moon texture source toggle
-        moonTexBtn = ButtonWidget.builder(Text.literal(moonTextureLabel()), b -> {
-            config.useSystemMoonTexture = !config.useSystemMoonTexture;
-            b.setMessage(Text.literal(moonTextureLabel()));
-        }).dimensions(centerX - 100, y, 200, 20).build();
-        addDrawableChild(moonTexBtn);
-
-        y += 30;
-        // Moon debug toggle
-        moonDebugBtn = ButtonWidget.builder(Text.literal(moonDebugLabel()), b -> {
-            config.debugSystemMoon = !config.debugSystemMoon;
-            b.setMessage(Text.literal(moonDebugLabel()));
-        }).dimensions(centerX - 100, y, 200, 20).build();
-        addDrawableChild(moonDebugBtn);
-
-        y += 30;
+        // Moon feature removed
         // Save
         saveBtn = ButtonWidget.builder(Text.translatable("ui.beautiful_day_counter.save"), b -> {
             config.label = labelField.getText();
@@ -98,8 +82,7 @@ public class ConfigScreen extends Screen {
             }
             state.setHudCorner(config.hudCorner);
             state.setToastEnabled(config.showToast);
-            state.setUseSystemMoonTexture(config.useSystemMoonTexture);
-            state.setDebugSystemMoon(config.debugSystemMoon);
+            // Moon feature removed
             MinecraftClient.getInstance().setScreen(parent);
         }).dimensions(centerX - 100, y, 95, CONTROL_HEIGHT).build();
         addDrawableChild(saveBtn);
@@ -126,17 +109,7 @@ public class ConfigScreen extends Screen {
                 : Text.translatable("ui.beautiful_day_counter.toast.disabled")).getString();
     }
 
-    private String moonTextureLabel() {
-        return (config.useSystemMoonTexture
-                ? Text.translatable("ui.beautiful_day_counter.moon.texture.system")
-                : Text.translatable("ui.beautiful_day_counter.moon.texture.fallback")).getString();
-    }
-
-    private String moonDebugLabel() {
-        return (config.debugSystemMoon
-                ? Text.translatable("ui.beautiful_day_counter.moon.debug.on")
-                : Text.translatable("ui.beautiful_day_counter.moon.debug.off")).getString();
-    }
+    // Moon feature removed
 
     private String cornerLabel() {
         return "HUD Corner: " + switch (config.hudCorner.toLowerCase()) {
@@ -235,8 +208,7 @@ public class ConfigScreen extends Screen {
         if (toggleHudBtn != null) { toggleHudBtn.setX(centerX - 100); toggleHudBtn.setY(y); y += ROW_SPACING; }
         if (cornerBtn != null) { cornerBtn.setX(centerX - 100); cornerBtn.setY(y); y += ROW_SPACING; }
         if (toastBtn != null) { toastBtn.setX(centerX - 100); toastBtn.setY(y); y += ROW_SPACING; }
-        if (moonTexBtn != null) { moonTexBtn.setX(centerX - 100); moonTexBtn.setY(y); y += ROW_SPACING; }
-        if (moonDebugBtn != null) { moonDebugBtn.setX(centerX - 100); moonDebugBtn.setY(y); y += ROW_SPACING; }
+        // Moon feature removed
         if (saveBtn != null && cancelBtn != null) {
             saveBtn.setX(centerX - 100); saveBtn.setY(y);
             cancelBtn.setX(centerX + 5); cancelBtn.setY(y);

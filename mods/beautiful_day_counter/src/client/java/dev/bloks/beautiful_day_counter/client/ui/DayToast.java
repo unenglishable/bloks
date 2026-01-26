@@ -5,7 +5,6 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.toast.Toast;
 import net.minecraft.client.toast.ToastManager;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
@@ -16,16 +15,12 @@ import net.minecraft.item.Items;
 public final class DayToast implements Toast {
     private final Text title;
     private final long displayMs;
-    private final int phase; // 0..7
-    private final boolean useSystemMoonTexture;
     private long startTime = -1L;
     private Visibility visibility = Visibility.SHOW;
 
-    public DayToast(Text title, long displayMs, int phase, boolean useSystemMoonTexture) {
+    public DayToast(Text title, long displayMs) {
         this.title = title;
         this.displayMs = displayMs;
-        this.phase = Math.floorMod(phase, 8);
-        this.useSystemMoonTexture = useSystemMoonTexture;
     }
 
     @Override
@@ -36,8 +31,8 @@ public final class DayToast implements Toast {
         int iconPad = 6;
 
         int textW = textRenderer.getWidth(title);
-        // Space: [pad][clock 16][pad][text][pad][moon 16][pad]
-        int bw = Math.max(160, pad + iconSize + iconPad + textW + iconPad + iconSize + pad);
+        // Space: [pad][clock 16][pad][text][pad]
+        int bw = Math.max(140, pad + iconSize + iconPad + textW + pad);
         int bh = Math.max(24, textRenderer.fontHeight + pad);
         int bx = 0;
         int by = 0;
@@ -61,19 +56,7 @@ public final class DayToast implements Toast {
         int textY = by + (bh - textRenderer.fontHeight) / 2;
         context.drawTextWithShadow(textRenderer, title, textX, textY, 0xFFFFFFFF);
 
-        // Right icon: try system moon texture via reflection when enabled; fallback to glyph
-        int rightIconX = bx + bw - pad - iconSize;
-        int rightIconY = iconY;
-        boolean drawn = false;
-        if (useSystemMoonTexture) {
-            drawn = MoonTextureDebug.drawSystemMoonPhase(context, rightIconX, rightIconY, phase, iconSize);
-        }
-        if (!drawn) {
-            String[] glyphs = new String[]{"●", "◔", "◑", "◕", "○", "◕", "◑", "◔"};
-            String g = glyphs[phase % glyphs.length];
-            context.fill(rightIconX, rightIconY, rightIconX + iconSize, rightIconY + iconSize, 0x20FFFFFF);
-            context.drawTextWithShadow(textRenderer, Text.literal(g), rightIconX + 3, rightIconY + 2, 0xFFFFFFFF);
-        }
+        // No right icon (moon) after de-scope of moon feature
     }
 
     @Override

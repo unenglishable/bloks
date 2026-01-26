@@ -19,7 +19,7 @@ Phases
 - P4 Polish + config:
   - Persist client config (visibility, label, HUD corner, toast enable). [Completed]
   - Localization (lang): convert UI strings to translatables. [In Progress]
-  - Moon phase icon. [Planned]
+  - Deprecated (2026-01-27): moon phase icon — removed for simplicity and mappings stability.
   - Deprecated (2026-01-26): positioning offsets — decided corner selection is sufficient.
   - Deprecated (2026-01-26): weather icon/report — not needed now.
 
