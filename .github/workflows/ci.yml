@@ -31,41 +31,27 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java }}
 
-      - name: Assemble (Gradle 9.3.0)
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
         with:
           gradle-version: 9.3.0
-          arguments: assemble
           cache-read-only: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork }}
           cache-key: gradle-home-v1-${{ runner.os }}-java${{ matrix.java }}-${{ hashFiles('settings.gradle.kts', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle.properties', '.tool-versions', 'mods/**/build.gradle.kts') }}
           cache-restore-keys: |
             gradle-home-v1-${{ runner.os }}-java${{ matrix.java }}-
           gradle-home-cache-includes: caches wrapper
+
+      - name: Assemble
+        run: gradle assemble
 
       - name: Tests
-        uses: gradle/actions/setup-gradle@v5
-        with:
-          gradle-version: 9.3.0
-          arguments: test
-          cache-read-only: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork }}
-          cache-key: gradle-home-v1-${{ runner.os }}-java${{ matrix.java }}-${{ hashFiles('settings.gradle.kts', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle.properties', '.tool-versions', 'mods/**/build.gradle.kts') }}
-          cache-restore-keys: |
-            gradle-home-v1-${{ runner.os }}-java${{ matrix.java }}-
-          gradle-home-cache-includes: caches wrapper
+        run: gradle test
 
       - name: Static analysis (Spotless, Checkstyle, SpotBugs)
-        uses: gradle/actions/setup-gradle@v5
-        with:
-          gradle-version: 9.3.0
-          arguments: |
-            spotlessCheck
-            checkstyleMain checkstyleTest
-            spotbugsMain spotbugsTest
-          cache-read-only: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork }}
-          cache-key: gradle-home-v1-${{ runner.os }}-java${{ matrix.java }}-${{ hashFiles('settings.gradle.kts', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle.properties', '.tool-versions', 'mods/**/build.gradle.kts') }}
-          cache-restore-keys: |
-            gradle-home-v1-${{ runner.os }}-java${{ matrix.java }}-
-          gradle-home-cache-includes: caches wrapper
+        run: |
+          gradle spotlessCheck \
+                 checkstyleMain checkstyleTest \
+                 spotbugsMain spotbugsTest
 
       - name: Upload SpotBugs SARIF to GitHub
         if: ${{ always() && hashFiles('build/reports/spotbugs/**/*.sarif') != '' }}
@@ -80,15 +66,7 @@ jobs:
       - run: npx -y prettier@3.2.5 --check "**/*.md"
 
       - name: Remap jars
-        uses: gradle/actions/setup-gradle@v5
-        with:
-          gradle-version: 9.3.0
-          arguments: remapJar
-          cache-read-only: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork }}
-          cache-key: gradle-home-v1-${{ runner.os }}-java${{ matrix.java }}-${{ hashFiles('settings.gradle.kts', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle.properties', '.tool-versions', 'mods/**/build.gradle.kts') }}
-          cache-restore-keys: |
-            gradle-home-v1-${{ runner.os }}-java${{ matrix.java }}-
-          gradle-home-cache-includes: caches wrapper
+        run: gradle remapJar
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

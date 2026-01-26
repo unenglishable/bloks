@@ -51,28 +51,20 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          gradle-version: 9.3.0
+          cache-key: gradle-home-v1-${{ runner.os }}-java21-${{ hashFiles('settings.gradle.kts', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle.properties', '.tool-versions', 'mods/**/build.gradle.kts') }}
+          cache-restore-keys: |
+            gradle-home-v1-${{ runner.os }}-java21-
+          gradle-home-cache-includes: caches wrapper
 
       - name: Run module tests
-        uses: gradle/gradle-build-action@v3
-        with:
-          gradle-version: 9.3.0
-          arguments: :mods:${{ env.MODID }}:test
-          cache-key: gradle-home-v1-${{ runner.os }}-java21-${{ hashFiles('settings.gradle.kts', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle.properties', '.tool-versions', 'mods/**/build.gradle.kts') }}
-          cache-restore-keys: |
-            gradle-home-v1-${{ runner.os }}-java21-
-          gradle-home-cache-includes: caches wrapper
+        run: gradle :mods:${{ env.MODID }}:test
 
       - name: Build and remap
-        uses: gradle/gradle-build-action@v3
-        with:
-          gradle-version: 9.3.0
-          arguments: |
-            :mods:${{ env.MODID }}:build
-            :mods:${{ env.MODID }}:remapJar
-          cache-key: gradle-home-v1-${{ runner.os }}-java21-${{ hashFiles('settings.gradle.kts', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle.properties', '.tool-versions', 'mods/**/build.gradle.kts') }}
-          cache-restore-keys: |
-            gradle-home-v1-${{ runner.os }}-java21-
-          gradle-home-cache-includes: caches wrapper
+        run: gradle :mods:${{ env.MODID }}:build :mods:${{ env.MODID }}:remapJar
 
       - name: Upload artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
