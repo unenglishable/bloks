@@ -1,6 +1,6 @@
 # Bloks Minecraft Mods Monorepo
 
-We (you + this AI agent) are building Minecraft Java mods with Fabric (Loom) in a Gradle multi-module repo. Each mod lives under `mods/<modid>` and can be built and released independently.
+In this project, we are building Minecraft Java mods with Fabric (Loom) in a Gradle multi-module repo. Each mod lives under `mods/<modid>` and can be built and released independently.
 
 ## Structure
 - Root Gradle
@@ -40,16 +40,20 @@ We (you + this AI agent) are building Minecraft Java mods with Fabric (Loom) in 
 - Static analysis: `./gradlew spotbugsMain spotbugsTest` (HTML reports in `build/reports/spotbugs`).
 CI runs all of the above on every push/PR.
 
-## Best Practices Before Publishing
-- Sanity tests:
-  - New world and existing world; sleep → new day toast shows once.
-  - Toggle (H), F1 Hide GUI, dimension switch (Overworld/Nether/End).
-  - Join a server without the mod (client-only fallback) and with the mod (packet assist).
-- Logs: watch the game log for errors/exceptions; keep log noise minimal.
-- Conflicts: check keybinding conflicts; verify Mod Menu config opens and saves.
-- Performance: ensure HUD/toast do not cause frame drops; test with other common mods.
-- Packaging: verify `fabric.mod.json` fields, jar filename, and that only needed classes/resources
-  are included (no dev-only assets).
+## Best Practices Before Publishing (Generic)
+- Functional checks: verify core features trigger exactly as intended (no duplicate triggers),
+  toggles and config take effect, and behavior matches expectations across saves.
+- Compatibility: test singleplayer and multiplayer, multiple dimensions, and with/without any
+  optional server components your mod supports.
+- UX: validate keybinding defaults and conflicts, configuration UX, and visibility/placement of UI.
+- Performance: check for frame drops or spikes; test alongside commonly used mods.
+- Packaging: confirm metadata in `fabric.mod.json`, jar naming, and that only required resources
+  are packaged. Ensure CI build is green.
+
+## Docs Formatting
+- Format Markdown with Prettier:
+  - Check: `npx prettier --check "**/*.md"`
+  - Write: `npx prettier --write "**/*.md"`
 
 ## Getting Started (new machine)
 1) Install JDK 21 (Temurin). Optional: JDK 17 for matrix testing.

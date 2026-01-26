@@ -42,6 +42,12 @@ jobs:
             checkstyleMain checkstyleTest
             spotbugsMain spotbugsTest
 
+      - name: Markdown formatting (Prettier)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npx -y prettier@3.2.5 --check "**/*.md"
+
       - name: Remap jars
         uses: gradle/gradle-build-action@v3
         with:
