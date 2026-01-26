@@ -17,19 +17,10 @@ How to use
 Design goal
 - We use native UI components so the experience looks and feels like vanilla.
 
-## How It Works (Technical Overview)
-- Day detection
-  - Client‑only fallback: Each client reads `timeOfDay`, computes `day = floor(t/24000)+1`, and
-    triggers the toast when `day` increments. On join, it initializes to avoid catch‑up toasts.
-  - Optional server assist: If present, the server detects day rollovers and sends an S2C packet;
-    the client treats this as authoritative.
-- Toasts and animation
-  - Implemented via the built‑in toast system (`Toast`, `ToastComponent`).
-  - Our `DayToast` draws the standard toast background + a clock icon + title text.
-  - The toast system handles slide‑in/out animation; we control display duration (3s).
-- HUD display
-  - We render a true HUD overlay using Fabric’s HUD render callback each frame.
-  - It’s lightweight, always in the same spot, and avoids chat/action‑bar spam.
+## How It Works (Overview)
+- The mod tracks in‑game days and shows a small on‑screen label (HUD overlay) like “Day N”.
+- A toast pops in at the start of each new day with the same “Day N” message.
+- It’s designed with native UI pieces to match vanilla’s look and feel.
 
 F1 (Hide GUI) behavior
 - The HUD overlay respects F1: it does not render when Hide GUI is enabled.
@@ -38,11 +29,19 @@ F1 (Hide GUI) behavior
 - Mod Menu: Provides a small config screen for label and HUD visibility.
 - File: `config/beautiful_day_counter.json` stores the same settings client‑side.
 
+## Fun Facts
+- Day/night cycle: A Minecraft day is 24,000 ticks (~20 minutes). We compute days as
+  floor(timeOfDay/24000)+1.
+- Moon phase: Cycles every 8 days (0 = full moon). We can use this for future icons.
+- Weather: The world exposes current rain/thunder state; forecasting needs server data.
+- Vanilla style: The day toast uses Minecraft’s built‑in toast system and textures.
+
 ## Files & Links
 - Plan: mods/beautiful_day_counter/PLAN.md
 - Design prompts: mods/beautiful_day_counter/DESIGN.md
 - Client code: mods/beautiful_day_counter/src/client/java/dev/bloks/beautiful_day_counter/client
 - Server init: mods/beautiful_day_counter/src/main/java/dev/bloks/beautiful_day_counter
+ - Developer docs: mods/beautiful_day_counter/DEV.md
 
 ## Roadmap (Next Step)
 - Replace action‑bar HUD with a true HUD overlay rendered each frame (Fabric HUD callback), honoring
