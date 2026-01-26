@@ -1,7 +1,7 @@
 package dev.bloks.beautiful_day_counter.client;
 
 import dev.bloks.beautiful_day_counter.client.state.ClientState;
-import dev.bloks.beautiful_day_counter.net.Packets;
+import dev.bloks.beautiful_day_counter.net.DayChangePayload;
 import dev.bloks.beautiful_day_counter.client.config.Config;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -33,12 +33,13 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                         "category.beautiful_day_counter"
                 )
         );
-        // Register packet receiver to update state (and later show toast)
-        ClientPlayNetworking.registerGlobalReceiver(Packets.DAY_CHANGE, (client, handler, buf, responseSender) -> {
-            long day = buf.readVarLong();
+        // Register payload receiver to update state
+        ClientPlayNetworking.registerGlobalReceiver(DayChangePayload.ID, (payload, context) -> {
+            long day = payload.day();
+            var client = net.minecraft.client.MinecraftClient.getInstance();
             client.execute(() -> {
                 ClientState.get().setCurrentDay(day);
-                LOGGER.debug("Day updated from packet: {}", day);
+                LOGGER.debug("Day updated from payload: {}", day);
                 if (client.player != null) {
                     client.player.sendMessage(
                             net.minecraft.text.Text.literal(ClientState.get().getDayLabel() + " " + day),

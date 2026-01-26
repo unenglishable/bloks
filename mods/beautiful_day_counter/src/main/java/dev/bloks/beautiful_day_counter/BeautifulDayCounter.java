@@ -7,7 +7,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import io.netty.buffer.Unpooled;
-import dev.bloks.beautiful_day_counter.net.Packets;
+import dev.bloks.beautiful_day_counter.net.DayChangePayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,12 +34,8 @@ public class BeautifulDayCounter implements ModInitializer {
             if (lastDay != -1L) {
                 LOGGER.info("Welcome to Day {}!", day);
                 // Send a networking packet to all players to update HUD / trigger toast
-                PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-                buf.writeVarLong(day);
                 for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                    if (ServerPlayNetworking.canSend(player, Packets.DAY_CHANGE)) {
-                        ServerPlayNetworking.send(player, Packets.DAY_CHANGE, buf.copy());
-                    }
+                    ServerPlayNetworking.send(player, new DayChangePayload(day));
                 }
             }
             lastDay = day;
