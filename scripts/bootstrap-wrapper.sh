@@ -16,7 +16,7 @@ done
 if [ -f .tool-versions ]; then
   VERSION_FROM_FILE=$(awk '/^gradle[[:space:]]/ { print $2; exit }' .tool-versions)
 fi
-VERSION="${USER_VERSION:-${VERSION_FROM_FILE:-8.14.4}}"
+VERSION="${USER_VERSION:-${VERSION_FROM_FILE:-9.3.0}}"
 echo "Bootstrapping Gradle wrapper ${VERSION}..."
 
 # Verify system Gradle version is recent enough to evaluate the build (Loom requires Gradle 8.x).
