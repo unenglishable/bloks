@@ -30,10 +30,9 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
         // Keybinding constructor signature changed in 1.21.11 (Category enum). We will reintroduce
         // registration after pinning the exact API. For now, rely on config/UI toggle only.
         TOGGLE_KEY = null;
-        // Register payload receiver to update state
-        ClientPlayNetworking.registerGlobalReceiver(DayChangePayload.ID, (payload, context) -> {
-            long day = payload.day();
-            var client = net.minecraft.client.MinecraftClient.getInstance();
+        // Register legacy ByteBuf-based receiver (no payload type registry needed)
+        ClientPlayNetworking.registerGlobalReceiver(DayChangePayload.CHANNEL, (client, handler, buf, responseSender) -> {
+            long day = buf.readVarLong();
             client.execute(() -> {
                 ClientState.get().setCurrentDay(day);
                 LOGGER.debug("Day updated from payload: {}", day);

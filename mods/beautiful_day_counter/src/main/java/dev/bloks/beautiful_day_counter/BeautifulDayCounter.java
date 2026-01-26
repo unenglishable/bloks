@@ -33,9 +33,11 @@ public class BeautifulDayCounter implements ModInitializer {
         if (day != lastDay) {
             if (lastDay != -1L) {
                 LOGGER.info("Welcome to Day {}!", day);
-                // Send a networking packet to all players to update HUD / trigger toast
+                // Send a ByteBuf-based packet to all players to update HUD / trigger toast
                 for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                    ServerPlayNetworking.send(player, new DayChangePayload(day));
+                    PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+                    buf.writeVarLong(day);
+                    ServerPlayNetworking.send(player, DayChangePayload.CHANNEL, buf);
                 }
             }
             lastDay = day;

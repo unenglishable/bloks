@@ -7,6 +7,8 @@ import net.minecraft.util.Identifier;
 
 public record DayChangePayload(long day) implements CustomPayload {
     public static final Id<DayChangePayload> ID = new Id<>(Identifier.of(BeautifulDayCounter.MOD_ID, "day_change"));
+    // Legacy channel identifier for ByteBuf-based networking (avoids payload type registry)
+    public static final Identifier CHANNEL = Identifier.of(BeautifulDayCounter.MOD_ID, "day_change");
 
     @Override
     public Id<? extends CustomPayload> getId() {
@@ -21,4 +23,3 @@ public record DayChangePayload(long day) implements CustomPayload {
         buf.writeVarLong(day);
     }
 }
-
