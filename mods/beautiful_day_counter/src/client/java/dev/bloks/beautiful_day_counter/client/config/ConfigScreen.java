@@ -110,8 +110,9 @@ public class ConfigScreen extends Screen {
     public void render(net.minecraft.client.gui.DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
         if (labelField != null) {
-            context.drawText(this.textRenderer, Text.literal("Counter Label"),
-                    labelField.getX(), labelField.getY() - 10, 0xA0A0A0, false);
+            int lx = labelField.getX();
+            int ly = labelField.getY() - 12;
+            context.drawTextWithShadow(this.textRenderer, Text.literal("Counter Label"), lx, ly, 0xFFFFFFFF);
         }
     }
 }
