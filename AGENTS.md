@@ -85,3 +85,6 @@
   - `docs/CI_PLAN.md`, `docs/PUBLISHING.md`, `docs/PLATFORM_SETUP.md`.
 - Reflect version bumps mentioned in docs with `gradle/libs.versions.toml` changes.
 - Use `docs:` commits for documentation-only changes and keep them separate from code.
+- Implementation guide: see `docs/IMPLEMENTATION_GUIDE.md` for technology-agnostic steps to add
+  new mods and restart work in new AI sessions. When altering `PLAN.md`, prefer deprecating lines
+  (prefix `Deprecated:` with a date) rather than deleting.
