@@ -23,3 +23,7 @@ Use asdf to manage toolchains consistently across machines.
 ## Notes
 - Ensure `java -version` reports 21.x.
 - If Prettier is not installed globally, use `npx` (CI uses `npx`).
+- npx requires a writable npm cache inside the asdf Node.js install. Run
+  `scripts/bootstrap-npm-cache.sh` (once per Node version) so the `<install>/.npm`
+  directory exists; the script reads `.tool-versions` automatically but also
+  accepts an explicit version argument.
