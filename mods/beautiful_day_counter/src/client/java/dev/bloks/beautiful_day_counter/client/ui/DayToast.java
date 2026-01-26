@@ -12,9 +12,13 @@ import net.minecraft.text.Text;
  */
 public final class DayToast implements Toast {
     private final Text title;
+    private final long displayMs;
+    private long startTime = -1L;
+    private Visibility visibility = Visibility.SHOW;
 
-    public DayToast(Text title, long displayMsIgnored) {
+    public DayToast(Text title, long displayMs) {
         this.title = title;
+        this.displayMs = displayMs;
     }
 
     @Override
@@ -25,6 +29,14 @@ public final class DayToast implements Toast {
 
     @Override
     public void update(ToastManager manager, long time) {
-        // No-op; we rely on the toast manager’s defaults. Removal can be added later.
+        if (startTime < 0) startTime = time;
+        if (time - startTime >= displayMs) {
+            visibility = Visibility.HIDE;
+        }
+    }
+
+    @Override
+    public Visibility getVisibility() {
+        return visibility;
     }
 }
