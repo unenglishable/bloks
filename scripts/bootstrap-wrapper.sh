@@ -29,4 +29,34 @@ fi
 
 gradle wrapper --gradle-version "${VERSION}" --distribution-type bin
 
-echo "Wrapper created. You can now use ./gradlew with Gradle ${VERSION}."
+echo "Attempting in-repo wrapper generation..."
+if gradle wrapper --gradle-version "${VERSION}" --distribution-type bin >/dev/null 2>&1; then
+  echo "Wrapper created by configuring current build."
+  echo "You can now use ./gradlew with Gradle ${VERSION}."
+  exit 0
+fi
+
+echo "Direct wrapper task failed (likely due to plugin configuration). Using bootstrap fallback..."
+BOOT_DIR=".gradle-wrapper-bootstrap"
+mkdir -p "${BOOT_DIR}"
+cat > "${BOOT_DIR}/settings.gradle.kts" <<'EOF'
+rootProject.name = "wrapper-bootstrap"
+EOF
+cat > "${BOOT_DIR}/build.gradle.kts" <<EOF
+tasks.register("noop") {}
+EOF
+
+(
+  cd "${BOOT_DIR}"
+  gradle wrapper --gradle-version "${VERSION}" --distribution-type bin
+)
+
+cp -f "${BOOT_DIR}/gradlew" ./gradlew
+cp -f "${BOOT_DIR}/gradlew.bat" ./gradlew.bat
+mkdir -p gradle/wrapper
+cp -f "${BOOT_DIR}/gradle/wrapper/gradle-wrapper.jar" gradle/wrapper/gradle-wrapper.jar
+cp -f "${BOOT_DIR}/gradle/wrapper/gradle-wrapper.properties" gradle/wrapper/gradle-wrapper.properties
+
+echo "Wrapper files copied from bootstrap project. Cleaning up..."
+rm -rf "${BOOT_DIR}"
+echo "Done. You can now use ./gradlew with Gradle ${VERSION}."
