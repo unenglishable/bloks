@@ -36,7 +36,6 @@ else
   exit 1
 fi
 
-gradle wrapper --gradle-version "${VERSION}" --distribution-type bin
 
 if [ "$FORCE_BOOTSTRAP" -eq 0 ]; then
   echo "Attempting in-repo wrapper generation..."
