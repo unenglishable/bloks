@@ -1,5 +1,6 @@
 package dev.bloks.beautiful_day_counter.client.state;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 public final class ClientState {
   private static final ClientState INSTANCE = new ClientState();
 
@@ -13,6 +14,9 @@ public final class ClientState {
 
   // Moon feature removed
 
+  @SuppressFBWarnings(
+      value = "MS_EXPOSE_REP",
+      justification = "Singleton instance intentionally exposed for client state")
   public static ClientState get() {
     return INSTANCE;
   }

@@ -46,8 +46,14 @@ public final class Config {
 
   public void save() {
     Path path = configPath();
+    if (path == null) {
+      return; // Defensive: SpotBugs null-safety for config path
+    }
     try {
-      Files.createDirectories(path.getParent());
+      Path dir = path.getParent();
+      if (dir != null) {
+        Files.createDirectories(dir);
+      }
       try (Writer w = Files.newBufferedWriter(path)) {
         GSON.toJson(this, w);
       }

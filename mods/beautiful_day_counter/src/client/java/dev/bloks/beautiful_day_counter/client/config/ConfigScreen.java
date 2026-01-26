@@ -1,5 +1,6 @@
 package dev.bloks.beautiful_day_counter.client.config;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import dev.bloks.beautiful_day_counter.client.state.ClientState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -23,6 +24,9 @@ public class ConfigScreen extends Screen {
   private static final int CONTROL_HEIGHT = 20;
   private static final int MARGIN = 12;
 
+  @SuppressFBWarnings(
+      value = "EI_EXPOSE_REP2",
+      justification = "Holding parent reference for navigation; not exposed outside")
   public ConfigScreen(Screen parent, Config config) {
     super(Text.translatable("ui.beautiful_day_counter.config.title"));
     this.parent = parent;
