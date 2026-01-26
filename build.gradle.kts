@@ -32,21 +32,13 @@ subprojects {
     isShowViolations = true
   }
 
-  spotless {
+  extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension>("spotless") {
     java {
       target("**/*.java")
-      // Google Java Format
       googleJavaFormat()
-      // Trim and end with newline
       trimTrailingWhitespace()
       endWithNewline()
     }
-  }
-
-  spotbugs {
-    toolVersion.set("4.8.6")
-    effort.set(com.github.spotbugs.snom.Effort.DEFAULT)
-    reportLevel.set(com.github.spotbugs.snom.Confidence.DEFAULT)
   }
 
   tasks.withType<com.github.spotbugs.snom.SpotBugsTask>().configureEach {

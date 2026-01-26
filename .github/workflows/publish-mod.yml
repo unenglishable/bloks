@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       MODID: ${{ inputs.modid }}
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+      MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
+      CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+      CURSEFORGE_PROJECT_ID: ${{ vars.CURSEFORGE_PROJECT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -66,13 +70,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to Modrinth/CurseForge (optional)
-        if: ${{ (secrets.MODRINTH_TOKEN != '' && vars.MODRINTH_PROJECT_ID != '') || (secrets.CURSEFORGE_TOKEN != '' && vars.CURSEFORGE_PROJECT_ID != '') }}
+        if: ${{ (env.MODRINTH_TOKEN != '' && env.MODRINTH_PROJECT_ID != '') || (env.CURSEFORGE_TOKEN != '' && env.CURSEFORGE_PROJECT_ID != '') }}
         uses: Kir-Antipov/mc-publish@v3
         with:
-          modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          curseforge-id: ${{ vars.CURSEFORGE_PROJECT_ID }}
-          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          modrinth-id: ${{ env.MODRINTH_PROJECT_ID }}
+          modrinth-token: ${{ env.MODRINTH_TOKEN }}
+          curseforge-id: ${{ env.CURSEFORGE_PROJECT_ID }}
+          curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
           files: mods/${{ env.MODID }}/build/libs/*.jar
           name: Beautiful Day Counter ${{ steps.version.outputs.version }}
           version: ${{ steps.version.outputs.version }}
@@ -82,4 +86,3 @@ jobs:
           java: 21
           changelog: mods/${{ env.MODID }}/CHANGELOG.md
           fail-mode: warn
-
