@@ -43,8 +43,8 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             client.execute(() -> {
                 ClientState.get().setCurrentDay(day);
                 LOGGER.debug("Day updated from payload: {}", day);
-                // Temporary in-HUD toast until SystemToast is finalized
-                ClientState.get().setToastTicks(300); // ~5s at ~60 FPS
+                // Show native toast via ToastManager
+                Toasts.showDayToast(day, ClientState.get().getDayLabel());
             });
         });
 
@@ -77,33 +77,6 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             }
             // Draw day text (opaque white)
             drawContext.drawTextWithShadow(mc.textRenderer, net.minecraft.text.Text.literal(text), x, y, 0xFFFFFFFF);
-            // Lightweight debug tag to help verify rendering path
-            // (top-left, tiny gray)
-            drawContext.drawText(mc.textRenderer, net.minecraft.text.Text.literal("BDC"), 2, 2, 0xA0A0A0, false);
-
-            // Ephemeral toast-like banner at top-right when toastTicks > 0
-            if (state.getToastTicks() > 0) {
-                String toastText = state.getDayLabel() + " " + Math.max(day, 1);
-                int tw = mc.textRenderer.getWidth(toastText);
-                int th = mc.textRenderer.fontHeight + 6;
-                int bx = screenW - margin - Math.max(tw + 12, 100);
-                int by = margin;
-                int bw = Math.max(tw + 12, 100);
-                int bh = th;
-                // Background (warm morning vibe)
-                drawContext.fill(bx, by, bx + bw, by + bh, 0xC0FFCC66);
-                // Border
-                drawContext.fill(bx, by, bx + bw, by + 1, 0x80E6B450);
-                drawContext.fill(bx, by + bh - 1, bx + bw, by + bh, 0x80E6B450);
-                drawContext.fill(bx, by, bx + 1, by + bh, 0x80E6B450);
-                drawContext.fill(bx + bw - 1, by, bx + bw, by + bh, 0x80E6B450);
-                // Icon (clock) + text
-                int iconX = bx + 6;
-                int iconY = by + 2;
-                drawContext.drawItem(new net.minecraft.item.ItemStack(net.minecraft.item.Items.CLOCK), iconX, iconY);
-                drawContext.drawTextWithShadow(mc.textRenderer, net.minecraft.text.Text.literal(toastText), iconX + 16 + 4, by + 4, 0xFF2A2A2A);
-                state.decrementToastTicks();
-            }
         });
 
         // Client-only fallback: detect day change based on client world time if no packet arrives
@@ -126,7 +99,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             if (computedDay > state.getCurrentDay()) {
                 state.setCurrentDay(computedDay);
                 LOGGER.debug("Day advanced (client fallback): {}", computedDay);
-                state.setToastTicks(300); // ~5s at ~60 FPS
+                Toasts.showDayToast(computedDay, state.getDayLabel());
             }
             // No action-bar spam; HUD overlay renders each frame via HudRenderCallback
         });

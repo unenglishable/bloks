@@ -10,6 +10,6 @@ public final class Toasts {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc == null) return;
         Text title = Text.literal(label + " " + day);
-        mc.getToastManager().add(new DayToast(title, 3000));
+        mc.getToastManager().add(new DayToast(title, 5000));
     }
 }
