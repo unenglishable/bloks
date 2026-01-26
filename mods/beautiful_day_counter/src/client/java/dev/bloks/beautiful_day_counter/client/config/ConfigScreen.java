@@ -27,9 +27,11 @@ public class ConfigScreen extends Screen {
         int y = this.height / 3;
 
         // Label input
-        labelField = new TextFieldWidget(this.textRenderer, centerX - 100, y, 200, 20, Text.literal("Counter label (e.g., Day/Sol)"));
+        labelField = new TextFieldWidget(this.textRenderer, centerX - 100, y, 200, 20, Text.literal("Counter label"));
         labelField.setMaxLength(32);
         labelField.setText(config.label);
+        // Hint text when empty, similar to Create World "World Name" field
+        labelField.setSuggestion("e.g., Day or Sol");
         addDrawableChild(labelField);
 
         y += 30;
@@ -108,7 +110,7 @@ public class ConfigScreen extends Screen {
     public void render(net.minecraft.client.gui.DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
         if (labelField != null) {
-            context.drawText(this.textRenderer, Text.literal("Counter Label (e.g., Day/Sol)"),
+            context.drawText(this.textRenderer, Text.literal("Counter Label"),
                     labelField.getX(), labelField.getY() - 10, 0xA0A0A0, false);
         }
     }
