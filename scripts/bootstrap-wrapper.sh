@@ -12,7 +12,8 @@ echo "Bootstrapping Gradle wrapper ${VERSION}..."
 
 # Verify system Gradle version is recent enough to evaluate the build (Loom requires Gradle 8.x).
 if command -v gradle >/dev/null 2>&1; then
-  GV=$(gradle -v | sed -n 's/^Gradle \([0-9][0-9]*\.[0-9][0-9]*\(\.[0-9][0-9]*\)\?\).*/\1/p' | head -n1)
+  # Robustly parse version from "Gradle X.Y[.Z]" line; works with BSD awk
+  GV=$(gradle --version 2>/dev/null | awk '/^Gradle /{print $2; exit}')
   echo "Detected system Gradle: ${GV:-unknown}"
   # Compare major.minor numerically (best-effort); require >= 8.0
   MAJOR=${GV%%.*}
