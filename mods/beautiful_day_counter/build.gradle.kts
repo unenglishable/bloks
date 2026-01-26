@@ -18,10 +18,15 @@ dependencies {
 }
 
 tasks.processResources {
-  // Expand version into fabric.mod.json if needed
-  inputs.property("version", project.version)
+  val props = mapOf(
+    "version" to project.version,
+    "fabric_loader" to libs.versions.fabricLoader.get(),
+    "fabric_api" to libs.versions.fabricApi.get(),
+    "minecraft" to libs.versions.minecraft.get()
+  )
+  inputs.properties(props)
   filesMatching("fabric.mod.json") {
-    expand(mapOf("version" to project.version))
+    expand(props)
   }
 }
 
