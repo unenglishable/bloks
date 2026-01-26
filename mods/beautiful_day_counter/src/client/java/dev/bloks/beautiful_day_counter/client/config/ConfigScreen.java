@@ -12,6 +12,7 @@ public class ConfigScreen extends Screen {
     private TextFieldWidget labelField;
     private ButtonWidget toggleHudBtn;
     private ButtonWidget cornerBtn;
+    private ButtonWidget toastBtn;
     private final Config config;
 
     public ConfigScreen(Screen parent, Config config) {
@@ -38,6 +39,14 @@ public class ConfigScreen extends Screen {
             b.setMessage(Text.literal(hudLabel()));
         }).dimensions(centerX - 100, y, 200, 20).build();
         addDrawableChild(toggleHudBtn);
+
+        y += 30;
+        // Toast toggle
+        toastBtn = ButtonWidget.builder(Text.literal(toastLabel()), b -> {
+            config.showToast = !config.showToast;
+            b.setMessage(Text.literal(toastLabel()));
+        }).dimensions(centerX - 100, y, 200, 20).build();
+        addDrawableChild(toastBtn);
 
         y += 30;
         // Corner selector
@@ -70,6 +79,10 @@ public class ConfigScreen extends Screen {
 
     private String hudLabel() {
         return "HUD: " + (config.hudVisible ? "Visible" : "Hidden");
+    }
+
+    private String toastLabel() {
+        return "Toast: " + (config.showToast ? "Enabled" : "Disabled");
     }
 
     private String cornerLabel() {

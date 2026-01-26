@@ -43,8 +43,10 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             client.execute(() -> {
                 ClientState.get().setCurrentDay(day);
                 LOGGER.debug("Day updated from payload: {}", day);
-                // Show native toast via ToastManager
-                Toasts.showDayToast(day, ClientState.get().getDayLabel());
+                // Show native toast via ToastManager if enabled
+                if (cfg.showToast) {
+                    Toasts.showDayToast(day, ClientState.get().getDayLabel());
+                }
             });
         });
 
@@ -90,7 +92,9 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 cfg.hudVisible = state.isHudVisible();
                 cfg.save();
                 // Brief confirmation toast
-                Toasts.showDayToast(state.getCurrentDay(), state.isHudVisible() ? state.getDayLabel() : "");
+                if (cfg.showToast) {
+                    Toasts.showDayToast(state.getCurrentDay(), state.isHudVisible() ? state.getDayLabel() : "");
+                }
             }
             if (state.getCurrentDay() == 0L) {
                 state.setCurrentDay(computedDay); // initialize on join to avoid catch-up toast
@@ -99,7 +103,9 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             if (computedDay > state.getCurrentDay()) {
                 state.setCurrentDay(computedDay);
                 LOGGER.debug("Day advanced (client fallback): {}", computedDay);
-                Toasts.showDayToast(computedDay, state.getDayLabel());
+                if (cfg.showToast) {
+                    Toasts.showDayToast(computedDay, state.getDayLabel());
+                }
             }
             // No action-bar spam; HUD overlay renders each frame via HudRenderCallback
         });

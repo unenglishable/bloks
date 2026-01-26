@@ -21,6 +21,9 @@ public final class Config {
     @SerializedName("hudVisible")
     public boolean hudVisible = true;
 
+    @SerializedName("showToast")
+    public boolean showToast = true;
+
     @SerializedName("hudCorner")
     public String hudCorner = "bottom_right"; // top_left, top_right, bottom_left, bottom_right
 
