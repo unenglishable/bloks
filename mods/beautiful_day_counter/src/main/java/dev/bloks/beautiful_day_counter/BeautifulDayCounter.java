@@ -3,9 +3,9 @@ package dev.bloks.beautiful_day_counter;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import io.netty.buffer.Unpooled;
 import dev.bloks.beautiful_day_counter.net.Packets;
 import org.slf4j.Logger;
@@ -26,17 +26,17 @@ public class BeautifulDayCounter implements ModInitializer {
 
     private void onEndServerTick(MinecraftServer server) {
         // Use overworld time as the canonical day counter
-        var world = server.getOverworld();
+        var world = server.overworld();
         if (world == null) return;
-        long timeOfDay = world.getTimeOfDay();
+        long timeOfDay = world.getDayTime();
         long day = (timeOfDay / 24000L) + 1L; // Day 1 starts at 0..23999
         if (day != lastDay) {
             if (lastDay != -1L) {
                 LOGGER.info("Welcome to Day {}!", day);
                 // Send a networking packet to all players to update HUD / trigger toast
-                PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+                FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
                 buf.writeVarLong(day);
-                for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                     if (ServerPlayNetworking.canSend(player, Packets.DAY_CHANGE)) {
                         ServerPlayNetworking.send(player, Packets.DAY_CHANGE, buf.copy());
                     }
