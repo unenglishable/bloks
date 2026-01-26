@@ -40,7 +40,8 @@ public class ConfigScreen extends Screen {
         labelField.setMaxLength(32);
         labelField.setText(config.label);
         // Hint text when empty, similar to Create World "World Name" field
-        labelField.setSuggestion(Text.translatable("ui.beautiful_day_counter.label.suggestion").getString());
+        updateSuggestion();
+        labelField.setChangedListener(s -> updateSuggestion());
         addDrawableChild(labelField);
 
         y += 30;
@@ -137,6 +138,14 @@ public class ConfigScreen extends Screen {
             case "bottom_right" -> "bottom_left";
             default -> "top_left";
         };
+    }
+
+    private void updateSuggestion() {
+        if (labelField == null) return;
+        boolean empty = labelField.getText() == null || labelField.getText().isEmpty();
+        labelField.setSuggestion(empty
+                ? Text.translatable("ui.beautiful_day_counter.label.suggestion").getString()
+                : null);
     }
 
     @Override
