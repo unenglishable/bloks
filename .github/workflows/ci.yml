@@ -27,16 +27,16 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java }}
 
-      - name: Build (Gradle 8.10.2)
+      - name: Build (Gradle 8.14.4)
         uses: gradle/gradle-build-action@v3
         with:
-          gradle-version: 8.10.2
+          gradle-version: 8.14.4
           arguments: build
 
       - name: Static analysis (Spotless, Checkstyle, SpotBugs)
         uses: gradle/gradle-build-action@v3
         with:
-          gradle-version: 8.10.2
+          gradle-version: 8.14.4
           arguments: |
             spotlessCheck
             checkstyleMain checkstyleTest
@@ -45,7 +45,7 @@ jobs:
       - name: Markdown formatting (Prettier)
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.20.0
       - run: npx -y prettier@3.2.5 --check "**/*.md"
 
       - name: Remap jars

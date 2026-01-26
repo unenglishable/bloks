@@ -26,6 +26,7 @@ Tooling via asdf
 - Prefer asdf for toolchains. See `docs/TOOLING.md`.
 - If the Gradle wrapper is missing locally, generate it with `scripts/bootstrap-wrapper.sh` (requires
   a locally installed Gradle via asdf) or use `gradle` directly.
+- Versions source of truth: `.tool-versions`. Keep CI workflows (Gradle/Node) aligned with it.
 
 ## Dependencies & Tooling
 - Apply `fabric-loom` in mod subprojects.

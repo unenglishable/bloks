@@ -16,7 +16,7 @@ In this project, we are building Minecraft Java mods with Fabric (Loom) in a Gra
     - Planning: [PLAN.md](mods/beautiful_day_counter/PLAN.md), [DESIGN.md](mods/beautiful_day_counter/DESIGN.md)
 - Shared & CI
   - [scripts/bootstrap-wrapper.sh](scripts/bootstrap-wrapper.sh) create local Gradle wrapper
-  - [ci.yml](.github/workflows/ci.yml) PR/branch build + remapJar (Java 21)
+- [ci.yml](.github/workflows/ci.yml) PR/branch build + remapJar (Java 21), versions from `.tool-versions`
   - [release.yml](.github/workflows/release.yml) tag-driven release `<modid>-v*` (Java 21)
   - [publish-mod.yml](.github/workflows/publish-mod.yml) semantic-release per mod (manual)
   - Docs: [AGENTS.md](AGENTS.md), [CI_PLAN.md](docs/CI_PLAN.md), [PUBLISHING.md](docs/PUBLISHING.md), [PLATFORM_SETUP.md](docs/PLATFORM_SETUP.md)
@@ -57,8 +57,8 @@ CI runs all of the above on every push/PR.
 
 ## Getting Started (new machine)
 1) Install with asdf (recommended): see [docs/TOOLING.md](docs/TOOLING.md).
-2) Ensure `java -version` reports 21.x; install Gradle 8.10.2 and Node 20.x via asdf.
-3) Option A (wrapper): run `scripts/bootstrap-wrapper.sh 8.10.2` once, then use `./gradlew`.
+2) Ensure `java -version` reports 21.x; install Gradle and Node per `.tool-versions` via asdf.
+3) Option A (wrapper): run `scripts/bootstrap-wrapper.sh` once (reads Gradle version from `.tool-versions`), then use `./gradlew`.
    Option B (no wrapper): use `gradle` directly if installed via asdf.
 4) Build: `./gradlew build` (or `gradle build`).
 5) Run dev: `./gradlew :mods:<modid>:runClient` or `:runServer`.

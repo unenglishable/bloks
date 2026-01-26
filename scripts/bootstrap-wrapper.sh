@@ -4,7 +4,10 @@ set -euo pipefail
 # Bootstrap the Gradle wrapper locally. Requires a system Gradle installation.
 # Usage: scripts/bootstrap-wrapper.sh [GRADLE_VERSION]
 
-VERSION="${1:-8.10.2}"
+if [ -f .tool-versions ]; then
+  VERSION_FROM_FILE=$(awk '/^gradle[[:space:]]/ { print $2; exit }' .tool-versions)
+fi
+VERSION="${1:-${VERSION_FROM_FILE:-8.14.4}}"
 echo "Bootstrapping Gradle wrapper ${VERSION}..."
 
 # Verify system Gradle version is recent enough to evaluate the build (Loom requires Gradle 8.x).

@@ -24,7 +24,7 @@ jobs:
       - name: Set up Node 20
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.20.0
 
       - name: Run semantic-release for module
         working-directory: mods/${{ env.MODID }}
@@ -55,7 +55,7 @@ jobs:
       - name: Build and remap
         uses: gradle/gradle-build-action@v3
         with:
-          gradle-version: 8.10.2
+          gradle-version: 8.14.4
           arguments: |
             :mods:${{ env.MODID }}:build
             :mods:${{ env.MODID }}:remapJar
