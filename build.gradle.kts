@@ -45,9 +45,15 @@ subprojects {
   }
 
   tasks.withType<com.github.spotbugs.snom.SpotBugsTask>().configureEach {
-    reports.create("html") {
-      required.set(true)
-      outputLocation.set(file("build/reports/spotbugs/${name}.html"))
+    // Prefer SARIF for CI (GitHub code scanning) and aggregate at root build dir
+    reports { 
+      // Disable legacy HTML output
+      html.required.set(false)
+      xml.required.set(false)
+      sarif.required.set(true)
+      sarif.outputLocation.set(
+        rootProject.file("build/reports/spotbugs/${project.name}-${name}.sarif")
+      )
     }
   }
 }
