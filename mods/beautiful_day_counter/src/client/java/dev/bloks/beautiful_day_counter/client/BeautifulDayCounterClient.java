@@ -43,7 +43,8 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             client.execute(() -> {
                 ClientState.get().setCurrentDay(day);
                 LOGGER.debug("Day updated from payload: {}", day);
-                Toasts.showDayToast(day, ClientState.get().getDayLabel());
+                // Temporary in-HUD toast until SystemToast is finalized
+                ClientState.get().setToastTicks(60);
             });
         });
 
@@ -79,6 +80,21 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             // Lightweight debug tag to help verify rendering path
             // (top-left, tiny gray)
             drawContext.drawText(mc.textRenderer, net.minecraft.text.Text.literal("BDC"), 2, 2, 0xA0A0A0, false);
+
+            // Ephemeral toast-like banner at top-right when toastTicks > 0
+            if (state.getToastTicks() > 0) {
+                String toastText = state.getDayLabel() + " " + Math.max(day, 1);
+                int tw = mc.textRenderer.getWidth(toastText);
+                int th = mc.textRenderer.fontHeight + 6;
+                int bx = screenW - margin - Math.max(tw + 12, 100);
+                int by = margin;
+                int bw = Math.max(tw + 12, 100);
+                int bh = th;
+                // Background (semi-transparent dark)
+                drawContext.fill(bx, by, bx + bw, by + bh, 0xC0000000);
+                drawContext.drawTextWithShadow(mc.textRenderer, net.minecraft.text.Text.literal(toastText), bx + 6, by + 4, 0xFFFFFFFF);
+                state.decrementToastTicks();
+            }
         });
 
         // Client-only fallback: detect day change based on client world time if no packet arrives
@@ -101,7 +117,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             if (computedDay > state.getCurrentDay()) {
                 state.setCurrentDay(computedDay);
                 LOGGER.debug("Day advanced (client fallback): {}", computedDay);
-                Toasts.showDayToast(computedDay, state.getDayLabel());
+                state.setToastTicks(60);
             }
             // No action-bar spam; HUD overlay renders each frame via HudRenderCallback
         });

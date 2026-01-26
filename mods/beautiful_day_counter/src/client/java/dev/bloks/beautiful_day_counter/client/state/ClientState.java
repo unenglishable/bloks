@@ -8,6 +8,7 @@ public final class ClientState {
     private String dayLabel = "Day"; // configurable later
     private int tickSinceOverlayUpdate = 0;
     private String hudCorner = "bottom_right"; // top_left, top_right, bottom_left, bottom_right
+    private int toastTicks = 0; // frames to display ephemeral day toast
 
     public static ClientState get() {
         return INSTANCE;
@@ -57,5 +58,17 @@ public final class ClientState {
 
     public void setHudCorner(String hudCorner) {
         this.hudCorner = hudCorner;
+    }
+
+    public int getToastTicks() {
+        return toastTicks;
+    }
+
+    public void setToastTicks(int toastTicks) {
+        this.toastTicks = toastTicks;
+    }
+
+    public void decrementToastTicks() {
+        if (toastTicks > 0) toastTicks--;
     }
 }
