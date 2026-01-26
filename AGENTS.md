@@ -22,6 +22,11 @@
 - Run dev server: `./gradlew :mods:<modid>:runServer`
 - Run tests (all/one): `./gradlew test` / `./gradlew :mods:<modid>:test`
 
+Tooling via asdf
+- Prefer asdf for toolchains. See `docs/TOOLING.md`.
+- If the Gradle wrapper is missing locally, generate it with `scripts/bootstrap-wrapper.sh` (requires
+  a locally installed Gradle via asdf) or use `gradle` directly.
+
 ## Dependencies & Tooling
 - Apply `fabric-loom` in mod subprojects.
 - Pin versions in `libs.versions.toml`:

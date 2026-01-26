@@ -56,9 +56,10 @@ CI runs all of the above on every push/PR.
   - Write: `npx prettier --write "**/*.md"`
 
 ## Getting Started (new machine)
-1) Install JDK 21 (Temurin).
-2) Clone repo. Ensure `java -version` shows 21.
-3) Optional: `scripts/bootstrap-wrapper.sh 8.10.2` to generate local wrapper.
+1) Install with asdf (recommended): see [docs/TOOLING.md](docs/TOOLING.md).
+2) Ensure `java -version` reports 21.x; install Gradle 8.10.2 and Node 20.x via asdf.
+3) Option A (wrapper): run `scripts/bootstrap-wrapper.sh 8.10.2` once, then use `./gradlew`.
+   Option B (no wrapper): use `gradle` directly if installed via asdf.
 4) Build: `./gradlew build` (or `gradle build`).
 5) Run dev: `./gradlew :mods:<modid>:runClient` or `:runServer`.
 6) For publishing, add tokens/IDs as in `docs/PLATFORM_SETUP.md`.
