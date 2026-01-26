@@ -13,3 +13,5 @@ modmenu = { group = "com.terraformersmc", name = "modmenu", version.ref = "modme
 
 [plugins]
 fabric-loom = { id = "fabric-loom", version.ref = "loom" }
+spotless = { id = "com.diffplug.spotless", version = "6.25.0" }
+spotbugs = { id = "com.github.spotbugs", version = "6.0.16" }
