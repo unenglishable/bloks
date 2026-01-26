@@ -8,6 +8,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +42,21 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 DayToast.show(day, ClientState.get().getDayLabel());
             });
         });
-        // TODO: Register HUD overlay to render subtle day counter when enabled
+
+        // HUD overlay: render a subtle day counter each frame when visible
+        HudRenderCallback.EVENT.register((guiGraphics, tickDelta) -> {
+            var mc = net.minecraft.client.Minecraft.getInstance();
+            var state = ClientState.get();
+            if (mc == null || mc.player == null) return;
+            if (mc.options.hideGui) return; // respect F1 Hide GUI
+            if (!state.isHudVisible()) return;
+            long day = state.getCurrentDay();
+            if (day <= 0) return;
+            String text = state.getDayLabel() + " " + day;
+            int x = 4;
+            int y = 4;
+            guiGraphics.drawString(mc.font, net.minecraft.network.chat.Component.literal(text), x, y, 0xFFFFFF, true);
+        });
 
         // Client-only fallback: detect day change based on client world time if no packet arrives
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -72,20 +87,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 LOGGER.debug("Day advanced (client fallback): {}", computedDay);
                 DayToast.show(computedDay, state.getDayLabel());
             }
-            // Minimal HUD overlay via action bar (throttled)
-            if (state.isHudVisible() && client.player != null) {
-                state.incrementOverlayTick();
-                if (state.getTickSinceOverlayUpdate() >= 40) { // ~2 seconds at 20 TPS
-                    String text = state.getDayLabel() + " " + state.getCurrentDay();
-                    client.player.displayClientMessage(
-                            net.minecraft.network.chat.Component.literal(text),
-                            true
-                    );
-                    state.resetOverlayTick();
-                }
-            } else {
-                state.resetOverlayTick();
-            }
+            // No action-bar spam; HUD overlay renders each frame via HudRenderCallback
         });
     }
 }
