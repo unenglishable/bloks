@@ -68,6 +68,7 @@ public class ConfigScreen extends Screen {
                 state.toggleHudVisible();
             }
             state.setHudCorner(config.hudCorner);
+            state.setToastEnabled(config.showToast);
             MinecraftClient.getInstance().setScreen(parent);
         }).dimensions(centerX - 100, y, 95, 20).build());
 

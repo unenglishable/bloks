@@ -8,6 +8,7 @@ public final class ClientState {
     private String dayLabel = "Day"; // configurable later
     private int tickSinceOverlayUpdate = 0;
     private String hudCorner = "bottom_right"; // top_left, top_right, bottom_left, bottom_right
+    private boolean toastEnabled = true;
 
     public static ClientState get() {
         return INSTANCE;
@@ -57,6 +58,14 @@ public final class ClientState {
 
     public void setHudCorner(String hudCorner) {
         this.hudCorner = hudCorner;
+    }
+
+    public boolean isToastEnabled() {
+        return toastEnabled;
+    }
+
+    public void setToastEnabled(boolean toastEnabled) {
+        this.toastEnabled = toastEnabled;
     }
 
 }

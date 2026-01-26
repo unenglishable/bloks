@@ -24,6 +24,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
         Config cfg = Config.load();
         ClientState.get().setDayLabel(cfg.label);
         ClientState.get().setHudCorner(cfg.hudCorner);
+        ClientState.get().setToastEnabled(cfg.showToast);
         if (ClientState.get().isHudVisible() != cfg.hudVisible) {
             ClientState.get().toggleHudVisible();
         }
@@ -44,7 +45,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 ClientState.get().setCurrentDay(day);
                 LOGGER.debug("Day updated from payload: {}", day);
                 // Show native toast via ToastManager if enabled
-                if (cfg.showToast) {
+                if (ClientState.get().isToastEnabled()) {
                     Toasts.showDayToast(day, ClientState.get().getDayLabel());
                 }
             });
@@ -92,7 +93,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 cfg.hudVisible = state.isHudVisible();
                 cfg.save();
                 // Brief confirmation toast
-                if (cfg.showToast) {
+                if (ClientState.get().isToastEnabled()) {
                     Toasts.showDayToast(state.getCurrentDay(), state.isHudVisible() ? state.getDayLabel() : "");
                 }
             }
@@ -103,7 +104,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             if (computedDay > state.getCurrentDay()) {
                 state.setCurrentDay(computedDay);
                 LOGGER.debug("Day advanced (client fallback): {}", computedDay);
-                if (cfg.showToast) {
+                if (ClientState.get().isToastEnabled()) {
                     Toasts.showDayToast(computedDay, state.getDayLabel());
                 }
             }
