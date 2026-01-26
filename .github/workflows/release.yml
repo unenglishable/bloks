@@ -27,6 +27,16 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: Run module tests
+        uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: 9.3.0
+          arguments: :mods:${{ steps.parse.outputs.modid }}:test
+          cache-key: gradle-home-v1-${{ runner.os }}-java21-${{ hashFiles('settings.gradle.kts', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle.properties', '.tool-versions', 'mods/**/build.gradle.kts') }}
+          cache-restore-keys: |
+            gradle-home-v1-${{ runner.os }}-java21-
+          gradle-home-cache-includes: caches wrapper
+
       - name: Build module
         uses: gradle/gradle-build-action@v3
         with:
@@ -34,6 +44,10 @@ jobs:
           arguments: |
             :mods:${{ steps.parse.outputs.modid }}:build
             :mods:${{ steps.parse.outputs.modid }}:remapJar
+          cache-key: gradle-home-v1-${{ runner.os }}-java21-${{ hashFiles('settings.gradle.kts', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle.properties', '.tool-versions', 'mods/**/build.gradle.kts') }}
+          cache-restore-keys: |
+            gradle-home-v1-${{ runner.os }}-java21-
+          gradle-home-cache-includes: caches wrapper
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
