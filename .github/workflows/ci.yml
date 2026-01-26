@@ -43,7 +43,7 @@ jobs:
           gradle-home-cache-includes: caches wrapper
 
       - name: Tests
-        uses: gradle/gradle-build-action@v5
+        uses: gradle/actions/setup-gradle@v5
         with:
           gradle-version: 9.3.0
           arguments: test
@@ -54,7 +54,7 @@ jobs:
           gradle-home-cache-includes: caches wrapper
 
       - name: Static analysis (Spotless, Checkstyle, SpotBugs)
-        uses: gradle/gradle-build-action@v5
+        uses: gradle/actions/setup-gradle@v5
         with:
           gradle-version: 9.3.0
           arguments: |
@@ -80,7 +80,7 @@ jobs:
       - run: npx -y prettier@3.2.5 --check "**/*.md"
 
       - name: Remap jars
-        uses: gradle/gradle-build-action@v5
+        uses: gradle/actions/setup-gradle@v5
         with:
           gradle-version: 9.3.0
           arguments: remapJar
