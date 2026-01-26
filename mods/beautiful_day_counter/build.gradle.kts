@@ -17,12 +17,14 @@ dependencies {
   modRuntimeOnly(libs.modmenu)
 }
 
+val vc = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
 tasks.processResources {
   val props = mapOf(
-    "version" to project.version,
-    "fabric_loader" to libs.versions["fabric_loader"].get(),
-    "fabric_api" to libs.versions["fabric_api"].get(),
-    "minecraft" to libs.versions["minecraft"].get()
+    "version" to project.version.toString(),
+    "fabric_loader" to vc.findVersion("fabric_loader").get().requiredVersion,
+    "fabric_api" to vc.findVersion("fabric_api").get().requiredVersion,
+    "minecraft" to vc.findVersion("minecraft").get().requiredVersion
   )
   inputs.properties(props)
   filesMatching("fabric.mod.json") {
@@ -34,3 +36,4 @@ tasks.processResources {
 base {
   archivesName.set("beautiful_day_counter")
 }
+import org.gradle.api.plugins.VersionCatalogsExtension
