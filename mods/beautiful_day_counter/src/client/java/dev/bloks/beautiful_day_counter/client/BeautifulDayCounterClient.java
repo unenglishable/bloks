@@ -55,8 +55,11 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             if (mc.options.hudHidden) return; // respect F1 Hide GUI
             if (!state.isHudVisible()) return;
             long day = state.getCurrentDay();
-            if (day <= 0) return;
-            String text = state.getDayLabel() + " " + day;
+            if (day <= 0 && mc.world != null) {
+                // Fallback compute for first-frame visibility
+                day = (mc.world.getTimeOfDay() / 24000L) + 1L;
+            }
+            String text = state.getDayLabel() + " " + Math.max(day, 1);
             int screenW = mc.getWindow().getScaledWidth();
             int screenH = mc.getWindow().getScaledHeight();
             int textW = mc.textRenderer.getWidth(text);
@@ -71,7 +74,11 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
                 case "bottom_left" -> { x = margin; y = screenH - margin - textH; }
                 default -> { x = screenW - margin - textW; y = screenH - margin - textH; }
             }
-            drawContext.drawTextWithShadow(mc.textRenderer, net.minecraft.text.Text.literal(text), x, y, 0xFFFFFF);
+            // Draw day text (opaque white)
+            drawContext.drawTextWithShadow(mc.textRenderer, net.minecraft.text.Text.literal(text), x, y, 0xFFFFFFFF);
+            // Lightweight debug tag to help verify rendering path
+            // (top-left, tiny gray)
+            drawContext.drawText(mc.textRenderer, net.minecraft.text.Text.literal("BDC"), 2, 2, 0xA0A0A0, false);
         });
 
         // Client-only fallback: detect day change based on client world time if no packet arrives
