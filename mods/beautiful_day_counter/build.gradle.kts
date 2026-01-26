@@ -23,6 +23,7 @@ dependencies {
   modCompileOnly(libs.modmenu)
   modRuntimeOnly(libs.modmenu)
   testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
 }
 
 val vc = extensions.getByType<VersionCatalogsExtension>().named("libs")
