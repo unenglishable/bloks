@@ -71,7 +71,7 @@ jobs:
       - name: Remap jars
         uses: gradle/gradle-build-action@v3
         with:
-          gradle-version: 8.10.2
+          gradle-version: 9.3.0
           arguments: remapJar
           cache-read-only: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork }}
           cache-key: gradle-home-v1-${{ runner.os }}-java${{ matrix.java }}-${{ hashFiles('settings.gradle.kts', 'build.gradle.kts', 'gradle/libs.versions.toml', 'gradle.properties', '.tool-versions', 'mods/**/build.gradle.kts') }}
