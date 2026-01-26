@@ -28,14 +28,11 @@ Design goal
   - Our `DayToast` draws the standard toast background + a clock icon + title text.
   - The toast system handles slide‑in/out animation; we control display duration (3s).
 - HUD display
-  - Current build: uses the action bar (above the hotbar) and refreshes every ~2 seconds while
-    visible. This is minimal and keeps the UI clutter‑free.
-  - Planned: replace with a true HUD overlay using Fabric’s HUD render callback for persistent,
-    fine‑grained placement and styling.
+  - We render a true HUD overlay using Fabric’s HUD render callback each frame.
+  - It’s lightweight, always in the same spot, and avoids chat/action‑bar spam.
 
 F1 (Hide GUI) behavior
-- Action bar messages: Hidden when F1 is toggled (Hide GUI on) along with other HUD elements.
-- Future HUD overlay: We will respect F1 by not rendering when Hide GUI is enabled.
+- The HUD overlay respects F1: it does not render when Hide GUI is enabled.
 
 ## Configuration
 - Mod Menu: Provides a small config screen for label and HUD visibility.
