@@ -7,6 +7,10 @@ on:
     branches: ["main", "master"]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -41,6 +45,12 @@ jobs:
             spotlessCheck
             checkstyleMain checkstyleTest
             spotbugsMain spotbugsTest
+
+      - name: Upload SpotBugs SARIF to GitHub
+        if: ${{ always() && hashFiles('build/reports/spotbugs/**/*.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: build/reports/spotbugs
 
       - name: Markdown formatting (Prettier)
         uses: actions/setup-node@v4
