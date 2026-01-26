@@ -46,16 +46,15 @@ subprojects {
 
   tasks.withType<com.github.spotbugs.snom.SpotBugsTask>().configureEach {
     // Prefer SARIF for CI (GitHub code scanning) and aggregate at root build dir
-    val taskName = name
-    reports.all { report ->
-      val isSarif = report.name.equals("sarif", ignoreCase = true)
-      report.required.set(isSarif)
-      if (isSarif && report is org.gradle.api.reporting.SingleFileReport) {
-        report.outputLocation.set(
-          rootProject.layout.projectDirectory.file(
-            "build/reports/spotbugs/${project.name}-${taskName}.sarif"
-          )
+    val sarifTarget =
+        rootProject.layout.projectDirectory.file(
+          "build/reports/spotbugs/${project.name}-${name}.sarif"
         )
+    reports.configureEach {
+      val isSarif = name.equals("sarif", ignoreCase = true)
+      required.set(isSarif)
+      if (isSarif) {
+        outputLocation.set(sarifTarget)
       }
     }
   }
