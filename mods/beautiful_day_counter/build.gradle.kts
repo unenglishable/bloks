@@ -1,3 +1,5 @@
+import org.gradle.api.plugins.VersionCatalogsExtension
+
 plugins {
   alias(libs.plugins.fabric.loom)
 }
@@ -36,4 +38,3 @@ tasks.processResources {
 base {
   archivesName.set("beautiful_day_counter")
 }
-import org.gradle.api.plugins.VersionCatalogsExtension
