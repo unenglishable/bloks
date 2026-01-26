@@ -2,12 +2,21 @@
 set -euo pipefail
 
 # Bootstrap the Gradle wrapper locally. Requires a system Gradle installation.
-# Usage: scripts/bootstrap-wrapper.sh [GRADLE_VERSION]
+# Usage: scripts/bootstrap-wrapper.sh [GRADLE_VERSION] [--force]
+
+FORCE_BOOTSTRAP=0
+USER_VERSION=""
+for arg in "$@"; do
+  case "$arg" in
+    --force|--force-bootstrap) FORCE_BOOTSTRAP=1 ;;
+    *) USER_VERSION="$arg" ;;
+  esac
+done
 
 if [ -f .tool-versions ]; then
   VERSION_FROM_FILE=$(awk '/^gradle[[:space:]]/ { print $2; exit }' .tool-versions)
 fi
-VERSION="${1:-${VERSION_FROM_FILE:-8.14.4}}"
+VERSION="${USER_VERSION:-${VERSION_FROM_FILE:-8.14.4}}"
 echo "Bootstrapping Gradle wrapper ${VERSION}..."
 
 # Verify system Gradle version is recent enough to evaluate the build (Loom requires Gradle 8.x).
@@ -29,11 +38,13 @@ fi
 
 gradle wrapper --gradle-version "${VERSION}" --distribution-type bin
 
-echo "Attempting in-repo wrapper generation..."
-if gradle wrapper --gradle-version "${VERSION}" --distribution-type bin >/dev/null 2>&1; then
-  echo "Wrapper created by configuring current build."
-  echo "You can now use ./gradlew with Gradle ${VERSION}."
-  exit 0
+if [ "$FORCE_BOOTSTRAP" -eq 0 ]; then
+  echo "Attempting in-repo wrapper generation..."
+  if gradle wrapper --gradle-version "${VERSION}" --distribution-type bin >/dev/null 2>&1; then
+    echo "Wrapper created by configuring current build."
+    echo "You can now use ./gradlew with Gradle ${VERSION}."
+    exit 0
+  fi
 fi
 
 echo "Direct wrapper task failed (likely due to plugin configuration). Using bootstrap fallback..."
