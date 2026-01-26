@@ -15,12 +15,15 @@ import net.minecraft.item.Items;
 public final class DayToast implements Toast {
     private final Text title;
     private final long displayMs;
+    private final Runnable onHide;
     private long startTime = -1L;
+    private boolean notified = false;
     private Visibility visibility = Visibility.SHOW;
 
-    public DayToast(Text title, long displayMs) {
+    public DayToast(Text title, long displayMs, Runnable onHide) {
         this.title = title;
         this.displayMs = displayMs;
+        this.onHide = onHide;
     }
 
     @Override
@@ -64,6 +67,10 @@ public final class DayToast implements Toast {
         if (startTime < 0) startTime = time;
         if (time - startTime >= displayMs) {
             visibility = Visibility.HIDE;
+            if (!notified && onHide != null) {
+                notified = true;
+                onHide.run();
+            }
         }
     }
 

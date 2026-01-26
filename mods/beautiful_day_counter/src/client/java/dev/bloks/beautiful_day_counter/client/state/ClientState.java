@@ -9,6 +9,7 @@ public final class ClientState {
     private int tickSinceOverlayUpdate = 0;
     private String hudCorner = "bottom_right"; // top_left, top_right, bottom_left, bottom_right
     private boolean toastEnabled = true;
+    private boolean toastActive = false;
     // Moon feature removed
 
     public static ClientState get() {
@@ -67,6 +68,14 @@ public final class ClientState {
 
     public void setToastEnabled(boolean toastEnabled) {
         this.toastEnabled = toastEnabled;
+    }
+
+    public boolean isToastActive() {
+        return toastActive;
+    }
+
+    public void setToastActive(boolean toastActive) {
+        this.toastActive = toastActive;
     }
 
     
