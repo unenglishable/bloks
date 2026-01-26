@@ -7,6 +7,7 @@ public final class ClientState {
     private long currentDay = 0L; // 0 indicates uninitialized
     private String dayLabel = "Day"; // configurable later
     private int tickSinceOverlayUpdate = 0;
+    private String hudCorner = "bottom_right"; // top_left, top_right, bottom_left, bottom_right
 
     public static ClientState get() {
         return INSTANCE;
@@ -48,5 +49,13 @@ public final class ClientState {
 
     public void resetOverlayTick() {
         this.tickSinceOverlayUpdate = 0;
+    }
+
+    public String getHudCorner() {
+        return hudCorner;
+    }
+
+    public void setHudCorner(String hudCorner) {
+        this.hudCorner = hudCorner;
     }
 }

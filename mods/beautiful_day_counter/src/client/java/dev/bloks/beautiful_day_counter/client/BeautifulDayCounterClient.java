@@ -22,6 +22,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
         // Load config and apply to live state
         Config cfg = Config.load();
         ClientState.get().setDayLabel(cfg.label);
+        ClientState.get().setHudCorner(cfg.hudCorner);
         if (ClientState.get().isHudVisible() != cfg.hudVisible) {
             ClientState.get().toggleHudVisible();
         }
@@ -53,8 +54,20 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
             long day = state.getCurrentDay();
             if (day <= 0) return;
             String text = state.getDayLabel() + " " + day;
-            int x = 4;
-            int y = 4;
+            int screenW = mc.getWindow().getGuiScaledWidth();
+            int screenH = mc.getWindow().getGuiScaledHeight();
+            int textW = mc.font.width(text);
+            int textH = mc.font.lineHeight;
+            int margin = 4;
+            int x;
+            int y;
+            String corner = state.getHudCorner().toLowerCase();
+            switch (corner) {
+                case "top_left" -> { x = margin; y = margin; }
+                case "top_right" -> { x = screenW - margin - textW; y = margin; }
+                case "bottom_left" -> { x = margin; y = screenH - margin - textH; }
+                default -> { x = screenW - margin - textW; y = screenH - margin - textH; }
+            }
             guiGraphics.drawString(mc.font, net.minecraft.network.chat.Component.literal(text), x, y, 0xFFFFFF, true);
         });
 

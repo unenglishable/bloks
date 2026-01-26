@@ -21,6 +21,9 @@ public final class Config {
     @SerializedName("hudVisible")
     public boolean hudVisible = true;
 
+    @SerializedName("hudCorner")
+    public String hudCorner = "bottom_right"; // top_left, top_right, bottom_left, bottom_right
+
     public static Path configPath() {
         return FabricLoader.getInstance().getConfigDir().resolve(FILE_NAME);
     }
@@ -49,4 +52,3 @@ public final class Config {
         }
     }
 }
-

@@ -11,6 +11,7 @@ public class ConfigScreen extends Screen {
     private final Screen parent;
     private EditBox labelField;
     private Button toggleHudBtn;
+    private Button cornerBtn;
     private final Config config;
 
     public ConfigScreen(Screen parent, Config config) {
@@ -49,6 +50,7 @@ public class ConfigScreen extends Screen {
             if (state.isHudVisible() != config.hudVisible) {
                 state.toggleHudVisible();
             }
+            state.setHudCorner(config.hudCorner);
             Minecraft.getInstance().setScreen(parent);
         }).bounds(centerX - 100, y, 95, 20).build());
 
@@ -61,5 +63,35 @@ public class ConfigScreen extends Screen {
     private String hudLabel() {
         return "HUD: " + (config.hudVisible ? "Visible" : "Hidden");
     }
-}
 
+    @Override
+    public void added() {
+        super.added();
+        // Add corner selector after init components are ready
+        int centerX = this.width / 2;
+        int y = this.height / 3 + 60; // below toggle
+        cornerBtn = Button.builder(Component.literal(cornerLabel()), b -> {
+            config.hudCorner = nextCorner(config.hudCorner);
+            b.setMessage(Component.literal(cornerLabel()));
+        }).bounds(centerX - 100, y, 200, 20).build();
+        addRenderableWidget(cornerBtn);
+    }
+
+    private String cornerLabel() {
+        return "Corner: " + switch (config.hudCorner.toLowerCase()) {
+            case "top_left" -> "Top Left";
+            case "top_right" -> "Top Right";
+            case "bottom_left" -> "Bottom Left";
+            default -> "Bottom Right";
+        };
+    }
+
+    private String nextCorner(String cur) {
+        return switch (cur.toLowerCase()) {
+            case "top_left" -> "top_right";
+            case "top_right" -> "bottom_right";
+            case "bottom_right" -> "bottom_left";
+            default -> "top_left";
+        };
+    }
+}
