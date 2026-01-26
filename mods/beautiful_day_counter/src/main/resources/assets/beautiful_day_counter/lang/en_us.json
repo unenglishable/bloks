@@ -13,6 +13,5 @@
   "ui.beautiful_day_counter.toast.enabled": "Toast: Enabled",
   "ui.beautiful_day_counter.toast.disabled": "Toast: Disabled",
   "ui.beautiful_day_counter.label.caption": "Counter Label",
-  "ui.beautiful_day_counter.label.suggestion": "e.g., Day or Sol",
-  
+  "ui.beautiful_day_counter.label.suggestion": "e.g., Day or Sol"
 }
