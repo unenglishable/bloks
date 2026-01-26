@@ -16,7 +16,7 @@ In this project, we are building Minecraft Java mods with Fabric (Loom) in a Gra
     - Planning: [PLAN.md](mods/beautiful_day_counter/PLAN.md), [DESIGN.md](mods/beautiful_day_counter/DESIGN.md)
 - Shared & CI
   - [scripts/bootstrap-wrapper.sh](scripts/bootstrap-wrapper.sh) create local Gradle wrapper
-  - [ci.yml](.github/workflows/ci.yml) PR/branch build + remapJar (Java 17, 21)
+  - [ci.yml](.github/workflows/ci.yml) PR/branch build + remapJar (Java 21)
   - [release.yml](.github/workflows/release.yml) tag-driven release `<modid>-v*` (Java 21)
   - [publish-mod.yml](.github/workflows/publish-mod.yml) semantic-release per mod (manual)
   - Docs: [AGENTS.md](AGENTS.md), [CI_PLAN.md](docs/CI_PLAN.md), [PUBLISHING.md](docs/PUBLISHING.md), [PLATFORM_SETUP.md](docs/PLATFORM_SETUP.md)
@@ -56,7 +56,7 @@ CI runs all of the above on every push/PR.
   - Write: `npx prettier --write "**/*.md"`
 
 ## Getting Started (new machine)
-1) Install JDK 21 (Temurin). Optional: JDK 17 for matrix testing.
+1) Install JDK 21 (Temurin).
 2) Clone repo. Ensure `java -version` shows 21.
 3) Optional: `scripts/bootstrap-wrapper.sh 8.10.2` to generate local wrapper.
 4) Build: `./gradlew build` (or `gradle build`).
@@ -65,7 +65,7 @@ CI runs all of the above on every push/PR.
 
 ## Conventions
 - Conventional Commits (Angular). Split changes by type/scope. Stage explicit files only.
-- Java toolchain 21 in modules; CI tests 17/21.
+- Java toolchain 21 in modules; CI uses Java 21.
 - Mod IDs lowercase with underscores; packages `com.yourorg.<modid>`.
 
 ## Current Mods
