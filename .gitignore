@@ -1,0 +1,21 @@
+# Gradle
+.gradle/
+**/build/
+
+# IDEs
+.idea/
+.project
+.classpath
+.settings/
+.vscode/
+
+# Minecraft dev
+run/
+*.log
+
+# Node
+.npm-cache/
+
+# OS
+.DS_Store
+Thumbs.db

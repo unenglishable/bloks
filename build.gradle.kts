@@ -1,5 +1,7 @@
 plugins {
-  // Version via libs.versions.toml plugin alias in subprojects
+  // Version via libs.versions.toml
+  alias(libs.plugins.spotless) apply false
+  alias(libs.plugins.spotbugs) apply false
 }
 
 allprojects {
@@ -9,6 +11,8 @@ allprojects {
   repositories {
     mavenCentral()
     maven("https://maven.fabricmc.net/")
+    // TerraformersMC (Mod Menu)
+    maven("https://maven.terraformersmc.com/releases/")
   }
 }
 
@@ -18,5 +22,40 @@ subprojects {
   tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
   }
-}
 
+  // Lint + formatting + static analysis
+  apply(plugin = "checkstyle")
+  apply(plugin = "com.diffplug.spotless")
+  apply(plugin = "com.github.spotbugs")
+
+  configure<CheckstyleExtension> {
+    toolVersion = "10.16.0"
+    // Use the repo-root config for all modules instead of per-module paths
+    configDirectory.set(rootProject.file("config/checkstyle"))
+    isShowViolations = true
+  }
+
+  extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension>("spotless") {
+    java {
+      target("**/*.java")
+      googleJavaFormat()
+      trimTrailingWhitespace()
+      endWithNewline()
+    }
+  }
+
+  tasks.withType<com.github.spotbugs.snom.SpotBugsTask>().configureEach {
+    // Prefer SARIF for CI (GitHub code scanning) and aggregate at root build dir
+    val sarifTarget =
+        rootProject.layout.projectDirectory.file(
+          "build/reports/spotbugs/${project.name}-${name}.sarif"
+        )
+    reports.configureEach {
+      val isSarif = name.equals("sarif", ignoreCase = true)
+      required.set(isSarif)
+      if (isSarif) {
+        outputLocation.set(sarifTarget)
+      }
+    }
+  }
+}

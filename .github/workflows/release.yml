@@ -1,0 +1,83 @@
+name: Release Mod
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    branches: ["main"]
+    types: [completed]
+
+jobs:
+  release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    env:
+      MODID: beautiful_day_counter
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Determine version
+        id: meta
+        run: |
+          VERSION=$(sed -n 's/^version=//p' mods/${MODID}/gradle.properties)
+          TAG="${MODID}-v${VERSION}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Decide if release needed
+        id: guard
+        run: |
+          set -euo pipefail
+          TAG="${{ steps.meta.outputs.tag }}"
+          MODPATH="mods/${MODID}/gradle.properties"
+          git fetch --tags --quiet origin
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "release_needed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          LAST_TAG=$(git tag --list "${MODID}-v*" | sort -V | tail -n1 || true)
+          if [ -n "$LAST_TAG" ]; then
+            if git diff --quiet "$LAST_TAG" HEAD -- "$MODPATH"; then
+              echo "release_needed=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+          echo "release_needed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Java 21
+        if: steps.guard.outputs.release_needed == 'true'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Setup Gradle
+        if: steps.guard.outputs.release_needed == 'true'
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          gradle-version: 9.3.0
+          gradle-home-cache-includes: caches wrapper
+
+      - name: Run module tests
+        if: steps.guard.outputs.release_needed == 'true'
+        run: gradle :mods:${MODID}:test
+
+      - name: Build module
+        if: steps.guard.outputs.release_needed == 'true'
+        run: gradle :mods:${MODID}:build :mods:${MODID}:remapJar
+
+      - name: Create GitHub Release
+        if: steps.guard.outputs.release_needed == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag }}
+          name: Beautiful Day Counter ${{ steps.meta.outputs.version }}
+          body: |
+            Release for `${{ env.MODID }}` version `${{ steps.meta.outputs.version }}`.
+            Built with Java 21 and Fabric Loom. Includes remapped JAR(s).
+          files: |
+            mods/${{ env.MODID }}/build/libs/*.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
