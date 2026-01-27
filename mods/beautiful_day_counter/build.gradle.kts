@@ -1,4 +1,3 @@
-import net.fabricmc.loom.task.RemapJarTask
 import org.gradle.api.artifacts.VersionCatalogsExtension
 
 plugins {
@@ -48,10 +47,6 @@ tasks.processResources {
 // Configure archives base name for nicer artifact name
 base {
   archivesName.set("beautiful_day_counter")
-}
-
-tasks.named<RemapJarTask>("remapJar") {
-  archiveClassifier.set("")
 }
 
 tasks.test {
