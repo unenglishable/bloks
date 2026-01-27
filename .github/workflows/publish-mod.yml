@@ -1,18 +1,17 @@
 name: Publish Mod (Semantic Release)
 
 on:
-  workflow_dispatch:
-    inputs:
-      modid:
-        description: Mod ID under mods/<modid>
-        required: true
-        type: string
+  workflow_run:
+    workflows: ["Release Mod"]
+    branches: ["main"]
+    types: [completed]
 
 jobs:
   release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     env:
-      MODID: ${{ inputs.modid }}
+      MODID: beautiful_day_counter
       MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
       MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
       CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
@@ -20,13 +19,37 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Determine version/tag
+        id: meta
+        run: |
+          VERSION=$(sed -n 's/^version=//p' mods/${MODID}/gradle.properties)
+          TAG="${MODID}-v${VERSION}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Confirm release tag exists
+        id: guard
+        run: |
+          set -euo pipefail
+          TAG="${{ steps.meta.outputs.tag }}"
+          git fetch --tags --quiet origin
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Set up Node 20
+        if: steps.guard.outputs.should_publish == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 20.20.0
 
       - name: Run semantic-release for module
+        if: steps.guard.outputs.should_publish == 'true'
         working-directory: mods/${{ env.MODID }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -40,33 +63,32 @@ jobs:
                @semantic-release/github \
                @semantic-release/exec
 
-      - name: Read version from gradle.properties
-        id: version
-        run: |
-          VERSION=$(sed -n 's/^version=//p' mods/${MODID}/gradle.properties)
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-
       - name: Set up Java 21
+        if: steps.guard.outputs.should_publish == 'true'
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
       - name: Setup Gradle
+        if: steps.guard.outputs.should_publish == 'true'
         uses: gradle/actions/setup-gradle@v5
         with:
           gradle-version: 9.3.0
           gradle-home-cache-includes: caches wrapper
 
       - name: Run module tests
-        run: gradle :mods:${{ env.MODID }}:test
+        if: steps.guard.outputs.should_publish == 'true'
+        run: gradle :mods:${MODID}:test
 
       - name: Build and remap
-        run: gradle :mods:${{ env.MODID }}:build :mods:${{ env.MODID }}:remapJar
+        if: steps.guard.outputs.should_publish == 'true'
+        run: gradle :mods:${MODID}:build :mods:${MODID}:remapJar
 
       - name: Upload artifacts to GitHub Release
+        if: steps.guard.outputs.should_publish == 'true'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.MODID }}-v${{ steps.version.outputs.version }}
+          tag_name: ${{ steps.meta.outputs.tag }}
           files: |
             mods/${{ env.MODID }}/build/libs/*.jar
         env:
@@ -81,8 +103,8 @@ jobs:
           curseforge-id: ${{ env.CURSEFORGE_PROJECT_ID }}
           curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
           files: mods/${{ env.MODID }}/build/libs/*.jar
-          name: Beautiful Day Counter ${{ steps.version.outputs.version }}
-          version: ${{ steps.version.outputs.version }}
+          name: Beautiful Day Counter ${{ steps.meta.outputs.version }}
+          version: ${{ steps.meta.outputs.version }}
           version-type: release
           loaders: fabric
           game-versions: 1.21.11

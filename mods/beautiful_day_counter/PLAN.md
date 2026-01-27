@@ -38,6 +38,9 @@ Packaging
   - Add explicit `test` step to GitHub Actions build. [Completed]
   - Update `publish-mod.yml` and `release.yml` to run module tests and share Gradle caching.
     [Completed]
+- Release automation:
+  - CI success on `main` triggers `Release Mod` (version gate, tag + GitHub release) followed by
+    `Publish Mod` (semantic-release + Modrinth/Curse uploads). [Completed]
 
 Status
 
