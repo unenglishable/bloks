@@ -39,12 +39,15 @@ jobs:
           gradle-home-cache-includes: caches wrapper
 
       - name: Assemble
+        if: github.ref != 'refs/heads/cd'
         run: gradle assemble
 
       - name: Tests
+        if: github.ref != 'refs/heads/cd'
         run: gradle test
 
       - name: Static analysis (Spotless, Checkstyle, SpotBugs)
+        if: github.ref != 'refs/heads/cd'
         run: |
           gradle spotlessCheck \
                  checkstyleMain checkstyleTest \
@@ -63,6 +66,7 @@ jobs:
       - run: npx -y prettier@3.2.5 --check "**/*.md"
 
       - name: Remap jars
+        if: github.ref != 'refs/heads/cd'
         run: gradle remapJar
 
       - name: Upload artifacts

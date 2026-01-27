@@ -7,7 +7,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "sed -i.bak -E 's/^version=.*/version=${nextRelease.version}/' gradle.properties && rm -f gradle.properties.bak && gradle :mods:beautiful_day_counter:build :mods:beautiful_day_counter:remapJar && rm -rf dist && mkdir -p dist && cp build/libs/beautiful_day_counter-${nextRelease.version}.jar dist/"
+        "prepareCmd": "sed -i.bak -E 's/^version=.*/version=${nextRelease.version}/' gradle.properties && rm -f gradle.properties.bak && gradle :mods:beautiful_day_counter:build :mods:beautiful_day_counter:remapJar && rm -rf dist && mkdir -p dist && cp build/libs/beautiful_day_counter-${nextRelease.version}-remapped.jar dist/beautiful_day_counter-${nextRelease.version}.jar"
       }
     ],
     [
