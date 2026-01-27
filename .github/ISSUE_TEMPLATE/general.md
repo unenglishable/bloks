@@ -7,14 +7,18 @@ assignees: ""
 ---
 
 ## Issue Type
+
 - [ ] Bug
 - [ ] Feature request
 
 ## Summary
+
 <!-- Describe the bug or feature at a high level. -->
 
 ## Details
+
 ### For Bugs
+
 - Steps to reproduce:
   1.
   2.
@@ -25,6 +29,7 @@ assignees: ""
 - Logs/screenshots:
 
 ### For Feature Requests
+
 - Problem / motivation:
 - Proposed solution / behavior:
 - Alternatives considered:
