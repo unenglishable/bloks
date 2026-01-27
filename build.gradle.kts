@@ -4,10 +4,10 @@ plugins {
   alias(libs.plugins.spotbugs) apply false
 }
 
-allprojects {
-  group = "dev.bloks"
-  version = "0.1.0-SNAPSHOT"
+group = "dev.bloks"
+version = "0.1.0-SNAPSHOT"
 
+allprojects {
   repositories {
     mavenCentral()
     maven("https://maven.fabricmc.net/")
