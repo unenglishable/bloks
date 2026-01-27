@@ -42,34 +42,6 @@ jobs:
             echo "should_publish=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Set up Node 20
-        if: steps.guard.outputs.should_publish == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.20.0
-
-      - name: Run semantic-release for module
-        if: steps.guard.outputs.should_publish == 'true'
-        working-directory: mods/${{ env.MODID }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          npx -y \
-            -p semantic-release@24.2.9 \
-            -p @semantic-release/commit-analyzer \
-            -p @semantic-release/release-notes-generator \
-            -p @semantic-release/changelog \
-            -p @semantic-release/git \
-            -p @semantic-release/github \
-            -p @semantic-release/exec \
-            semantic-release \
-              -p @semantic-release/commit-analyzer \
-                 @semantic-release/release-notes-generator \
-                 @semantic-release/changelog \
-                 @semantic-release/git \
-                 @semantic-release/github \
-                 @semantic-release/exec
-
       - name: Set up Java 21
         if: steps.guard.outputs.should_publish == 'true'
         uses: actions/setup-java@v4
