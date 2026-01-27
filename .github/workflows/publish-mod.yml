@@ -65,7 +65,7 @@ jobs:
         if: steps.guard.outputs.should_publish == 'true'
         run: |
           mkdir -p mods/${MODID}/dist
-          cp mods/${MODID}/build/libs/${MODID}-${{ steps.meta.outputs.version }}-remapped.jar mods/${MODID}/dist/${MODID}-${{ steps.meta.outputs.version }}.jar
+          cp mods/${MODID}/build/libs/${MODID}-${{ steps.meta.outputs.version }}.jar mods/${MODID}/dist/${MODID}-${{ steps.meta.outputs.version }}.jar
 
       - name: Publish to Modrinth
         if: steps.guard.outputs.should_publish == 'true' && env.MODRINTH_TOKEN != '' && env.MODRINTH_PROJECT_ID != ''

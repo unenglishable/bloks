@@ -27,13 +27,19 @@ jobs:
           gradle-version: 9.3.0
           gradle-home-cache-includes: caches wrapper
 
+      - name: Determine version
+        id: meta
+        run: |
+          VERSION=$(sed -n 's/^version=//p' mods/${MODID}/gradle.properties)
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
       - name: Build and remap jar
         run: gradle :mods:${MODID}:build :mods:${MODID}:remapJar
 
       - name: Prepare jar
         run: |
           mkdir -p mods/${MODID}/dist
-          cp mods/${MODID}/build/libs/${MODID}-*-remapped.jar mods/${MODID}/dist/${MODID}-cd-${{ github.run_id }}.jar
+          cp mods/${MODID}/build/libs/${MODID}-${{ steps.meta.outputs.version }}.jar mods/${MODID}/dist/${MODID}-cd-${{ github.run_id }}.jar
 
       - name: Publish to CurseForge
         uses: Kir-Antipov/mc-publish@v3
