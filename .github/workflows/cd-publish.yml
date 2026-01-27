@@ -36,6 +36,9 @@ jobs:
       - name: Build and remap jar
         run: gradle :mods:${MODID}:build :mods:${MODID}:remapJar
 
+      - name: Debug jars
+        run: ls -R mods/${MODID}/build/libs
+
       - name: Prepare jar
         run: |
           mkdir -p mods/${MODID}/dist
