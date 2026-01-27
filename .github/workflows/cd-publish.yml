@@ -36,7 +36,7 @@ jobs:
         with:
           curseforge-id: ${{ env.CURSEFORGE_PROJECT_ID }}
           curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
-          files: mods/${{ env.MODID }}/build/libs/${{ env.MODID }}-*-remapped.jar
+          files: mods/${{ env.MODID }}/build/libs/${{ env.MODID }}-*.jar
           name: Beautiful Day Counter (cd build)
           version: cd-${{ github.run_id }}
           version-type: beta
