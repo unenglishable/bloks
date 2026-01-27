@@ -3,7 +3,7 @@ name: Release Mod
 on:
   workflow_run:
     workflows: ["CI"]
-    branches: ["main", "cd"]
+    branches: ["main"]
     types: [completed]
 
 jobs:

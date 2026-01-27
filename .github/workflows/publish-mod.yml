@@ -3,7 +3,7 @@ name: Publish Mod (Semantic Release)
 on:
   workflow_run:
     workflows: ["Release Mod"]
-    branches: ["main", "cd"]
+    branches: ["main"]
     types: [completed]
 
 jobs:
@@ -67,7 +67,7 @@ jobs:
         with:
           modrinth-id: ${{ env.MODRINTH_PROJECT_ID }}
           modrinth-token: ${{ env.MODRINTH_TOKEN }}
-          files: mods/${{ env.MODID }}/build/libs/${{ env.MODID }}-${{ steps.meta.outputs.version }}-remapped.jar
+          files: mods/${{ env.MODID }}/build/libs/${{ env.MODID }}-${{ steps.meta.outputs.version }}.jar
           name: Beautiful Day Counter ${{ steps.meta.outputs.version }}
           version: ${{ steps.meta.outputs.version }}
           version-type: release
@@ -83,7 +83,7 @@ jobs:
         with:
           curseforge-id: ${{ env.CURSEFORGE_PROJECT_ID }}
           curseforge-token: ${{ env.CURSEFORGE_TOKEN }}
-          files: mods/${{ env.MODID }}/build/libs/${{ env.MODID }}-${{ steps.meta.outputs.version }}-remapped.jar
+          files: mods/${{ env.MODID }}/build/libs/${{ env.MODID }}-${{ steps.meta.outputs.version }}.jar
           name: Beautiful Day Counter ${{ steps.meta.outputs.version }}
           version: ${{ steps.meta.outputs.version }}
           version-type: release
