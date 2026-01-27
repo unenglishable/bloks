@@ -10,7 +10,18 @@ Tagging scheme
 Per‑module versioning
 
 - Each mod defines its own version in `mods/<modid>/gradle.properties` (e.g., `version=0.1.0`).
-- Gradle uses this property as `project.version` for the module.
+- Gradle uses this property as `project.version` for the module and injects it into
+  `fabric.mod.json`, jar names, etc.
+- Semantic-release configuration lives alongside the mod (`mods/<modid>/.releaserc.json`).
+  - Tag format must be namespaced (e.g., `beautiful_day_counter-v${version}`) so multiple mods can
+    coexist in one repo.
+  - The `prepare` step should update the mod’s `gradle.properties` (set
+    `version=${nextRelease.version}`) and build/remap the jar
+    (`gradle :mods:<modid>:build :mods:<modid>:remapJar`) so the release assets match the new
+    version.
+  - `@semantic-release/git` commits `gradle.properties` + `CHANGELOG.md`.
+  - `@semantic-release/github` should upload the built jar (e.g., `build/libs/<modid>-*.jar`) so the
+    GitHub Release reflects the mod version.
 
 Release workflows
 
