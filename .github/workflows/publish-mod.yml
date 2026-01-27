@@ -55,10 +55,6 @@ jobs:
           gradle-version: 9.3.0
           gradle-home-cache-includes: caches wrapper
 
-      - name: Run module tests
-        if: steps.guard.outputs.should_publish == 'true'
-        run: gradle :mods:${MODID}:test
-
       - name: Build and remap
         if: steps.guard.outputs.should_publish == 'true'
         run: gradle :mods:${MODID}:build :mods:${MODID}:remapJar
