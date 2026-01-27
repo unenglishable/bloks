@@ -7,7 +7,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "sed -i.bak -E 's/^version=.*/version=${nextRelease.version}/' gradle.properties && rm -f gradle.properties.bak"
+        "prepareCmd": "sed -i.bak -E 's/^version=.*/version=${nextRelease.version}/' gradle.properties && rm -f gradle.properties.bak && gradle :mods:beautiful_day_counter:build :mods:beautiful_day_counter:remapJar"
       }
     ],
     [
@@ -17,7 +17,17 @@
         "message": "chore(release): beautiful_day_counter v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
-    ["@semantic-release/github", { "successComment": false }]
+    [
+      "@semantic-release/github",
+      {
+        "successComment": false,
+        "assets": [
+          {
+            "path": "build/libs/beautiful_day_counter-*.jar",
+            "label": "Beautiful Day Counter Jar"
+          }
+        ]
+      }
+    ]
   ]
 }
-
