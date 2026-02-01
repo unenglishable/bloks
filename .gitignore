@@ -16,6 +16,12 @@ run/
 # Node
 .npm-cache/
 
+# Beads local database (issues stored in JSONL)
+.beads/beads.db*
+
+# Local copy of beads reference repo (not tracked)
+beads-main/
+
 # OS
 .DS_Store
 Thumbs.db

@@ -40,6 +40,16 @@ Tooling via asdf
   - Minecraft version (compat matrix per mod as needed)
 - Use Java 17 (or 21 for newer MC) via Gradle toolchains.
 
+## External Documentation (Context7)
+
+- We have access to Context7 for up-to-date library docs and examples. Use it whenever standard docs
+  are needed rather than guessing APIs.
+- Workflow: call `context7__resolve-library-id` with the library name (unless the user supplies an
+  ID like `/org/project`), then query via `context7__query-docs`.
+- Respect the limit of three Context7 calls per user request (resolve + two queries typically
+  suffices). If docs still aren't found, fall back to existing knowledge and note the gap.
+- Never include secrets in Context7 queries; provide only the necessary technical question.
+
 ## Coding Style & Naming Conventions
 
 - Indentation: 4 spaces (Java/Kotlin), 2 spaces for JSON.
@@ -113,6 +123,24 @@ Tooling via asdf
 - Any time you touch Markdown, run `npx -y prettier@3.2.5 --write "**/*.md"` (or its check mode) and
   commit the resulting changes as part of the same task. Prettier fixes are always acceptable.
 
+## Task Tracking with Beads (`bd`)
+
+- This repo is initialized with [Beads](https://github.com/steveyegge/beads); all planning lives in
+  `.beads/`. Use the `bd` CLI for every task instead of free-form notes.
+- Core commands:
+  - `bd create "Title" -p <priority>` — create a task (P0 = urgent, P3 = low).
+  - `bd ready` — list tasks whose blockers are cleared.
+  - `bd show <id>` — inspect task details/history.
+  - `bd dep add <child> <parent>` — express blockers/relationships.
+  - `bd update <id> --notes "..."` — amend description/notes (avoids interactive editors).
+  - `bd close <id> --reason "Completed"` — mark tasks finished when work lands.
+- Do **not** use `bd edit` (it launches `$EDITOR`). Stick to `bd update` flags for non-interactive
+  changes.
+- If `bd` reports setup issues, run `bd doctor --fix`. Use `bd sync` before pushing so issues export
+  to `.beads/issues.jsonl`.
+- For local scratch work, you can point `BEADS_DB=/tmp/foo.db bd ...`, but all shared planning must
+  be recorded in this repo’s `.beads/`.
+
 Documentation boundaries
 
 - Top-level `README.md` is general-purpose: repo layout, CI/release, generic dev/testing commands.
@@ -130,3 +158,31 @@ Documentation boundaries
 - Add the required repositories explicitly (e.g., Fabric, TerraformersMC) and keep them scoped in
   `pluginManagement` (for plugins) and project `repositories` (for libraries).
 - Treat `.tool-versions` as the source of truth for Java/Gradle/Node; align CI/workflows with it.
+
+## Landing the Plane (Session Completion)
+
+**When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until
+`git push` succeeds.
+
+**MANDATORY WORKFLOW:**
+
+1. **File issues for remaining work** - Create issues for anything that needs follow-up
+2. **Run quality gates** (if code changed) - Tests, linters, builds
+3. **Update issue status** - Close finished work, update in-progress items
+4. **PUSH TO REMOTE** - This is MANDATORY:
+   ```bash
+   git pull --rebase
+   bd sync
+   git push
+   git status  # MUST show "up to date with origin"
+   ```
+5. **Clean up** - Clear stashes, prune remote branches
+6. **Verify** - All changes committed AND pushed
+7. **Hand off** - Provide context for next session
+
+**CRITICAL RULES:**
+
+- Work is NOT complete until `git push` succeeds
+- NEVER stop before pushing - that leaves work stranded locally
+- NEVER say "ready to push when you are" - YOU must push
+- If push fails, resolve and retry until it succeeds

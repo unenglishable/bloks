@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "id": "beautiful_day_counter",
   "name": "Beautiful Day Counter",
+  "icon": "assets/beautiful_day_counter/icon.png",
   "version": "${version}",
   "description": "Shows a subtle day counter and a welcoming toast at each new day.",
   "authors": ["itszelace"],
