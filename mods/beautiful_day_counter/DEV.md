@@ -28,6 +28,12 @@ This file is for contributors. Player-facing docs live in `README.md`.
   registered via PayloadTypeRegistry; client uses typed receiver)
 - Config: `client/config/*.java`, `fabric.mod.json` (modmenu entrypoint)
 
+## Assets & Mod Menu Icon
+
+- ModMenu pulls the icon listed in `fabric.mod.json` (`assets/beautiful_day_counter/icon.png`).
+  Replace that file with a square PNG (recommended 64×64 or 128×128) to update the mod list button
+  art. The placeholder file in the repo keeps builds happy until an actual design arrives.
+
 ## Testing Checklist
 
 - New/existing world; sleep → one toast per new day
