@@ -30,13 +30,16 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
       ClientState.get().toggleHudVisible();
     }
     // Keybinding: toggle HUD on/off (default: H)
+    var keyCategory =
+        net.minecraft.client.option.KeyBinding.Category.create(
+            "key.categories.beautiful_day_counter");
     toggleKey =
         KeyBindingHelper.registerKeyBinding(
             new net.minecraft.client.option.KeyBinding(
                 "key.beautiful_day_counter.toggle",
                 InputUtil.Type.KEYSYM,
                 org.lwjgl.glfw.GLFW.GLFW_KEY_H,
-                "key.categories.beautiful_day_counter"));
+                keyCategory));
     // Register typed payload for S2C
     PayloadTypeRegistry.playS2C().register(DayChangePayload.ID, DayChangePayload.CODEC);
     ClientPlayNetworking.registerGlobalReceiver(
