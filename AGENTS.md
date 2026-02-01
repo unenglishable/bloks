@@ -40,6 +40,16 @@ Tooling via asdf
   - Minecraft version (compat matrix per mod as needed)
 - Use Java 17 (or 21 for newer MC) via Gradle toolchains.
 
+## External Documentation (Context7)
+
+- We have access to Context7 for up-to-date library docs and examples. Use it whenever standard docs
+  are needed rather than guessing APIs.
+- Workflow: call `context7__resolve-library-id` with the library name (unless the user supplies an
+  ID like `/org/project`), then query via `context7__query-docs`.
+- Respect the limit of three Context7 calls per user request (resolve + two queries typically
+  suffices). If docs still aren't found, fall back to existing knowledge and note the gap.
+- Never include secrets in Context7 queries; provide only the necessary technical question.
+
 ## Coding Style & Naming Conventions
 
 - Indentation: 4 spaces (Java/Kotlin), 2 spaces for JSON.
