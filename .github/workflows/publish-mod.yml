@@ -22,27 +22,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
 
-      - name: Determine version/tag
+      - name: Determine latest release tag
         id: meta
         run: |
-          VERSION=$(sed -n 's/^version=//p' mods/${MODID}/gradle.properties)
-          TAG="${MODID}-v${VERSION}"
-          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+          git fetch --tags --force --quiet
+          TAG=$(git tag --list "${MODID}-v*" --sort=-v:refname | head -n 1)
+          if [ -n "$TAG" ]; then
+            VERSION="${TAG#${MODID}-v}"
+            echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+            echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Confirm release tag exists
         id: guard
         run: |
           set -euo pipefail
           TAG="${{ steps.meta.outputs.tag }}"
-          git fetch --tags --quiet origin
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
+          if [ -n "$TAG" ]; then
             echo "should_publish=true" >> "$GITHUB_OUTPUT"
           else
             echo "should_publish=false" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Checkout release tag
+        if: steps.guard.outputs.should_publish == 'true'
+        run: git checkout ${{ steps.meta.outputs.tag }}
 
       - name: Set up Java 21
         if: steps.guard.outputs.should_publish == 'true'
