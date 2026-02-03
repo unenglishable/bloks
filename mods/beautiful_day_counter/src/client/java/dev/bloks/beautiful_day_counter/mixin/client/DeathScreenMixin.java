@@ -23,9 +23,11 @@ public abstract class DeathScreenMixin extends Screen {
   @Shadow @Final @Mutable private Text scoreText;
 
   @Unique private Text beautiful_day_counter$baseScoreText;
+
   @Unique
   private static final SoundEvent BEAUTIFUL_DAY_COUNTER$HIKARI_CLIP =
       SoundEvent.of(Identifier.of("beautiful_day_counter", "hikari_8_bit"));
+
   @Unique private boolean beautiful_day_counter$clipPlayed;
 
   protected DeathScreenMixin(Text title) {

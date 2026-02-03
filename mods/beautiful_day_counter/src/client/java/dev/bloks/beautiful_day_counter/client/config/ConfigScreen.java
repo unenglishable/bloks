@@ -162,6 +162,7 @@ public class ConfigScreen extends Screen {
         ? Text.translatable("ui.beautiful_day_counter.death_clip.enabled")
         : Text.translatable("ui.beautiful_day_counter.death_clip.disabled");
   }
+
   // Moon feature removed
 
   private Text cornerLabel() {
