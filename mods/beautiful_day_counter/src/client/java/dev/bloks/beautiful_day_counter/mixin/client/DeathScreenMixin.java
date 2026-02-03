@@ -80,8 +80,7 @@ public abstract class DeathScreenMixin extends Screen {
     if (player == null) {
       return;
     }
-    player.playSound(
-        BEAUTIFUL_DAY_COUNTER$HIKARI_CLIP, net.minecraft.sound.SoundCategory.MASTER, 1.0F, 1.0F);
+    player.playSound(BEAUTIFUL_DAY_COUNTER$HIKARI_CLIP, 1.0F, 1.0F);
     beautiful_day_counter$clipPlayed = true;
   }
 
