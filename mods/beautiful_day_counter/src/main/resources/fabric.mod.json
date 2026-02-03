@@ -19,6 +19,9 @@
       "dev.bloks.beautiful_day_counter.client.config.ModMenuEntrypoint"
     ]
   },
+  "mixins": [
+    "mixins.beautiful_day_counter.json"
+  ],
   "depends": {
     "fabricloader": ">=${fabric_loader}",
     "fabric": ">=${fabric_api}",

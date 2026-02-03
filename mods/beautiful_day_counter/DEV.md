@@ -27,6 +27,8 @@ This file is for contributors. Player-facing docs live in `README.md`.
 - Networking: `main/BeautifulDayCounter.java` + `main/.../net/DayChangePayload.java` (typed payload
   registered via PayloadTypeRegistry; client uses typed receiver)
 - Config: `client/config/*.java`, `fabric.mod.json` (modmenu entrypoint)
+- Post-mortem overlay: `client/ui/PostMortemOverlay.java` + `mixin/client/DeathScreenMixin.java`
+  injects on `DeathScreen` render to show “Survived Day N” with difficulty/mode context.
 
 ## Assets & Mod Menu Icon
 
