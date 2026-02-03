@@ -76,20 +76,12 @@ public abstract class DeathScreenMixin extends Screen {
     if (beautiful_day_counter$clipPlayed) {
       return;
     }
-    var soundManager = mc.getSoundManager();
-    if (soundManager == null) {
+    var player = mc.player;
+    if (player == null) {
       return;
     }
-    soundManager.play(
-        new net.minecraft.client.sound.SimpleSoundInstance(
-            BEAUTIFUL_DAY_COUNTER$HIKARI_CLIP,
-            net.minecraft.sound.SoundCategory.MASTER,
-            1.0F,
-            1.0F,
-            net.minecraft.util.math.random.Random.create(),
-            mc.getCameraEntity().getX(),
-            mc.getCameraEntity().getY(),
-            mc.getCameraEntity().getZ()));
+    player.playSoundToPlayer(
+        BEAUTIFUL_DAY_COUNTER$HIKARI_CLIP, net.minecraft.sound.SoundCategory.MASTER, 1.0F, 1.0F);
     beautiful_day_counter$clipPlayed = true;
   }
 
