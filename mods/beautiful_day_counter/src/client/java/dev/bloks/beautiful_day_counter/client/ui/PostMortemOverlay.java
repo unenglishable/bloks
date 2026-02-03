@@ -4,20 +4,14 @@ import dev.bloks.beautiful_day_counter.client.state.ClientState;
 import java.util.Locale;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
 
 public final class PostMortemOverlay {
   private PostMortemOverlay() {}
 
-  public static void render(DrawContext context) {
+  public static void render(DrawContext context, int topY, int clampBottomY) {
     var mc = MinecraftClient.getInstance();
     if (mc == null || mc.textRenderer == null || context == null) {
-      return;
-    }
-
-    Window window = mc.getWindow();
-    if (window == null) {
       return;
     }
 
@@ -34,14 +28,24 @@ public final class PostMortemOverlay {
     String detail = describeWorld(mc);
     Text lineTwo = detail.isEmpty() ? Text.empty() : Text.literal(detail);
 
+    var window = mc.getWindow();
+    if (window == null) {
+      return;
+    }
     int width = window.getScaledWidth();
-    int height = window.getScaledHeight();
     int centerX = width / 2;
-    int y = height / 2 + 32;
+    int lineHeight = mc.textRenderer.fontHeight;
+    int lines =
+        lineTwo.getString().isEmpty()
+            ? 1
+            : 2; // second line optional (difficulty/mode string may be blank)
+    int totalHeight = (lines * lineHeight) + ((lines - 1) * 3);
+
+    int y = Math.max(topY, clampBottomY - totalHeight - 6);
 
     context.drawCenteredTextWithShadow(mc.textRenderer, lineOne, centerX, y, 0xFFFFAA00);
     if (!lineTwo.getString().isEmpty()) {
-      y += mc.textRenderer.fontHeight + 3;
+      y += lineHeight + 3;
       context.drawCenteredTextWithShadow(mc.textRenderer, lineTwo, centerX, y, 0xFFAAAAAA);
     }
   }

@@ -67,6 +67,9 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
           if (mc == null || mc.player == null) {
             return;
           }
+          if (!mc.player.isAlive()) {
+            return;
+          }
           if (mc.options.hudHidden) {
             return; // respect F1 Hide GUI
           }
