@@ -18,9 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(DeathScreen.class)
 public abstract class DeathScreenMixin extends Screen {
-  @Shadow
-  @Final
-  private List<ButtonWidget> buttons;
+  @Shadow @Final private List<ButtonWidget> buttons;
 
   protected DeathScreenMixin(Text title) {
     super(title);
@@ -55,8 +53,7 @@ public abstract class DeathScreenMixin extends Screen {
         beautiful_day_counter$scoreTextY != Integer.MIN_VALUE
             ? beautiful_day_counter$scoreTextY + textRenderer.fontHeight + 6
             : (height / 2);
-    int clampBottom =
-        buttons.stream().mapToInt(ButtonWidget::getY).min().orElse(height - 40);
+    int clampBottom = buttons.stream().mapToInt(ButtonWidget::getY).min().orElse(height - 40);
 
     PostMortemOverlay.render(context, topY, clampBottom);
   }
