@@ -6,7 +6,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.sound.SimpleSoundInstance;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -81,7 +80,16 @@ public abstract class DeathScreenMixin extends Screen {
     if (soundManager == null) {
       return;
     }
-    soundManager.play(SimpleSoundInstance.forUI(BEAUTIFUL_DAY_COUNTER$HIKARI_CLIP, 1.0F));
+    soundManager.play(
+        new net.minecraft.client.sound.SimpleSoundInstance(
+            BEAUTIFUL_DAY_COUNTER$HIKARI_CLIP,
+            net.minecraft.sound.SoundCategory.MASTER,
+            1.0F,
+            1.0F,
+            net.minecraft.util.math.random.Random.create(),
+            mc.getCameraEntity().getX(),
+            mc.getCameraEntity().getY(),
+            mc.getCameraEntity().getZ()));
     beautiful_day_counter$clipPlayed = true;
   }
 
