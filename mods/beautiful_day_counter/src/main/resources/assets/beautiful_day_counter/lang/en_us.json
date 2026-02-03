@@ -15,7 +15,7 @@
   "ui.beautiful_day_counter.toast.enabled": "Notification: Enabled",
   "ui.beautiful_day_counter.toast.disabled": "Notification: Disabled",
   "ui.beautiful_day_counter.death_clip.enabled": "Farewell Jingle: Enabled",
-  "ui.beautiful_day_counter.death_clip.disabled": "Farewell Jingle: Disabled",
+  "ui.beautiful_day_counter.death_clip.disabled": "Farewell Jingle: Silence",
   "ui.beautiful_day_counter.label.caption": "Counter Label",
   "ui.beautiful_day_counter.label.suggestion": "e.g., Day or Sol"
 }
