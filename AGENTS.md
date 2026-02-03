@@ -49,6 +49,8 @@ Tooling via asdf
 - Respect the limit of three Context7 calls per user request (resolve + two queries typically
   suffices). If docs still aren't found, fall back to existing knowledge and note the gap.
 - Never include secrets in Context7 queries; provide only the necessary technical question.
+- When API behavior is unclear (e.g., method parameters), prefer pulling the reference via Context7
+  instead of guessing; better to ask than to ship a build break.
 
 ## Coding Style & Naming Conventions
 
