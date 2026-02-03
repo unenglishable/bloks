@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 public class BeautifulDayCounter implements ModInitializer {
   public static final String MOD_ID = "beautiful_day_counter";
   public static final String DISPLAY_NAME = "Beautiful Day Counter";
-  public static final String KEY_CATEGORY_TRANSLATION_KEY =
-      "key.categories.beautiful_day_counter";
   public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
   private long lastDay = -1L;

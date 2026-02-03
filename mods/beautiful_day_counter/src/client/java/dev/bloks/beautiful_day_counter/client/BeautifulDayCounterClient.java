@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
     // Keybinding: toggle HUD on/off (default: H)
     var keyCategory =
         net.minecraft.client.option.KeyBinding.Category.create(
-            dev.bloks.beautiful_day_counter.BeautifulDayCounter.KEY_CATEGORY_TRANSLATION_KEY);
+            Identifier.of(dev.bloks.beautiful_day_counter.BeautifulDayCounter.MOD_ID, "controls"));
     toggleKey =
         KeyBindingHelper.registerKeyBinding(
             new net.minecraft.client.option.KeyBinding(
