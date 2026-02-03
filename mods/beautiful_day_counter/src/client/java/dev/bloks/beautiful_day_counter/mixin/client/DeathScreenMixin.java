@@ -81,7 +81,7 @@ public abstract class DeathScreenMixin extends Screen {
     if (soundManager == null) {
       return;
     }
-    soundManager.play(PositionedSoundInstance.master(BEAUTIFUL_DAY_COUNTER$HIKARI_CLIP, 1.0F));
+    soundManager.play(PositionedSoundInstance.master(BEAUTIFUL_DAY_COUNTER$HIKARI_CLIP, 1.0F, 1.0F));
     beautiful_day_counter$clipPlayed = true;
   }
 
