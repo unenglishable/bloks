@@ -1,0 +1,10 @@
+{
+  "hikari_8_bit": {
+    "sounds": [
+      {
+        "name": "beautiful_day_counter:hikari_8_bit",
+        "stream": false
+      }
+    ]
+  }
+}

@@ -6,7 +6,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -21,6 +24,9 @@ public abstract class DeathScreenMixin extends Screen {
   @Shadow @Final @Mutable private Text scoreText;
 
   @Unique private Text beautiful_day_counter$baseScoreText;
+  @Unique private static final SoundEvent BEAUTIFUL_DAY_COUNTER$HIKARI_CLIP =
+      SoundEvent.of(Identifier.of("beautiful_day_counter", "hikari_8_bit"));
+  @Unique private boolean beautiful_day_counter$clipPlayed;
 
   protected DeathScreenMixin(Text title) {
     super(title);
@@ -49,6 +55,7 @@ public abstract class DeathScreenMixin extends Screen {
               .copy()
               .append(Text.literal(" • " + label + " " + Math.max(day, 1)));
       scoreText = decorated;
+      beautiful_day_counter$maybePlayClip(mc);
     }
   }
 
@@ -58,6 +65,24 @@ public abstract class DeathScreenMixin extends Screen {
     if (beautiful_day_counter$baseScoreText != null) {
       scoreText = beautiful_day_counter$baseScoreText;
     }
+  }
+
+  @Inject(method = "init", at = @At("TAIL"))
+  private void beautiful_day_counter$resetClip(CallbackInfo ci) {
+    beautiful_day_counter$clipPlayed = false;
+  }
+
+  @Unique
+  private void beautiful_day_counter$maybePlayClip(MinecraftClient mc) {
+    if (beautiful_day_counter$clipPlayed) {
+      return;
+    }
+    var soundManager = mc.getSoundManager();
+    if (soundManager == null) {
+      return;
+    }
+    soundManager.play(PositionedSoundInstance.master(BEAUTIFUL_DAY_COUNTER$HIKARI_CLIP, 1.0F));
+    beautiful_day_counter$clipPlayed = true;
   }
 
   @Unique
