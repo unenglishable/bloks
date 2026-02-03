@@ -14,6 +14,8 @@
   "ui.beautiful_day_counter.corner.bottom_right": "HUD Corner: Bottom Right",
   "ui.beautiful_day_counter.toast.enabled": "Notification: Enabled",
   "ui.beautiful_day_counter.toast.disabled": "Notification: Disabled",
+  "ui.beautiful_day_counter.death_clip.enabled": "Death Clip: Enabled",
+  "ui.beautiful_day_counter.death_clip.disabled": "Death Clip: Disabled",
   "ui.beautiful_day_counter.label.caption": "Counter Label",
   "ui.beautiful_day_counter.label.suggestion": "e.g., Day or Sol"
 }

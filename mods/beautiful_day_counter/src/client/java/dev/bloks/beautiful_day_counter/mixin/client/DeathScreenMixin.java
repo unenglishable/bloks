@@ -73,7 +73,7 @@ public abstract class DeathScreenMixin extends Screen {
 
   @Unique
   private void beautiful_day_counter$maybePlayClip(MinecraftClient mc) {
-    if (beautiful_day_counter$clipPlayed) {
+    if (beautiful_day_counter$clipPlayed || !ClientState.get().isDeathClipEnabled()) {
       return;
     }
     var player = mc.player;

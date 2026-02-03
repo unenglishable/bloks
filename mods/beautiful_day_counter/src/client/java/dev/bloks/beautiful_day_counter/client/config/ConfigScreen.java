@@ -14,6 +14,8 @@ public class ConfigScreen extends Screen {
   private ButtonWidget toggleHudBtn;
   private ButtonWidget cornerBtn;
   private ButtonWidget toastBtn;
+  private ButtonWidget deathClipBtn;
+  private ButtonWidget deathClipBtn;
   // Moon feature removed
   private ButtonWidget saveBtn;
   private ButtonWidget cancelBtn;
@@ -94,6 +96,19 @@ public class ConfigScreen extends Screen {
     addDrawableChild(toastBtn);
 
     y += 30;
+    // Death clip toggle
+    deathClipBtn =
+        ButtonWidget.builder(
+                deathClipLabel(),
+                b -> {
+                  config.playDeathClip = !config.playDeathClip;
+                  b.setMessage(deathClipLabel());
+                })
+            .dimensions(centerX - 100, y, 200, 20)
+            .build();
+    addDrawableChild(deathClipBtn);
+
+    y += 30;
     // Moon feature removed
     // Save
     saveBtn =
@@ -110,6 +125,7 @@ public class ConfigScreen extends Screen {
                   }
                   state.setHudCorner(config.hudCorner);
                   state.setToastEnabled(config.showToast);
+                  state.setDeathClipEnabled(config.playDeathClip);
                   // Moon feature removed
                   MinecraftClient.getInstance().setScreen(parent);
                 })
@@ -142,6 +158,11 @@ public class ConfigScreen extends Screen {
         : Text.translatable("ui.beautiful_day_counter.toast.disabled");
   }
 
+  private Text deathClipLabel() {
+    return config.playDeathClip
+        ? Text.translatable("ui.beautiful_day_counter.death_clip.enabled")
+        : Text.translatable("ui.beautiful_day_counter.death_clip.disabled");
+  }
   // Moon feature removed
 
   private Text cornerLabel() {
@@ -246,6 +267,12 @@ public class ConfigScreen extends Screen {
     if (toastBtn != null) {
       rows++;
     }
+    if (deathClipBtn != null) {
+      rows++;
+    }
+    if (deathClipBtn != null) {
+      rows++;
+    }
     if (saveBtn != null) {
       rows++;
     }
@@ -279,6 +306,11 @@ public class ConfigScreen extends Screen {
     if (toastBtn != null) {
       toastBtn.setX(centerX - 100);
       toastBtn.setY(y);
+      y += ROW_SPACING;
+    }
+    if (deathClipBtn != null) {
+      deathClipBtn.setX(centerX - 100);
+      deathClipBtn.setY(y);
       y += ROW_SPACING;
     }
     // Moon feature removed

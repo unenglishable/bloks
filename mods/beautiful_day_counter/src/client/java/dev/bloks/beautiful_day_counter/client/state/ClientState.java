@@ -12,6 +12,7 @@ public final class ClientState {
   private String hudCorner = "bottom_right"; // top_left, top_right, bottom_left, bottom_right
   private boolean toastEnabled = true;
   private boolean toastActive = false;
+  private boolean deathClipEnabled = true;
 
   // Moon feature removed
 
@@ -82,5 +83,13 @@ public final class ClientState {
 
   public void setToastActive(boolean toastActive) {
     this.toastActive = toastActive;
+  }
+
+  public boolean isDeathClipEnabled() {
+    return deathClipEnabled;
+  }
+
+  public void setDeathClipEnabled(boolean deathClipEnabled) {
+    this.deathClipEnabled = deathClipEnabled;
   }
 }

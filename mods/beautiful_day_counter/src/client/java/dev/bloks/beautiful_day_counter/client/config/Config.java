@@ -26,6 +26,9 @@ public final class Config {
   @SerializedName("hudCorner")
   public String hudCorner = "bottom_right"; // top_left, top_right, bottom_left, bottom_right
 
+  @SerializedName("playDeathClip")
+  public boolean playDeathClip = true;
+
   // Moon feature removed
 
   public static Path configPath() {

@@ -27,6 +27,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
     ClientState.get().setDayLabel(cfg.label);
     ClientState.get().setHudCorner(cfg.hudCorner);
     ClientState.get().setToastEnabled(cfg.showToast);
+    ClientState.get().setDeathClipEnabled(cfg.playDeathClip);
     if (ClientState.get().isHudVisible() != cfg.hudVisible) {
       ClientState.get().toggleHudVisible();
     }

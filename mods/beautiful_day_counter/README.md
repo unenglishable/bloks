@@ -34,6 +34,8 @@ F1 (Hide GUI) behavior
 
 - Mod Menu: Provides a small config screen for label and HUD visibility.
 - File: `config/beautiful_day_counter.json` stores the same settings client‑side.
+- Options: label text, HUD visibility/corner, toast toggle, and the playful hardcore death clip
+  (enabled by default so first-time players hear it once, but you can disable it anytime).
 
 ## Fun Facts
 
