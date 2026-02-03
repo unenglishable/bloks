@@ -42,14 +42,14 @@ public abstract class DeathScreenMixin extends Screen {
     if (day <= 0 || mc == null) {
       return;
     }
-    String detail = beautiful_day_counter$describeWorld(mc);
-    String label = ClientState.get().getDayLabel();
-    Text decorated =
-        beautiful_day_counter$baseScoreText
-            .copy()
-            .append(Text.literal(" • " + label + " " + Math.max(day, 1)))
-            .append(detail.isEmpty() ? Text.empty() : Text.literal(" (" + detail + ")"));
-    scoreText = decorated;
+    if (mc.world != null && mc.world.getLevelProperties().isHardcore()) {
+      String label = ClientState.get().getDayLabel();
+      Text decorated =
+          beautiful_day_counter$baseScoreText
+              .copy()
+              .append(Text.literal(" • " + label + " " + Math.max(day, 1)));
+      scoreText = decorated;
+    }
   }
 
   @Inject(method = "render", at = @At("TAIL"))
