@@ -15,7 +15,6 @@ public class ConfigScreen extends Screen {
   private ButtonWidget cornerBtn;
   private ButtonWidget toastBtn;
   private ButtonWidget deathClipBtn;
-  private ButtonWidget deathClipBtn;
   // Moon feature removed
   private ButtonWidget saveBtn;
   private ButtonWidget cancelBtn;
