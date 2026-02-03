@@ -27,6 +27,7 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
     ClientState.get().setDayLabel(cfg.label);
     ClientState.get().setHudCorner(cfg.hudCorner);
     ClientState.get().setToastEnabled(cfg.showToast);
+    ClientState.get().setDeathClipEnabled(cfg.playDeathClip);
     if (ClientState.get().isHudVisible() != cfg.hudVisible) {
       ClientState.get().toggleHudVisible();
     }
@@ -65,6 +66,9 @@ public class BeautifulDayCounterClient implements ClientModInitializer {
           var mc = net.minecraft.client.MinecraftClient.getInstance();
           var state = ClientState.get();
           if (mc == null || mc.player == null) {
+            return;
+          }
+          if (!mc.player.isAlive()) {
             return;
           }
           if (mc.options.hudHidden) {

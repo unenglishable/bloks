@@ -27,6 +27,11 @@ This file is for contributors. Player-facing docs live in `README.md`.
 - Networking: `main/BeautifulDayCounter.java` + `main/.../net/DayChangePayload.java` (typed payload
   registered via PayloadTypeRegistry; client uses typed receiver)
 - Config: `client/config/*.java`, `fabric.mod.json` (modmenu entrypoint)
+- Post-mortem summary: `mixin/client/DeathScreenMixin.java` decorates the score line with the day
+  count and difficulty/mode when the death screen renders.
+- Audio gag: `assets/.../sounds/hikari_8_bit.ogg` + `sounds.json`. The death screen mixin plays this
+  “Farewell Jingle” once per hardcore death to add a lighthearted moment; replace the file to change
+  the tune. Config option `playDeathClip` (exposed via Mod Menu) lets players toggle it.
 
 ## Assets & Mod Menu Icon
 

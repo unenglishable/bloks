@@ -1,5 +1,6 @@
 {
   "key.beautiful_day_counter.toggle": "Toggle Day Counter",
+  "key.category.beautiful_day_counter.controls": "Beautiful Day Counter",
   "key.categories.beautiful_day_counter": "Beautiful Day Counter",
   "category.beautiful_day_counter": "Beautiful Day Counter",
   "ui.beautiful_day_counter.config.title": "Beautiful Day Counter Config",
@@ -11,8 +12,10 @@
   "ui.beautiful_day_counter.corner.top_right": "HUD Corner: Top Right",
   "ui.beautiful_day_counter.corner.bottom_left": "HUD Corner: Bottom Left",
   "ui.beautiful_day_counter.corner.bottom_right": "HUD Corner: Bottom Right",
-  "ui.beautiful_day_counter.toast.enabled": "Toast: Enabled",
-  "ui.beautiful_day_counter.toast.disabled": "Toast: Disabled",
+  "ui.beautiful_day_counter.toast.enabled": "Notification: Enabled",
+  "ui.beautiful_day_counter.toast.disabled": "Notification: Disabled",
+  "ui.beautiful_day_counter.death_clip.enabled": "Farewell Jingle: Enabled",
+  "ui.beautiful_day_counter.death_clip.disabled": "Farewell Jingle: Silence",
   "ui.beautiful_day_counter.label.caption": "Counter Label",
   "ui.beautiful_day_counter.label.suggestion": "e.g., Day or Sol"
 }
