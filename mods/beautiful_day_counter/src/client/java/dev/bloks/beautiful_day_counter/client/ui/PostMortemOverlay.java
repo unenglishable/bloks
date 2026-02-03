@@ -1,6 +1,7 @@
 package dev.bloks.beautiful_day_counter.client.ui;
 
 import dev.bloks.beautiful_day_counter.client.state.ClientState;
+import java.util.Locale;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.Window;
@@ -60,7 +61,7 @@ public final class PostMortemOverlay {
     if (hardcore) {
       builder.append("Hardcore");
     } else if (gameMode != null) {
-      builder.append(capitalize(gameMode.getName()));
+      builder.append(capitalize(gameMode.name().toLowerCase(Locale.ROOT)));
     }
 
     if (difficulty != null) {
